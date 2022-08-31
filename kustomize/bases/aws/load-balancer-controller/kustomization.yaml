@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - cert-manager_v1_5_4.yaml
+
+resources:
+  - aws-load-balancer-controller_v2_4_2_full.yaml

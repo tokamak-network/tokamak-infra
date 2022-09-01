@@ -3,7 +3,6 @@ kind: Kustomization
 
 bases:
   - ../../envs/rinkeby
-  - ../../envs/aws
   - ../../scripts
 
 resources:
@@ -12,7 +11,6 @@ resources:
   - ../../bases/batch-submitter
   - ../../bases/relayer
   - ../../bases/aws
-  - ./pv.yaml
   - ./pvc.yaml
 
 patchesStrategicMerge:

@@ -10,7 +10,6 @@ resources:
   - ../../bases/l2geth
   - ../../bases/batch-submitter
   - ../../bases/relayer
-  - ../../bases/aws
   - ./pvc.yaml
 
 patchesStrategicMerge:

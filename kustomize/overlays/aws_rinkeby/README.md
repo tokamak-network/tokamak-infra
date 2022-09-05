@@ -2,32 +2,32 @@
 This is the `kustomize overlays` files for AWS Fargate. The k8s resourses are based on `../../bases` files.
 
 ## Prerequisite
+You have to run this commands in same terminal session
 
 ### Tools
 - `kubectl` [Install](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-on-linux)
 - `aws` [Install](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html)
 - `eksctl` [Install](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html)
 
-Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html). You just need to set `region`, `aws_access_key_id`, `aws_secret_access_key`.
+Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html). You only need to set `region`, `aws_access_key_id`, `aws_secret_access_key`.
 
 ### AWS EKS cluster
-`EKS cluster` is required. (You must have at least one `private subnet` and at least one `public subnet` within your VPC for Fargate.)
-- Follow the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-cluster.html).
-
-`Fargate Profile` are required. (`kube-system`, `default`, `cert-manager` namespaces.)
-- Follow the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/fargate.html).
-
-Update kubeconfig
+Create cluster
 ```
-aws eks update-kubeconfig --region {us-east-1} --name {tokamak-test} # your region-code and cluster name
+eksctl create cluster --name {my-cluster} --region {region-code} --fargate
+
+# cluster name, region-code
 ```
 
-Update core-dns for using fargate
+Add fargate profile for cert-manager
 ```
-kubectl patch deployment coredns \
-    -n kube-system \
-    --type json \
-    -p='[{"op": "remove", "path": "/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type"}]'
+eksctl create fargateprofile \
+    --cluster {my-cluster} \
+    --region {region-code} \
+    --name cert-manager \
+    --namespace cert-manager
+
+# cluster name, region-code
 ```
 
 Create an IAM OIDC Provider for eksctl iamserviceaccount
@@ -99,7 +99,10 @@ file_system_id=$(aws efs create-file-system \
     --query 'FileSystemId' \
     --output text)
 
-# you have to execute this command for each fargate subnet
+# you can get the subnet-id being used by fargate following coammand
+aws ec2 describe-subnets --filters Name=vpc-id,Values=$vpc_id --query 'Subnets[?MapPublicIpOnLaunch==`false`].SubnetId' --region {region-code} --output text
+
+# you have to execute this command for each private subnet being used by fargate.
 aws efs create-mount-target \
     --file-system-id $file_system_id \
     --region {region-code} \
@@ -137,46 +140,90 @@ eksctl create iamserviceaccount \
 # cluster name, role name you want, user id, policy name set in the command above, region-code
 ```
 
-Some setting in your subnet is required. See the [documentation](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html) for details.
-```
-Private subnets – Must be tagged in the following format. This is so that Kubernetes and the AWS Load Balancer Controller know that the subnets can be used for internal load balancers. If you use eksctl or an Amazon EKS AWS AWS CloudFormation template to create your VPC after March 26, 2020, then the subnets are tagged appropriately when they're created. For more information about the Amazon EKS AWS AWS CloudFormation VPC templates, see Creating a VPC for your Amazon EKS cluster.
-
-Key – kubernetes.io/role/internal-elb
-Value – 1
-
-Public subnets – Must be tagged in the following format. This is so that Kubernetes knows to use only those subnets for external load balancers instead of choosing a public subnet in each Availability Zone (based on the lexicographical order of the subnet IDs). If you use eksctl or an Amazon EKS AWS CloudFormation template to create your VPC after March 26, 2020, then the subnets are tagged appropriately when they're created. For more information about the Amazon EKS AWS CloudFormation VPC templates, see Creating a VPC for your Amazon EKS cluster.
-
-Key – kubernetes.io/role/elb
-Value – 1
-```
-
 ## Environment
-You have to create `secret.env` file
+### Deploy contracts
+You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.
+
+### Env file
+You have to set `aws.env` files in `./kustomize/envs/aws`
+```
+# you have to set following values to yours in the 'aws.env'
+
+# open 'aws.env'
+# AWS_EKS_CLUSTER_NAME={your cluster name}
+# AWS_VPC_ID={your cluster vpc id}
+# AWS_REGION={region-code}
+```
+
+You have to set some `*.env` files in `./kustomize/envs/rinkeby`
+```
+# you have to set 'URL' to your contract address file's url in the 'batch-submitter.env', 'common.env', 'data-transport-layer.env', 'relayer.env'
+# you have to set 'ROLLUP_STATE_DUMP_PATH' to your state dump file's url in the 'l2geth.env'
+```
+
+You have to create and set `secret.env` file
 ```
 cd ./kustomize/envs/rinkeby
 cp secret.env.example secret.env
 
-# set your private keys
+# set your private keys in secret.env
 ```
 
 ## Run
 ```
-# working directory
+# in working directory
 
 kubectl apply -k ./kustomize/bases/aws
-EFS_VOLUME_ID={your EFS FileSystemId} envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl apply -f -
+EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl apply -f -
 kubectl apply -k ./kustomize/overlays/aws_rinkeby
 ```
 
-If you see this error, run again `kubectl apply -k ./kustomize/bases/aws`.
+If you see one of this errors, run again `kubectl apply -k ./kustomize/bases/aws`.
 ```
 Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.cert-manager.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+```
+```
+resource mapping not found for name: "aws-load-balancer-serving-cert" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Certificate" in version "cert-manager.io/v1"
+ensure CRDs are installed first
+resource mapping not found for name: "aws-load-balancer-selfsigned-issuer" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Issuer" in version "cert-manager.io/v1"
+ensure CRDs are installed first
+resource mapping not found for name: "alb" namespace: "" from "./kustomize/bases/aws": no matches for kind "IngressClassParams" in version "elbv2.k8s.aws/v1beta1"
+ensure CRDs are installed first
 ```
 This is an error according to the resource creation order. We will fix this error.
 
 ## Delete
+Delete k8s resources
 ```
+# in working directory
+
 kubectl delete -k ./kustomize/overlays/aws_rinkeby
-EFS_VOLUME_ID={your EFS FileSystemId} envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl delete -f -
+EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl delete -f -
 kubectl delete -k ./kustomize/bases/aws
+```
+
+Delete cluster and aws resources
+```
+eksctl delete iamserviceaccount --cluster={my-cluster} --namespace=kube-system --name=aws-load-balancer-controller --region {region-code}
+
+eksctl delete iamserviceaccount --cluster={my-cluster} --namespace=kube-system --name=efs-csi-controller-sa --region {region-code}
+
+# all efs mount targets must be removed before removing the file system.
+# you can get mount target id following command
+aws efs describe-mount-targets --file-system-id $file_system_id --region {region-code} --query MountTargets[].MountTargetId --output text
+
+# delete mount-target. you have to execute this command for each mount target.
+aws efs delete-mount-target --mount-target-id {mount target id} --region {region-code}
+
+# delete security group used by efs file system
+aws ec2 delete-security-group --group-id $security_group_id --region {region-code}
+
+# delete file system
+aws efs delete-file-system --file-system-id $file_system_id --region {region-code}
+
+# delete cluster
+eksctl delete cluster --name {my-cluster} --region {region-code}
+
+cluster name, region-code, mount target id
+# if you lose terminal session when deleting cluster, you need to find some values such as $file_system_id, $security_group_id ​​through the aws console or aws cli.
 ```

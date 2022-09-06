@@ -1,2 +1,2 @@
 **/secret.env
-
+./kustomize/envs/aws/aws.env

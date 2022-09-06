@@ -1,2 +1,5 @@
 **/secret.env
-./kustomize/envs/aws/aws.env
+
+kustomize/envs/aws/aws.env
+kustomize/overlays/aws_rinkeby/ingress.yaml
+kustomize/overlays/aws_rinkeby/pv.yaml

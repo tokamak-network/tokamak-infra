@@ -60,16 +60,13 @@ if [ $ACTION == "create" ]; then
   if [ -f $CLUSTER_PATH/create.sh ]; then
     sh $CLUSTER_PATH/create.sh
   fi
-
   kubectl apply -k $CLUSTER_PATH
 
 elif [ $ACTION == "delete" ]; then
+  kubectl delete -k $CLUSTER_PATH
   if [ -f $CLUSTER_PATH/delete.sh ]; then
     sh $CLUSTER_PATH/delete.sh
   fi
-
-  kubectl delete -k $CLUSTER_PATH
-
 else
   print_help
   exit 1

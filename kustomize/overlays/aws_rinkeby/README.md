@@ -140,19 +140,41 @@ eksctl create iamserviceaccount \
 # cluster name, role name you want, user id, policy name set in the command above, region-code
 ```
 
+Install `cert-manager`
+```
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
+```
+
+Install `aws-load-balancer-controller` by helm
+```
+helm repo add eks https://aws.github.io/eks-charts
+
+helm repo update
+
+helm install \
+  aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=tokamak-optimism-rinkeby \
+  --set region={region-code} \
+  --set vpcId={vpc_id} \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+```
+
 ## Environment
 ### Deploy contracts
 You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.
 
 ### Env file
-You have to set `aws.env` files in `./kustomize/envs/aws`
-```
-# you have to set following values to yours in the 'aws.env'
+You have to copy `.env` file from `.env.example` and modify it.
 
-# open 'aws.env'
-# AWS_EKS_CLUSTER_NAME={your cluster name}
-# AWS_VPC_ID={your cluster vpc id}
-# AWS_REGION={region-code}
+**.env**
+```
+AWS_EKS_CLUSTER_NAME={your cluster name}
+AWS_VPC_ID={your cluster vpc id}
+AWS_REGION={region-code}
+EFS_VOLUME_ID={efs file system id}
+CERTIFICATE_ARN={certificate arn for https}
 ```
 
 You have to set some `*.env` files in `./kustomize/envs/rinkeby`
@@ -171,11 +193,9 @@ cp secret.env.example secret.env
 
 ## Run
 ```
-# in working directory
+# in root directory
 
-kubectl apply -k ./kustomize/bases/aws
-EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl apply -f -
-kubectl apply -k ./kustomize/overlays/aws_rinkeby
+./tokamak-optimism.sh create aws_rinkeby
 ```
 
 If you see one of this errors, run again `kubectl apply -k ./kustomize/bases/aws`.
@@ -195,11 +215,9 @@ This is an error according to the resource creation order. We will fix this erro
 ## Delete
 Delete k8s resources
 ```
-# in working directory
+# in root directory
 
-kubectl delete -k ./kustomize/overlays/aws_rinkeby
-EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl delete -f -
-kubectl delete -k ./kustomize/bases/aws
+./tokamak-optimism.sh delete aws_rinkeby
 ```
 
 Delete cluster and aws resources

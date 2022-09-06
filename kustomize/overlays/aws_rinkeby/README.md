@@ -2,52 +2,228 @@
 This is the `kustomize overlays` files for AWS Fargate. The k8s resourses are based on `../../bases` files.
 
 ## Prerequisite
+You have to run this commands in same terminal session
 
 ### Tools
 - `kubectl` [Install](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-on-linux)
 - `aws` [Install](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html)
 - `eksctl` [Install](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html)
 
-Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html). You just need to set `region`, `aws_access_key_id`, `aws_secret_access_key`.
+Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html). You only need to set `region`, `aws_access_key_id`, `aws_secret_access_key`.
 
 ### AWS EKS cluster
-`EKS cluster` is required. (You must have at least one `private subnet` and at least one `public subnet` within your VPC for Fargate.)
-- Follow the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/create-cluster.html).
+Create cluster
+```
+eksctl create cluster --name {my-cluster} --region {region-code} --fargate
 
-`Fargate Profile` are required. (`kube-system`, `default`, `cert-manager` namespaces.)
-- Follow the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/fargate.html).
+# cluster name, region-code
+```
+
+Add fargate profile for cert-manager
+```
+eksctl create fargateprofile \
+    --cluster {my-cluster} \
+    --region {region-code} \
+    --name cert-manager \
+    --namespace cert-manager
+
+# cluster name, region-code
+```
+
+Create an IAM OIDC Provider for eksctl iamserviceaccount
+```
+eksctl utils associate-iam-oidc-provider --cluster {my-cluster} --region {region-code} --approve
+
+# cluster name, region-code
+```
 
 ### AWS EFS
-AWS EFS is required.
-- Create EFS with IAM following the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/efs-csi.html). (Skip `Install the Amazon EFS driver` in the documentation)
+Create an IAM Poilicy to be used by EFS_CSI_Driver
+```
+curl -o iam-policy-example.json https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/docs/iam-policy-example.json
+
+aws iam create-policy \
+    --policy-name {AmazonEKS_EFS_CSI_Driver_Policy} \
+    --policy-document file://iam-policy-example.json
+
+rm iam-policy-example.json
+
+# policy name you want
+```
+
+Create an IAM Role and deploy Kubernetes ServiceAccount
+```
+eksctl create iamserviceaccount \
+    --cluster {my-cluster} \
+    --namespace kube-system \
+    --name efs-csi-controller-sa \
+    --role-name "{AmazonEKS_EFS_CSI_Driver_Role}" \
+    --attach-policy-arn arn:aws:iam::{111122223333}:policy/{AmazonEKS_EFS_CSI_Driver_Policy} \
+    --approve \
+    --region {region-code}
+
+# cluster name, role name you want, user id, policy name set in the command above, region-code
+```
+
+Create an EFS filesystem for EKS
+```
+vpc_id=$(aws eks describe-cluster \
+    --name {my-cluster} \
+    --region {region-code} \
+    --query "cluster.resourcesVpcConfig.vpcId" \
+    --output text)
+
+cidr_range=$(aws ec2 describe-vpcs \
+    --vpc-ids $vpc_id \
+    --region {region-code} \
+    --query "Vpcs[].CidrBlock" \
+    --output text)
+
+security_group_id=$(aws ec2 create-security-group \
+    --group-name {MyEfsSecurityGroup} \
+    --description "My EFS security group" \
+    --vpc-id $vpc_id \
+    --region {region-code} \
+    --output text)
+
+aws ec2 authorize-security-group-ingress \
+    --group-id $security_group_id \
+    --region {region-code} \
+    --protocol tcp \
+    --port 2049 \
+    --cidr $cidr_range
+
+file_system_id=$(aws efs create-file-system \
+    --region {region-code} \
+    --performance-mode generalPurpose \
+    --query 'FileSystemId' \
+    --output text)
+
+# you can get the subnet-id being used by fargate following coammand
+aws ec2 describe-subnets --filters Name=vpc-id,Values=$vpc_id --query 'Subnets[?MapPublicIpOnLaunch==`false`].SubnetId' --region {region-code} --output text
+
+# you have to execute this command for each private subnet being used by fargate.
+aws efs create-mount-target \
+    --file-system-id $file_system_id \
+    --region {region-code} \
+    --subnet-id {subnet-EXAMPLEe2ba886490} \
+    --security-groups $security_group_id
+
+# cluster name, security group name you want, region-code, subnet id
+```
 
 ### AWS Application Load Balancer
-IAM for AWS Load Balancer Controller is required.
-- Follow the [documentation](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/aws-load-balancer-controller.html). (Create up to the `2. Create an IAM role` step)
+Create an IAM Policy for Load Balancer Controller
+```
+curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.3/docs/install/iam_policy.json
 
-Some setting is required.
-- Follow the [documentation](https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html)
+aws iam create-policy \
+    --policy-name {AWSLoadBalancerControllerIAMPolicy} \
+    --policy-document file://iam_policy.json
+
+rm iam_policy.json
+
+# poily name you want
+```
+
+Create an IAM Role and deploy Kubernetes ServiceAccount
+```
+eksctl create iamserviceaccount \
+  --cluster={my-cluster} \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name "{AmazonEKSLoadBalancerControllerRole}" \
+  --attach-policy-arn=arn:aws:iam::{111122223333}:policy/{AWSLoadBalancerControllerIAMPolicy} \
+  --region {region-code} \
+  --approve
+
+# cluster name, role name you want, user id, policy name set in the command above, region-code
+```
+
+## Environment
+### Deploy contracts
+You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.
+
+### Env file
+You have to set `aws.env` files in `./kustomize/envs/aws`
+```
+# you have to set following values to yours in the 'aws.env'
+
+# open 'aws.env'
+# AWS_EKS_CLUSTER_NAME={your cluster name}
+# AWS_VPC_ID={your cluster vpc id}
+# AWS_REGION={region-code}
+```
+
+You have to set some `*.env` files in `./kustomize/envs/rinkeby`
+```
+# you have to set 'URL' to your contract address file's url in the 'batch-submitter.env', 'common.env', 'data-transport-layer.env', 'relayer.env'
+# you have to set 'ROLLUP_STATE_DUMP_PATH' to your state dump file's url in the 'l2geth.env'
+```
+
+You have to create and set `secret.env` file
+```
+cd ./kustomize/envs/rinkeby
+cp secret.env.example secret.env
+
+# set your private keys in secret.env
+```
 
 ## Run
 ```
-kustomize build . > /tmp/kustomize.yaml
-export EFS_VOLUME_ID=fs-00000000000000000
-export AWS_EFS_CSI_CONTROLLER_ROLE_ARN=arn:aws:iam::000000000000:role/RoleName
-export AWS_LOAD_BALANCER_CONTROLLER_ROLE_ARN=arn:aws:iam::000000000000:role/RoleName
-envsubst '$EFS_VOLUME_ID,$AWS_EFS_CSI_CONTROLLER_ROLE_ARN,$AWS_LOAD_BALANCER_CONTROLLER_ROLE_ARN' < /tmp/kustomize.yaml | kubectl apply -f -
+# in working directory
+
+kubectl apply -k ./kustomize/bases/aws
+EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl apply -f -
+kubectl apply -k ./kustomize/overlays/aws_rinkeby
 ```
 
-If you see this error, run again `envsubst '$EFS_VOLUME_ID,$AWS_EFS_CSI_CONTROLLER_ROLE_ARN,$AWS_LOAD_BALANCER_CONTROLLER_ROLE_ARN' < /tmp/kustomize.yaml | kubectl apply -f -`.
+If you see one of this errors, run again `kubectl apply -k ./kustomize/bases/aws`.
 ```
-Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.cert-manager.svc:443/mutate?timeout=30s": no endpoints available for service "cert-manager-webhook"
+Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.cert-manager.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
+```
+```
+resource mapping not found for name: "aws-load-balancer-serving-cert" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Certificate" in version "cert-manager.io/v1"
+ensure CRDs are installed first
+resource mapping not found for name: "aws-load-balancer-selfsigned-issuer" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Issuer" in version "cert-manager.io/v1"
+ensure CRDs are installed first
+resource mapping not found for name: "alb" namespace: "" from "./kustomize/bases/aws": no matches for kind "IngressClassParams" in version "elbv2.k8s.aws/v1beta1"
+ensure CRDs are installed first
 ```
 This is an error according to the resource creation order. We will fix this error.
 
 ## Delete
+Delete k8s resources
 ```
-kustomize build . > /tmp/kustomize.yaml
-export EFS_VOLUME_ID=fs-00000000000000000
-export AWS_EFS_CSI_CONTROLLER_ROLE_ARN=arn:aws:iam::000000000000:role/RoleName
-export AWS_LOAD_BALANCER_CONTROLLER_ROLE_ARN=arn:aws:iam::000000000000:role/RoleName
-envsubst '$EFS_VOLUME_ID,$AWS_EFS_CSI_CONTROLLER_ROLE_ARN,$AWS_LOAD_BALANCER_CONTROLLER_ROLE_ARN' < /tmp/kustomize.yaml | kubectl delete --force -f -
+# in working directory
+
+kubectl delete -k ./kustomize/overlays/aws_rinkeby
+EFS_VOLUME_ID=$file_system_id envsubst < ./kustomize/overlays/aws_rinkeby/pv.yaml | kubectl delete -f -
+kubectl delete -k ./kustomize/bases/aws
+```
+
+Delete cluster and aws resources
+```
+eksctl delete iamserviceaccount --cluster={my-cluster} --namespace=kube-system --name=aws-load-balancer-controller --region {region-code}
+
+eksctl delete iamserviceaccount --cluster={my-cluster} --namespace=kube-system --name=efs-csi-controller-sa --region {region-code}
+
+# all efs mount targets must be removed before removing the file system.
+# you can get mount target id following command
+aws efs describe-mount-targets --file-system-id $file_system_id --region {region-code} --query MountTargets[].MountTargetId --output text
+
+# delete mount-target. you have to execute this command for each mount target.
+aws efs delete-mount-target --mount-target-id {mount target id} --region {region-code}
+
+# delete security group used by efs file system
+aws ec2 delete-security-group --group-id $security_group_id --region {region-code}
+
+# delete file system
+aws efs delete-file-system --file-system-id $file_system_id --region {region-code}
+
+# delete cluster
+eksctl delete cluster --name {my-cluster} --region {region-code}
+
+cluster name, region-code, mount target id
+# if you lose terminal session when deleting cluster, you need to find some values such as $file_system_id, $security_group_id ​​through the aws console or aws cli.
 ```

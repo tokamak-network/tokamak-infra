@@ -41,7 +41,8 @@ minikube start --cpus 4 --memory 16384
 ### deploy local resource
 minikube
 ```
-kubectl apply -k ./kustomize/overlays/local_hardhat/
+#kubectl apply -k ./kustomize/overlays/local_hardhat/
+./tokamak-optimism.sh create local_hardhat
 minikube tunnel # (keep terminal session)
 ```
 ### monitoring

@@ -8,6 +8,7 @@ You have to run this commands in same terminal session
 - `kubectl` [Install](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-on-linux)
 - `aws` [Install](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html)
 - `eksctl` [Install](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html)
+- `helm` [Install](https://helm.sh/docs/intro/install)
 
 Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html). You only need to set `region`, `aws_access_key_id`, `aws_secret_access_key`.
 
@@ -15,17 +16,6 @@ Create the config file for aws cli in the `$HOME/.aws/config` following the [doc
 Create cluster
 ```
 eksctl create cluster --name {my-cluster} --region {region-code} --fargate
-
-# cluster name, region-code
-```
-
-Add fargate profile for cert-manager
-```
-eksctl create fargateprofile \
-    --cluster {my-cluster} \
-    --region {region-code} \
-    --name cert-manager \
-    --namespace cert-manager
 
 # cluster name, region-code
 ```
@@ -140,11 +130,6 @@ eksctl create iamserviceaccount \
 # cluster name, role name you want, user id, policy name set in the command above, region-code
 ```
 
-Install `cert-manager`
-```
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.9.1/cert-manager.yaml
-```
-
 Install `aws-load-balancer-controller` by helm
 ```
 helm repo add eks https://aws.github.io/eks-charts
@@ -154,11 +139,13 @@ helm repo update
 helm install \
   aws-load-balancer-controller eks/aws-load-balancer-controller \
   -n kube-system \
-  --set clusterName=tokamak-optimism-rinkeby \
+  --set clusterName={my-cluster} \
   --set region={region-code} \
-  --set vpcId={vpc_id} \
+  --set vpcId=$vpc_id \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
+
+# cluster name, region-code
 ```
 
 ## Environment
@@ -198,24 +185,12 @@ cp secret.env.example secret.env
 ./tokamak-optimism.sh create aws_rinkeby
 ```
 
-If you see one of this errors, run again `kubectl apply -k ./kustomize/bases/aws`.
-```
-Error from server (InternalError): error when creating "STDIN": Internal error occurred: failed calling webhook "webhook.cert-manager.io": failed to call webhook: Post "https://cert-manager-webhook.cert-manager.svc:443/mutate?timeout=10s": no endpoints available for service "cert-manager-webhook"
-```
-```
-resource mapping not found for name: "aws-load-balancer-serving-cert" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Certificate" in version "cert-manager.io/v1"
-ensure CRDs are installed first
-resource mapping not found for name: "aws-load-balancer-selfsigned-issuer" namespace: "kube-system" from "./kustomize/bases/aws": no matches for kind "Issuer" in version "cert-manager.io/v1"
-ensure CRDs are installed first
-resource mapping not found for name: "alb" namespace: "" from "./kustomize/bases/aws": no matches for kind "IngressClassParams" in version "elbv2.k8s.aws/v1beta1"
-ensure CRDs are installed first
-```
-This is an error according to the resource creation order. We will fix this error.
-
 ## Delete
 Delete k8s resources
 ```
 # in root directory
+
+helm uninstall aws-load-balancer-controller -n kube-system
 
 ./tokamak-optimism.sh delete aws_rinkeby
 ```

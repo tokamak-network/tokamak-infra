@@ -148,6 +148,63 @@ helm install \
 # cluster name, region-code
 ```
 
+## Amazon Managed Service for Prometheus (Options)
+Create new Amazon Managed Service for Prometheus
+```
+aws amp create-workspace --alias {workspace name} --region {region-code}
+
+# workspace name you want, region-code you want
+# remember your workspace id from output
+```
+
+Add fargate profile for prometheus
+```
+eksctl create fargateprofile \
+    --cluster {my-cluster} \
+    --region {region-code} \
+    --name prometheus \
+    --namespace prometheus
+
+# cluster name, region-code
+```
+
+Create an IAM Role and deploy Kubernetes ServiceAccount for Amazon Managed Service for Prometheus
+```
+eksctl create iamserviceaccount \
+  --cluster={my-cluster} \
+  --namespace=prometheus \
+  --name=amp-iamproxy-ingest-service-account \
+  --role-name "amp-iamproxy-ingest-role" \
+  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusQueryAccess \
+  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess \
+  --region {region-code} \
+  --approve
+
+# cluster name, region-code
+```
+
+Install `prometheus` by helm
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install amp-prometheus-chart prometheus-community/prometheus -n prometheus \
+--set serviceAccounts.server.create=false \
+--set serviceAccounts.server.name=amp-iamproxy-ingest-service-account \
+--set server.remoteWrite[0].url="https://aps-workspaces.{region-code}.amazonaws.com/workspaces/{amp workspace id}/api/v1/remote_write" \
+--set server.remoteWrite[0].sigv4.region={region-code} \
+--set server.remoteWrite[0].queue_config.max_samples_per_send=1000 \
+--set server.remoteWrite[0].queue_config.max_shards=200 \
+--set server.remoteWrite[0].queue_config.capacity=2500 \
+--set server.persistentVolume.enabled=false \
+--set alertmanager.enabled=false \
+--set nodeExporter.enabled=false \
+--set pushgateway.enabled=false
+
+# region-code, amp workspace id
+```
+
 ## Environment
 ### Deploy contracts
 You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.

@@ -3,7 +3,7 @@
 ACTION=$1
 ACTION_LIST=("create delete")
 CLUSTER_NAME=$2
-CLUSTER_LIST=$(ls -d kustomize/overlays/*/ | cut -f3 -d'/')
+CLUSTER_LIST=$(ls -d kustomize/overlays/*/* | cut -f3-4 -d'/')
 CLUSTER_PATH=kustomize/overlays/${CLUSTER_NAME}
 
 function print_help() {
@@ -41,7 +41,7 @@ if !(check_cluster $CLUSTER_NAME); then
   exit 1
 fi
 
-NETWORK=${CLUSTER_NAME##*_}
+NETWORK=${CLUSTER_NAME##*/}
 
 echo "* ACTION=${ACTION}"
 echo "* CLUSTER_NAME=${CLUSTER_NAME}"

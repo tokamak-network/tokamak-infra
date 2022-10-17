@@ -1,0 +1,46 @@
+{
+  "SUPPORTED_NETWORKS": [
+    {
+      "name": "Local Hardhat",
+      "type": "L1",
+      "chainId": 31337,
+      "endpoint": "http://localhost:9545",
+      "oppositeChainId": null,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
+    },
+    {
+      "name": "Local Tokamak",
+      "type": "L2",
+      "chainId": 2090,
+      "endpoint": "http://localhost:8545",
+      "oppositeChainId": 31337,
+      "iconURL": "/logos/tokamak-symbol.svg"
+    }
+  ],
+  "SUPPORTED_TOKENS": [
+    {
+      "id": "ethereum",
+      "chainId": 31337,
+      "address": null,
+      "name": "ETH",
+      "symbol": "ETH",
+      "decimals": 18,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "extensions": {
+        "optimismBridgeAddress": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788"
+      }
+    },
+    {
+      "id": "ethereum",
+      "chainId": 2090,
+      "address": null,
+      "name": "ETH",
+      "symbol": "ETH",
+      "decimals": 18,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "extensions": {
+        "optimismBridgeAddress": "0x4200000000000000000000000000000000000010"
+      }
+    }
+  ]
+}

@@ -1,7 +1,9 @@
 # Kubernetes
+
 Resources for running the tokamak network based on kubernetes
 
 ## Directory Strcture
+
 ```
 kustomize
 ├─ bases: kubernetes bases resource like statefulset, deployment, service, etc
@@ -10,68 +12,416 @@ kustomize
 └─ scripts: scripts and kustomize file to make kubernetes configmap
 ```
 
-## Prerequisites
+## on Minikube
+
+### Prerequisites
+
 - `kubectl` **Minimum version v1.20** [Install notes](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-on-linux)
 - `minikube` from a [minikube page](https://minikube.sigs.k8s.io/docs/start/)
 - Docker
 
-## Configuration
-There are resources in `kustomize/envs`, `kustomize/overlays` for each environment. First environment is `local`.
+### Configuration
 
-### local
+There are resources in `kustomize/envs`, `kustomize/overlays/local` for each environment.
+
 Local is for local network test. It consists of one `l1`, one `l2`, one `data-transport-layer`, one `deployer`, one `batch-submitter` and one `relayer`.
 
-You can set the configuration by editing `*.env` files in `kustomize/envs/local`.
+You must create `secret.env` from `secret.env.example` in `kustomize/envs/local`..
 
-You must create `secret.env` in by referencing `secret.env.example`.
+### Run
 
-## Run
 This is an example of `local`.
-### create a cluster
-first,
-```
-cd k8s
-```
 
-minikube
+#### create a cluster
+
 ```
 minikube start --cpus 4 --memory 16384
 # customize the cps and the memory for your system
 ```
-### deploy local resource
-minikube
+
+#### deploy local resource
+
 ```
-#kubectl apply -k ./kustomize/overlays/local_hardhat/
-./tokamak-optimism.sh create local_hardhat
+./tokamak-optimism.sh create local/hardhat
+
 minikube tunnel # (keep terminal session)
 ```
-### monitoring
+
+#### monitoring
+
 ```
 kubectl get pods
 ```
+
 If you can see all `Running` in the status, then everyting was successful!
 
 This may take some time.(about 5m)
-### endpoint
-minikube
+
+#### endpoint
 
 Minikube doesn't provide port forwarding. this network is up,
+
 ```
 l1 endpoint: http://{svc external address}:9545
 l2 endpoint: http://{svc external address}:8545, ws://{svc external address}:8546
 dtl endpoint: http://{svc external address}:7878
 ```
+
 You can get `svc external address` to follow below command.
+
 ```
 kubectl get svc
 
 # NAME              TYPE           CLUSTER-IP      **EXTERNAL-IP**     PORT(S)          AGE
 # hello-minikube1   LoadBalancer   10.96.184.178   **10.96.184.178**   8080:30791/TCP   40s
 ```
+
 Notice that minkube is accessible from only local system.
 
-## Delete cluster
-minikube
+### Delete cluster
+
 ```
 minikube delete
+```
+
+## on AWS EKS
+
+This is the `kustomize overlays` files for AWS Fargate. The k8s resourses are based on `../../bases` files.
+
+### Prerequisite
+
+You have to run this commands in same terminal session
+
+- `kubectl` [Install](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/#install-kubectl-on-linux)
+- `aws` [Install](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/getting-started-install.html)
+- `eksctl` [Install](https://docs.aws.amazon.com/ko_kr/eks/latest/userguide/eksctl.html)
+- `helm` [Install](https://helm.sh/docs/intro/install)
+
+Create the config file for aws cli in the `$HOME/.aws/config` following the [documentation](https://docs.aws.amazon.com/ko_kr/cli/latest/userguide/cli-configure-files.html).
+
+### Setup Kubernetes Cluster on AWS EKS
+
+#### Set environment variables
+
+Set `Cluster Name` and `Region Code`, `Account ID` on AWS to variables.
+`Cluster Name` can be made you want.
+
+```
+export cluster_name=<Cluster Name>
+export region=<Region Code>
+export account_id=<Account ID>
+```
+
+example:
+
+```
+export cluster_name=tokamak-optimism-cluster
+export region=ap-northeast-2
+export account_id=123123123
+```
+
+#### AWS EKS cluster
+
+Create eks cluster with fargate.
+
+```
+eksctl create cluster --name ${cluster_name} --region ${region} --version 1.23 --fargate
+
+```
+
+Create an IAM OIDC Provider for eksctl iamserviceaccount
+
+```
+eksctl utils associate-iam-oidc-provider --cluster ${cluster_name} --region ${region} --approve
+```
+
+#### Test cluster
+
+check current context
+
+```
+kubectl config current-context
+```
+
+you can add the cluster to kubeconfig.
+
+```
+aws eks update-kubeconfig --region ${region} --name ${cluster_name}
+```
+
+#### AWS EFS
+
+Create an IAM Poilicy named `AmazonEKS_EFS_CSI_Driver_Policy` to be used by EFS_CSI_Driver.
+
+`AmazonEKS_EFS_CSI_Driver_Policy` can be changed you want. If the policy is already created, this step can be passed.
+
+```
+curl -o iam-policy-example.json https://raw.githubusercontent.com/kubernetes-sigs/aws-efs-csi-driver/master/docs/iam-policy-example.json
+
+aws iam create-policy \
+    --policy-name AmazonEKS_EFS_CSI_Driver_Policy \
+    --policy-document file://iam-policy-example.json
+
+rm iam-policy-example.json
+```
+
+Create an IAM Role named `AmazonEKS_EFS_CSI_Driver_Role` and deploy Kubernetes ServiceAccount with the policy already created as `AmazonEKS_EFS_CSI_Driver_Policy`
+
+`AmazonEKS_EFS_CSI_Driver_Role` can be changed you want.
+
+```
+eksctl create iamserviceaccount \
+    --cluster ${cluster_name} \
+    --namespace kube-system \
+    --name efs-csi-controller-sa \
+    --role-name "AmazonEKS_EFS_CSI_Driver_Role" \
+    --attach-policy-arn arn:aws:iam::${account_id}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
+    --approve \
+    --region ${region}
+```
+
+Create an EFS filesystem for EKS
+
+```
+vpc_id=$(aws eks describe-cluster \
+    --name ${cluster_name} \
+    --region ${region} \
+    --query "cluster.resourcesVpcConfig.vpcId" \
+    --output text)
+
+cidr_range=$(aws ec2 describe-vpcs \
+    --vpc-ids $vpc_id \
+    --region ${region} \
+    --query "Vpcs[].CidrBlock" \
+    --output text)
+
+security_group_id=$(aws ec2 create-security-group \
+    --group-name ${cluster_name}-sg \
+    --description "${cluster_name} security group" \
+    --vpc-id ${vpc_id} \
+    --region ${region} \
+    --output text)
+
+aws ec2 authorize-security-group-ingress \
+    --group-id ${security_group_id} \
+    --region ${region} \
+    --protocol tcp \
+    --port 2049 \
+    --cidr ${cidr_range}
+
+file_system_id=$(aws efs create-file-system \
+    --region ${region} \
+    --performance-mode generalPurpose \
+    --query 'FileSystemId' \
+    --output text)
+```
+
+Get the private subnet id to for fargate
+
+```
+aws ec2 describe-subnets \
+    --filters Name=vpc-id,Values=$vpc_id \
+    --query 'Subnets[?MapPublicIpOnLaunch==`false`].SubnetId'
+    --region ${region} \
+    --output json
+```
+
+Create a mount-target for each subnet id. If there are 3 subnet ids, create 3 times.
+
+Change `<my_subnet_id>` to the subnet id and execute next command each subnet id.
+
+```
+aws efs create-mount-target \
+    --file-system-id ${file_system_id} \
+    --region ${region} \
+    --security-groups ${security_group_id} \
+    --subnet-id <my_subnet_id>
+```
+
+#### AWS Application Load Balancer
+
+Create an IAM Policy named `AWSLoadBalancerControllerIAMPolicy` for Load Balancer Controller
+
+`AWSLoadBalancerControllerIAMPolicy` can be changed you want. If the policy is already created, this step can be passed.
+
+```
+curl -o iam_policy.json https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.4.3/docs/install/iam_policy.json
+
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json
+
+rm iam_policy.json
+```
+
+Create an IAM Role named `AmazonEKSLoadBalancerControllerRole` and deploy Kubernetes ServiceAccount with the policy already created as `AWSLoadBalancerControllerIAMPolicy`
+
+`AmazonEKSLoadBalancerControllerRole` can be changed you want.
+
+```
+eksctl create iamserviceaccount \
+  --cluster=${cluster_name} \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name "AmazonEKSLoadBalancerControllerRole" \
+  --attach-policy-arn=arn:aws:iam::${account_id}:policy/AWSLoadBalancerControllerIAMPolicy \
+  --region ${region} \
+  --approve
+```
+
+Install `aws-load-balancer-controller` by helm
+
+```
+helm repo add eks https://aws.github.io/eks-charts
+
+helm repo update
+
+helm install \
+  aws-load-balancer-controller eks/aws-load-balancer-controller \
+  -n kube-system \
+  --set clusterName=${cluster_name} \
+  --set region=${region} \
+  --set vpcId=${vpc_id} \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller
+```
+
+#### Amazon Managed Service for Prometheus (Options)
+
+Create new Amazon Managed Service for Prometheus
+
+```
+export workspace_name=<my-workspace_name>
+
+aws amp create-workspace --alias ${workspace_name} --region ${region}
+
+# remember your workspace id from output
+export workspace_id=<my-workspace id>
+```
+
+Add fargate profile for prometheus
+
+```
+eksctl create fargateprofile \
+    --cluster ${cluster_name} \
+    --region ${region} \
+    --name prometheus \
+    --namespace prometheus
+```
+
+Create an IAM Role and deploy Kubernetes ServiceAccount for Amazon Managed Service for Prometheus
+
+```
+eksctl create iamserviceaccount \
+  --cluster=${cluster_name} \
+  --namespace=prometheus \
+  --name=amp-iamproxy-ingest-service-account \
+  --role-name "amp-iamproxy-ingest-role" \
+  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusQueryAccess \
+  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess \
+  --region ${region} \
+  --approve
+
+# cluster name, region-code
+```
+
+Install `prometheus` by helm
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+helm repo update
+
+helm install amp-prometheus-chart prometheus-community/prometheus -n prometheus \
+--set serviceAccounts.server.create=false \
+--set serviceAccounts.server.name=amp-iamproxy-ingest-service-account \
+--set server.remoteWrite[0].url="https://aps-workspaces.${region}.amazonaws.com/workspaces/${workspace_id}/api/v1/remote_write" \
+--set server.remoteWrite[0].sigv4.region=${region} \
+--set server.remoteWrite[0].queue_config.max_samples_per_send=1000 \
+--set server.remoteWrite[0].queue_config.max_shards=200 \
+--set server.remoteWrite[0].queue_config.capacity=2500 \
+--set server.persistentVolume.enabled=false \
+--set alertmanager.enabled=false \
+--set nodeExporter.enabled=false \
+--set pushgateway.enabled=false
+```
+
+### Environment
+
+#### Deploy contracts
+
+You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.
+
+#### Env file
+
+You have to copy `.env` file from `.env.example` and modify it.
+
+**.env**
+
+```
+AWS_EKS_CLUSTER_NAME={your cluster name}
+AWS_VPC_ID={your cluster vpc id}
+AWS_REGION={region-code}
+EFS_VOLUME_ID={efs file system id}
+CERTIFICATE_ARN={certificate arn for https}
+```
+
+You have to set some `*.env` files in `./kustomize/envs/rinkeby`
+
+```
+# you have to set 'URL' to your contract address file's url in the 'batch-submitter.env', 'common.env', 'data-transport-layer.env', 'relayer.env'
+# you have to set 'ROLLUP_STATE_DUMP_PATH' to your state dump file's url in the 'l2geth.env'
+```
+
+You have to create and set `secret.env` file
+
+```
+cd ./kustomize/envs/goerli
+cp secret.env.example secret.env
+
+# set your private keys in secret.env
+```
+
+### Run
+
+```
+./tokamak-optimism.sh create aws/goerli
+```
+
+### Delete
+
+Delete k8s resources
+
+```
+# in root directory
+
+helm uninstall aws-load-balancer-controller -n kube-system
+
+./tokamak-optimism.sh delete aws/goerli
+```
+
+Delete cluster and aws resources
+
+```
+eksctl delete iamserviceaccount --cluster=${cluster_name} --namespace=kube-system --name=aws-load-balancer-controller --region ${region}
+
+eksctl delete iamserviceaccount --cluster=${cluster_name} --namespace=kube-system --name=efs-csi-controller-sa --region ${region}
+
+# all efs mount targets must be removed before removing the file system.
+# you can get mount target id following command
+aws efs describe-mount-targets --file-system-id ${file_system_id} --region ${region} --query MountTargets[].MountTargetId
+
+# delete mount-target. you have to execute this command for each mount target.
+aws efs delete-mount-target --mount-target-id <mount target id> --region ${region}
+
+# delete security group used by efs file system
+aws ec2 delete-security-group --group-id ${security_group_id} --region ${region}
+
+# delete file system
+aws efs delete-file-system --file-system-id ${file_system_id} --region ${region}
+
+# delete cluster
+eksctl delete cluster --name ${cluster_name} --region ${region}
+
+# if you lose terminal session when deleting cluster, you need to find some values such as $file_system_id, $security_group_id ​​through the aws console or aws cli.
 ```

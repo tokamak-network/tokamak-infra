@@ -12,7 +12,7 @@ spec:
       initContainers:
         - name: wait-for-l1
           image: nicolaka/netshoot
-          command: ["bash", "-c", "/script/wait/wait-for-l1.sh"]
+          command: ['bash', '-c', '/script/wait/wait-for-l1.sh']
           volumeMounts:
             - name: wait-scripts
               mountPath: /script/wait
@@ -21,7 +21,7 @@ spec:
                 name: common
         - name: wait-for-l2
           image: nicolaka/netshoot
-          command: ["bash", "-c", "/script/wait/wait-for-l2.sh"]
+          command: ['bash', '-c', '/script/wait/wait-for-l2.sh']
           envFrom:
             - configMapRef:
                 name: common
@@ -30,9 +30,9 @@ spec:
               mountPath: /script/wait
       containers:
         - name: relayer
-          image: onthertech/optimism.message-relayer
+          image: onthertech/optimism.tokamak-message-relayer:f8595075f4c1
           imagePullPolicy: IfNotPresent
-          command: ["./relayer.sh"]
+          command: ['./relayer.sh']
           resources: {}
           envFrom:
             - configMapRef:

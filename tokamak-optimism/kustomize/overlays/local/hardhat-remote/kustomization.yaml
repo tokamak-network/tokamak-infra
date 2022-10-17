@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+bases:
+  - ../../../envs/hardhat-remote
+  - ../../../scripts
+
+resources:
+  - ../../../bases/data-transport-layer
+  - ../../../bases/l2geth
+  - ../../../bases/batch-submitter
+  - ../../../bases/relayer
+  - local-path-provisioner.yaml
+  - pvc.yaml

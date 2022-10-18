@@ -9,10 +9,10 @@
       "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
     },
     {
-      "name": "Tokamak Nightly",
+      "name": "Tokamak",
       "type": "L2",
-      "chainId": 5051,
-      "endpoint": "https://goerli-nightly.optimism.tokamak.network",
+      "chainId": 5050,
+      "endpoint": "https://goerli.optimism.tokamak.network",
       "oppositeChainId": 5,
       "iconURL": "/logos/tokamak-symbol.svg"
     }
@@ -27,12 +27,12 @@
       "decimals": 18,
       "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
       "extensions": {
-        "optimismBridgeAddress": "0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4"
+        "optimismBridgeAddress": "0x7377F3D0F64d7a54Cf367193eb74a052ff8578FD"
       }
     },
     {
       "id": "ethereum",
-      "chainId": 5051,
+      "chainId": 5050,
       "address": null,
       "name": "ETH",
       "symbol": "ETH",
@@ -51,12 +51,12 @@
       "decimals": 18,
       "iconURL": "/logos/tokamak-symbol.svg",
       "extensions": {
-        "optimismBridgeAddress": "0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4"
+        "optimismBridgeAddress": "0x7377F3D0F64d7a54Cf367193eb74a052ff8578FD"
       }
     },
     {
       "id": "tokamak-network",
-      "chainId": 5051,
+      "chainId": 5050,
       "address": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
       "name": "TON",
       "symbol": "TON",

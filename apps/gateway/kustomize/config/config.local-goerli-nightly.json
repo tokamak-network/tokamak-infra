@@ -1,15 +1,15 @@
 {
   "SUPPORTED_NETWORKS": [
     {
-      "name": "Local Goerli Nightly",
+      "name": "Goerli",
       "type": "L1",
       "chainId": 5,
-      "endpoint": "https://goerli.rpc.tokamak.network",
+      "endpoint": "https://goerli2.rpc.tokamak.network",
       "oppositeChainId": null,
       "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
     },
     {
-      "name": "Local Tokamak",
+      "name": "Local Tokamak Nightly",
       "type": "L2",
       "chainId": 5051,
       "endpoint": "http://localhost:8545",
@@ -45,7 +45,7 @@
     {
       "id": "tokamak-network",
       "chainId": 5,
-      "address": "0x44d4f5d89e9296337b8c48a332b3b2fb2c190cd0",
+      "address": "0x68c1F9620aeC7F2913430aD6daC1bb16D8444F00",
       "name": "TON",
       "symbol": "TON",
       "decimals": 18,

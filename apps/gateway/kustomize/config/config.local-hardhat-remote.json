@@ -1,7 +1,7 @@
 {
   "SUPPORTED_NETWORKS": [
     {
-      "name": "Local Hardhat Remote",
+      "name": "Hardhat Remote",
       "type": "L1",
       "chainId": 31337,
       "endpoint": "https://hardhat.rpc.tokamak.network",

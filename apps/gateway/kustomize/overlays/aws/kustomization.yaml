@@ -7,3 +7,7 @@ bases:
 resources:
   - ../../bases
   - ingress.yaml
+
+patchesStrategicMerge:
+  - resource_override.yaml
+  - service_override.yaml

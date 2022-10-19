@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: l2geth-ingress-alb
+  name: gateway-ingress-alb
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
@@ -12,17 +12,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /ws
-            pathType: Prefix
-            backend:
-              service:
-                name: l2geth-svc
-                port:
-                  number: 8546
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: l2geth-svc
+                name: gateway-svc
                 port:
-                  number: 8545
+                  number: 80

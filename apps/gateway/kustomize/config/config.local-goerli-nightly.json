@@ -1,0 +1,70 @@
+{
+  "SUPPORTED_NETWORKS": [
+    {
+      "name": "Goerli",
+      "type": "L1",
+      "chainId": 5,
+      "endpoint": "https://goerli2.rpc.tokamak.network",
+      "oppositeChainId": null,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
+    },
+    {
+      "name": "Local Tokamak Nightly",
+      "type": "L2",
+      "chainId": 5051,
+      "endpoint": "http://localhost:8545",
+      "oppositeChainId": 5,
+      "iconURL": "/logos/tokamak-symbol.svg"
+    }
+  ],
+  "SUPPORTED_TOKENS": [
+    {
+      "id": "ethereum",
+      "chainId": 5,
+      "address": null,
+      "name": "ETH",
+      "symbol": "ETH",
+      "decimals": 18,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "extensions": {
+        "optimismBridgeAddress": "0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4"
+      }
+    },
+    {
+      "id": "ethereum",
+      "chainId": 5051,
+      "address": null,
+      "name": "ETH",
+      "symbol": "ETH",
+      "decimals": 18,
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "extensions": {
+        "optimismBridgeAddress": "0x4200000000000000000000000000000000000010"
+      }
+    },
+    {
+      "id": "tokamak-network",
+      "chainId": 5,
+      "address": "0x68c1F9620aeC7F2913430aD6daC1bb16D8444F00",
+      "name": "TON",
+      "symbol": "TON",
+      "decimals": 18,
+      "iconURL": "/logos/tokamak-symbol.svg",
+      "extensions": {
+        "optimismBridgeAddress": "0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4"
+      }
+    },
+    {
+      "id": "tokamak-network",
+      "chainId": 5051,
+      "address": "0x7c6b91D9Be155A6Db01f749217d76fF02A7227F2",
+      "name": "TON",
+      "symbol": "TON",
+      "decimals": 18,
+      "iconURL": "/logos/tokamak-symbol.svg",
+      "extensions": {
+        "optimismBridgeAddress": "0x4200000000000000000000000000000000000010"
+      }
+    }
+  ]
+}

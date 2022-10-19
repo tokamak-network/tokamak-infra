@@ -384,8 +384,30 @@ cp secret.env.example secret.env
 
 ### Run
 
+Use `tokamak-optimism.sh` script to run.
+
 ```
-./tokamak-optimism.sh create aws/goerli
+$ ./tokamak-optimism.sh help
+Usage:
+  ./tokamak-optimism.sh [command] [cluster name] [env name]
+    * command list
+      - create
+      - delete
+    * env list
+      - aws
+      - local
+```
+
+create optimism to aws cluster(eks):
+
+```
+./tokamak-optimism.sh create goerli-nightly aws
+```
+
+create optimism to local cluster:
+
+```
+./tokamak-optimism.sh create goerli-nightly local
 ```
 
 ### Delete
@@ -397,7 +419,7 @@ Delete k8s resources
 
 helm uninstall aws-load-balancer-controller -n kube-system
 
-./tokamak-optimism.sh delete aws/goerli
+./tokamak-optimism.sh delete goerli-nightly aws
 ```
 
 Delete cluster and aws resources

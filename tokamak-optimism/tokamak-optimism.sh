@@ -2,19 +2,30 @@
 
 function print_help() {
   echo "Usage: "
-  echo "  $0 [command] [cluster name] [env name]"
+  echo "  $0 [command] (cluster_name env_name)"
   echo "    * command list"
   echo "      - create"
   echo "      - delete"
   echo "      - list"
-  echo "    * env list"
-  echo "      - aws"
-  echo "      - local"
+  echo "      - update [list|all(default)|configmap|...]"
+  echo "      - reload [list|all(default)|...]"
+  echo
+  echo "Examples: "
+  echo " $0 list"
+  echo " $0 create hardhat-remote local"
+  echo " $0 delete"
+  echo " $0 update"
+  echo " $0 update list"
+  echo " $0 update configmap"
+  echo " $0 update batch-submitter"
+  echo " $0 reload"
+  echo " $0 reload list"
+  echo " $0 reload"
+  echo " $0 reload batch-submitter"
 }
 
 MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 ACTION=$1
-ACTION_LIST=("create delete list")
 CLUSTER_NAME=$2
 ENV_NAME=$3
 
@@ -30,13 +41,6 @@ CLUSTER_PATH=$MYPATH/kustomize/overlays/${ENV_NAME}/${CLUSTER_NAME}
 
 function check_cluster() {
   for i in $CLUSTER_LIST; do
-    [[ "$i" == "$1" ]] && return 0
-  done
-  return 1
-}
-
-function check_action() {
-  for i in $ACTION_LIST; do
     [[ "$i" == "$1" ]] && return 0
   done
   return 1
@@ -58,28 +62,11 @@ function get_configmap() {
   fi
 }
 
-if !(check_action $ACTION); then
-  print_help
-  exit 1
-fi
-
 echo "[ARGS]"
 echo "* ACTION=${ACTION}"
-echo "* CLUSTER_NAME=${CLUSTER_NAME}"
-echo "* ENV_NAME=${ENV_NAME}"
+[ "$CLUSTER_NAME" ] && echo "* CLUSTER_NAME=${CLUSTER_NAME}"
+[ "$ENV_NAME" ] && echo "* ENV_NAME=${ENV_NAME}"
 echo
-
-if [ $ACTION == "list" ]; then
-  echo "[List that can be created]"
-  for env in $ENV_LIST; do
-    cluster_list=$(ls -d $MYPATH/kustomize/overlays/${env}/*/ | rev | cut -f2 -d'/' | rev)
-    cluster_list=${cluster_list//templates/}
-    for cluster in $cluster_list; do
-      echo "* $cluster $env"
-    done
-  done
-  exit 0
-fi
 
 if [ $ACTION == "create" ]; then
   if !(check_cluster $CLUSTER_NAME); then
@@ -131,6 +118,23 @@ elif [ $ACTION == "delete" ]; then
     sh $DELETE_CLUSTER_PATH/delete.sh
     [ $? -ne 0 ] && exit 1
   fi
+
+elif [ $ACTION == "list" ]; then
+  echo "[List that can be created]"
+  for env in $ENV_LIST; do
+    cluster_list=$(ls -d $MYPATH/kustomize/overlays/${env}/*/ | rev | cut -f2 -d'/' | rev)
+    cluster_list=${cluster_list//templates/}
+    for cluster in $cluster_list; do
+      echo "* $cluster $env"
+    done
+  done
+
+elif [ $ACTION == "update" ]; then
+  echo "update"
+
+elif [ $ACTION == "reload" ]; then
+  echo "reload"
+
 else
   print_help
   exit 1

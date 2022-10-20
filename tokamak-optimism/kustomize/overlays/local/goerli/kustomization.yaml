@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 bases:
   - ../../../envs/goerli
   - ../../../scripts
@@ -12,3 +15,9 @@ resources:
   - ../../../bases/relayer
   - local-path-provisioner.yaml
   - pvc.yaml
+
+configMapGenerator:
+  - name: chain-config
+    literals:
+      - CLUSTER_NAME=goerli
+      - ENV_NAME=local

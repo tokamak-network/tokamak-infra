@@ -6,6 +6,7 @@ function print_help() {
   echo "    * command list"
   echo "      - create"
   echo "      - delete"
+  echo "      - list"
   echo "    * env list"
   echo "      - aws"
   echo "      - local"
@@ -67,6 +68,18 @@ echo "* ACTION=${ACTION}"
 echo "* CLUSTER_NAME=${CLUSTER_NAME}"
 echo "* ENV_NAME=${ENV_NAME}"
 echo
+
+if [ $ACTION == "list" ]; then
+  echo "[List that can be created]"
+  for env in $ENV_LIST; do
+    cluster_list=$(ls -d $MYPATH/kustomize/overlays/${env}/*/ | rev | cut -f2 -d'/' | rev)
+    cluster_list=${cluster_list//templates/}
+    for cluster in $cluster_list; do
+      echo "* $cluster $env"
+    done
+  done
+  exit 0
+fi
 
 if [ $ACTION == "create" ]; then
   if !(check_cluster $CLUSTER_NAME); then

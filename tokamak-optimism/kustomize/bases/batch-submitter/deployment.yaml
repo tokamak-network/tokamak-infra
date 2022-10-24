@@ -12,7 +12,7 @@ spec:
       initContainers:
         - name: wait-for-l1
           image: nicolaka/netshoot
-          command: ['bash', '-c', '/script/wait/wait-for-l1.sh']
+          command: ["bash", "-c", "/script/wait/wait-for-l1.sh"]
           volumeMounts:
             - name: wait-scripts
               mountPath: /script/wait
@@ -21,7 +21,7 @@ spec:
                 name: common
         - name: wait-for-deployer
           image: nicolaka/netshoot
-          command: ['bash', '-c', '/script/wait/wait-for-deployer.sh']
+          command: ["bash", "-c", "/script/wait/wait-for-deployer.sh"]
           envFrom:
             - configMapRef:
                 name: common
@@ -30,7 +30,7 @@ spec:
               mountPath: /script/wait
         - name: wait-for-l2
           image: nicolaka/netshoot
-          command: ['bash', '-c', '/script/wait/wait-for-l2.sh']
+          command: ["bash", "-c", "/script/wait/wait-for-l2.sh"]
           envFrom:
             - configMapRef:
                 name: common
@@ -41,7 +41,10 @@ spec:
         - name: batch-submitter
           image: onthertech/optimism.batch-submitter-service
           imagePullPolicy: IfNotPresent
-          command: ['./batch-submitter.sh']
+          ports:
+            - containerPort: 7300
+              protocol: TCP
+          command: ["./batch-submitter.sh"]
           resources: {}
           envFrom:
             - configMapRef:

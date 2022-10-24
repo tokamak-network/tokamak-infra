@@ -221,7 +221,7 @@ Get the private subnet id to for fargate
 ```
 aws ec2 describe-subnets \
     --filters Name=vpc-id,Values=$vpc_id \
-    --query 'Subnets[?MapPublicIpOnLaunch==`false`].SubnetId'
+    --query 'Subnets[?MapPublicIpOnLaunch==`false`].SubnetId' \
     --region ${region} \
     --output json
 ```
@@ -292,8 +292,9 @@ Create new Amazon Managed Service for Prometheus
 
 ```
 export workspace_name=<my-workspace_name>
+export amp_region=<my-amp_region>
 
-aws amp create-workspace --alias ${workspace_name} --region ${region}
+aws amp create-workspace --alias ${workspace_name} --region ${amp_region}
 
 # remember your workspace id from output
 export workspace_id=<my-workspace id>
@@ -321,8 +322,6 @@ eksctl create iamserviceaccount \
   --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess \
   --region ${region} \
   --approve
-
-# cluster name, region-code
 ```
 
 Install `prometheus` by helm
@@ -335,15 +334,31 @@ helm repo update
 helm install amp-prometheus-chart prometheus-community/prometheus -n prometheus \
 --set serviceAccounts.server.create=false \
 --set serviceAccounts.server.name=amp-iamproxy-ingest-service-account \
---set server.remoteWrite[0].url="https://aps-workspaces.${region}.amazonaws.com/workspaces/${workspace_id}/api/v1/remote_write" \
---set server.remoteWrite[0].sigv4.region=${region} \
+--set server.resources.requests.cpu=1 \
+--set server.resources.requests.memory=1.5Gi \
+--set server.remoteWrite[0].url="https://aps-workspaces.${amp_region}.amazonaws.com/workspaces/${workspace_id}/api/v1/remote_write" \
+--set server.remoteWrite[0].sigv4.region=${amp_region} \
 --set server.remoteWrite[0].queue_config.max_samples_per_send=1000 \
 --set server.remoteWrite[0].queue_config.max_shards=200 \
 --set server.remoteWrite[0].queue_config.capacity=2500 \
 --set server.persistentVolume.enabled=false \
 --set alertmanager.enabled=false \
 --set nodeExporter.enabled=false \
---set pushgateway.enabled=false
+--set pushgateway.enabled=false \
+--set extraScrapeConfigs='
+- job_name: "data-transport-layer"
+  static_configs:
+    - targets:
+      - "data-transport-layer-0.data-transport-layer-svc.default.svc.cluster.local:7878"
+- job_name: "batch-submitter"
+  static_configs:
+    - targets:
+      - "batch-submitter-svc.default.svc.cluster.local:7300"
+- job_name: "l2geth"
+  metrics_path: /debug/metrics/prometheus
+  static_configs:
+    - targets:
+      - "l2geth-0.l2geth-svc.default.svc.cluster.local"'
 ```
 
 ### Environment
@@ -366,7 +381,7 @@ EFS_VOLUME_ID={efs file system id}
 CERTIFICATE_ARN={certificate arn for https}
 ```
 
-You have to set some `*.env` files in `./kustomize/envs/rinkeby`
+You have to set some `*.env` files in `./kustomize/envs/goerli`
 
 ```
 # you have to set 'URL' to your contract address file's url in the 'batch-submitter.env', 'common.env', 'data-transport-layer.env', 'relayer.env'

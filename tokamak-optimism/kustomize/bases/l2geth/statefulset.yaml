@@ -13,7 +13,7 @@ spec:
       initContainers:
         - name: wait-for-deployer
           image: nicolaka/netshoot
-          command: ["bash", "-c", "/script/wait/wait-for-deployer.sh"]
+          command: ['bash', '-c', '/script/wait/wait-for-deployer.sh']
           envFrom:
             - configMapRef:
                 name: common
@@ -22,7 +22,7 @@ spec:
               mountPath: /script/wait
         - name: wait-for-dtl
           image: nicolaka/netshoot
-          command: ["bash", "-c", "/script/wait/wait-for-dtl.sh"]
+          command: ['bash', '-c', '/script/wait/wait-for-dtl.sh']
           envFrom:
             - configMapRef:
                 name: common
@@ -32,7 +32,7 @@ spec:
       containers:
         - name: l2geth
           image: onthertech/optimism.l2geth
-          command: ["sh", "./geth.sh"]
+          command: ['sh', './geth.sh']
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8545

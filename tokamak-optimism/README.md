@@ -389,13 +389,21 @@ Use `tokamak-optimism.sh` script to run.
 ```
 $ ./tokamak-optimism.sh help
 Usage:
-  ./tokamak-optimism.sh [command] [cluster name] [env name]
+  ./tokamak-optimism.sh [command] ([cluster_name] [env_name]|[pod_name])
     * command list
-      - create
+      - create [list|cluster_name env_name]
       - delete
-    * env list
-      - aws
-      - local
+      - update
+      - reload(restart) [list|all|pod_name]
+
+Examples:
+ ./tokamak-optimism.sh create list
+ ./tokamak-optimism.sh create hardhat-remote local
+ ./tokamak-optimism.sh delete
+ ./tokamak-optimism.sh update
+ ./tokamak-optimism.sh reload list
+ ./tokamak-optimism.sh reload all
+ ./tokamak-optimism.sh reload batch-submitter
 ```
 
 create optimism to aws cluster(eks):
@@ -410,6 +418,22 @@ create optimism to local cluster:
 ./tokamak-optimism.sh create goerli-nightly local
 ```
 
+### Change config
+
+Modify environment variables.
+
+```
+$ ./tokamak-optimism.sh update
+$ ./tokamak-optimism.sh reload list
+[List]
+* batch-submitter
+* relayer
+* data-transport-layer
+* l2geth
+
+$ ./tokamak-optimism.sh reload relayer
+```
+
 ### Delete
 
 Delete k8s resources
@@ -419,7 +443,7 @@ Delete k8s resources
 
 helm uninstall aws-load-balancer-controller -n kube-system
 
-./tokamak-optimism.sh delete goerli-nightly aws
+./tokamak-optimism.sh delete
 ```
 
 Delete cluster and aws resources

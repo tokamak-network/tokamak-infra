@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gateway
+  name: app-gateway
 spec:
   replicas: 1
   template:
@@ -10,17 +10,17 @@ spec:
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       containers:
-        - name: gateway
+        - name: app-gateway
           image: onthertech/tokamak.gateway
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
               protocol: TCP
           volumeMounts:
-            - name: gateway-volume
+            - name: app-gateway-volume
               readOnly: true
               mountPath: /usr/share/caddy/config
       volumes:
-        - name: gateway-volume
+        - name: app-gateway-volume
           configMap:
-            name: gateway-config
+            name: app-gateway-config

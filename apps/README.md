@@ -34,29 +34,48 @@ Use `tokamak-apps.sh` script to run gateway.
 ```
 $ ./tokamak-apps.sh help
 Usage:
-  ./tokamak-apps.sh [command] [app name] [env name]
+  ./tokamak-apps.sh [command] [app_name] [env_name]
     * command list
-      - create
-      - delete
-    * env list
-      - aws
-      - local
+      - create [list|all|app_name env_name]
+      - delete [list|all|app_name]
+      - update [list|app_name]
+      - reload(restart) [list|all|app_name]
+
+Examples:
+ ./tokamak-apps.sh create list
+ ./tokamak-apps.sh create gateway local
+ ./tokamak-apps.sh delete list
+ ./tokamak-apps.sh delete gateway
+ ./tokamak-apps.sh update list
+ ./tokamak-apps.sh update gateway
+ ./tokamak-apps.sh reload list
+ ./tokamak-apps.sh reload all
+ ./tokamak-apps.sh reload gateway
 ```
 
-deploy gateway to local cluster:
+**deploy gateway to local cluster**
 
 ```
 $ ./tokamak-apps.sh create gateway local
 ```
 
-deploy gateway to aws cluster:
+**deploy gateway to aws cluster**
 
 ```
 $ ./tokamak-apps.sh create gateway aws
 ```
 
-remove gateway to aws cluster:
+**remove gateway to aws cluster**
 
 ```
-$ ./tokamak-apps.sh delete gateway aws
+$ ./tokamak-apps.sh delete gateway
+```
+
+**update gateway**
+
+modify config.json
+
+```
+$ ./tokamak-apps.sh update gateway
+$ ./tokamak-apps.sh reload gateway
 ```

@@ -6,3 +6,10 @@ bases:
 
 resources:
   - ../../bases
+
+configMapGenerator:
+  - name: app-gateway-config
+    behavior: merge
+    literals:
+      - APP_NAME=gateway
+      - ENV_NAME=local

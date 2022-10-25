@@ -11,3 +11,10 @@ resources:
 patchesStrategicMerge:
   - resource_override.yaml
   - service_override.yaml
+
+configMapGenerator:
+  - name: app-gateway-config
+    behavior: merge
+    literals:
+      - APP_NAME=gateway
+      - ENV_NAME=aws

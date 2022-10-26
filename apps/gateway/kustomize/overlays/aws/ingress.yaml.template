@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: gateway-ingress-alb
+  name: app-gateway-ingress-alb
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
@@ -16,6 +16,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: gateway-svc
+                name: app-gateway-svc
                 port:
                   number: 80

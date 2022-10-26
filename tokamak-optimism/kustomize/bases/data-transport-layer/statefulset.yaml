@@ -13,7 +13,7 @@ spec:
       initContainers:
         - name: wait-for-l1
           image: nicolaka/netshoot
-          command: ["bash", "-c", "/script/wait/wait-for-l1.sh"]
+          command: ['bash', '-c', '/script/wait/wait-for-l1.sh']
           volumeMounts:
             - name: wait-scripts
               mountPath: /script/wait
@@ -24,7 +24,7 @@ spec:
         - name: data-transport-layer
           image: onthertech/optimism.data-transport-layer
           imagePullPolicy: IfNotPresent
-          command: ["./dtl.sh"]
+          command: ['./dtl.sh']
           envFrom:
             - configMapRef:
                 name: data-transport-layer

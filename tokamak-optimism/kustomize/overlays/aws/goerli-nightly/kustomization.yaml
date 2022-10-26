@@ -5,6 +5,9 @@ bases:
   - ../../../envs/goerli-nightly
   - ../../../scripts
 
+generatorOptions:
+  disableNameSuffixHash: true
+
 resources:
   - ../../../bases/data-transport-layer
   - ../../../bases/l2geth
@@ -18,3 +21,9 @@ resources:
 patchesStrategicMerge:
   - resource_override.yaml
   - service_override.yaml
+
+configMapGenerator:
+  - name: chain-config
+    literals:
+      - CLUSTER_NAME=goerli-nightly
+      - ENV_NAME=aws

@@ -1,20 +1,22 @@
 {
   "SUPPORTED_NETWORKS": [
     {
-      "name": "Goerli",
+      "name": "Goerli Network",
       "type": "L1",
       "chainId": 5,
       "endpoint": "https://goerli.rpc.tokamak.network",
       "oppositeChainId": null,
-      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "explorer": "https://goerli.etherscan.io/tx/"
     },
     {
-      "name": "Tokamak",
+      "name": "Tokamak Goerli",
       "type": "L2",
       "chainId": 5050,
       "endpoint": "https://goerli.optimism.tokamak.network",
       "oppositeChainId": 5,
-      "iconURL": "/logos/tokamak-symbol.svg"
+      "iconURL": "/logos/tokamak-symbol.svg",
+      "explorer": "https://goerli.explorer.tokamak.network/tx/"
     }
   ],
   "SUPPORTED_TOKENS": [

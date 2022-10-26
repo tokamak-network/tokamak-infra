@@ -1,7 +1,7 @@
 {
   "SUPPORTED_NETWORKS": [
     {
-      "name": "Goerli",
+      "name": "Goerli Network",
       "type": "L1",
       "chainId": 5,
       "endpoint": "https://goerli.rpc.tokamak.network",
@@ -9,7 +9,7 @@
       "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
     },
     {
-      "name": "Tokamak Nightly",
+      "name": "Tokamak Goerli Nightly",
       "type": "L2",
       "chainId": 5051,
       "endpoint": "https://goerli-nightly.optimism.tokamak.network",

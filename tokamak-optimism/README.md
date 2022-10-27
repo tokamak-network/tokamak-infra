@@ -358,7 +358,7 @@ helm install amp-prometheus-chart prometheus-community/prometheus -n prometheus 
   metrics_path: /debug/metrics/prometheus
   static_configs:
     - targets:
-      - "l2geth-0.l2geth-svc.default.svc.cluster.local"'
+      - "l2geth-0.l2geth-svc.default.svc.cluster.local:6060"'
 ```
 
 ### Environment

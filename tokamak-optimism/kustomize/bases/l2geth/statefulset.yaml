@@ -32,12 +32,23 @@ spec:
       containers:
         - name: l2geth
           image: onthertech/optimism.l2geth
-          command: ['sh', './geth.sh', '--metrics']
+          command:
+            [
+              'sh',
+              './geth.sh',
+              '--metrics',
+              '--metrics.addr',
+              '0.0.0.0',
+              '--metrics.port',
+              '6060',
+            ]
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8545
               protocol: TCP
             - containerPort: 8546
+              protocol: TCP
+            - containerPort: 6060
               protocol: TCP
           resources: {}
           env:

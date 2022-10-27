@@ -128,10 +128,17 @@ function print_running_list() {
   done
 }
 
-echo "[ARGS]"
-echo "* ACTION=${ACTION}"
-echo "* ...ARGS=$2 $3 $4"
-echo
+function ask_going() {
+  local current_context=$(kubectl config current-context)
+  local message="Current context is \"${current_context}\"."$'\n'
+  message+="going to \"${ACTION}\"?"
+  local res=1
+  read -p "$message (n) " -n 1 -r
+  echo
+  echo
+  [[ $REPLY =~ ^[Yy]$ ]] && res=0
+  return $res
+}
 
 case $ACTION in
   create)
@@ -161,10 +168,25 @@ case $ACTION in
 
     secret_file=$MYPATH/kustomize/envs/$cluster_name/secret.env
 
+    message="Do you check environment files?"$'\n'
+    [ "$env_name" == "aws" ] && message+=" - $cluster_path/.env"$'\n'
+    message+=" - $secret_file"$'\n'
+    read -p "$message(n) " -n 1 -r
+    echo
+    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+      echo "aborted."
+      exit 0
+    fi
+
     if [ ! -f $secret_file ]; then
       echo "Not found secret.env file($secret_file)"
       echo "Generate secret.env file from secret.env.example"
       exit 1
+    fi
+
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
     fi
 
     if [ -f $cluster_path/create.sh ]; then
@@ -177,6 +199,11 @@ case $ACTION in
     kubectl apply -k $cluster_path
     ;;
   delete)
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     get_configmap
 
     delete_cluster_path=$MYPATH/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
@@ -190,10 +217,20 @@ case $ACTION in
     fi
     ;;
   update|upgrade)
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     get_configmap
     update_configmap
     ;;
   reload|restart)
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     if [ -z "$2" ]; then
       print_help
       exit 1

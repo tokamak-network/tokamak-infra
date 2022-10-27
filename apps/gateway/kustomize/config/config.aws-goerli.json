@@ -68,5 +68,17 @@
         "optimismBridgeAddress": "0x4200000000000000000000000000000000000010"
       }
     }
-  ]
+  ],
+  "SUPPORTED_CHAINID": [],
+  "SUPPORTED_WALLETS": {
+    "METAMASK": {
+      "connector": "injected",
+      "name": "MetaMask",
+      "iconName": "metamask.svg",
+      "description": "Easy-to-use browser extension.",
+      "href": null,
+      "color": "#E8831D",
+      "type": "METAMASK"
+    }
+  }
 }

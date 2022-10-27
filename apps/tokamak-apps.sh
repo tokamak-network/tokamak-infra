@@ -4,18 +4,28 @@ function print_help() {
   echo "Usage: "
   echo "  $0 [command] [app_name] [env_name]"
   echo "    * command list"
-  echo "      - create [list|all|app_name env_name]"
-  echo "      - delete [list|all|app_name]"
-  echo "      - update [list|app_name]"
-  echo "      - reload(restart) [list|all|app_name]"
+  echo "      - create"
+  echo "         - list|all"
+  echo "         - [app_name] [env_name]"
+  echo "      - delete"
+  echo "         - list|all|[app_name]"
+  echo "      - tag|tags [app_name]"
+  echo "      - update"
+  echo "         - list"
+  echo "         - [app_name] config|[tag_name]|undo"
+  echo "      - reload(restart)"
+  echo "         - list|all|[app_name]"
   echo
   echo "Examples: "
   echo " $0 create list"
   echo " $0 create gateway local"
   echo " $0 delete list"
   echo " $0 delete gateway"
+  echo " $0 tag gateway"
   echo " $0 update list"
-  echo " $0 update gateway"
+  echo " $0 update gateway config"
+  echo " $0 update gateway latest"
+  echo " $0 update gateway undo"
   echo " $0 reload list"
   echo " $0 reload all"
   echo " $0 reload gateway"
@@ -47,40 +57,38 @@ function check_env() {
 }
 
 function check_running_pod() {
-  deployment_list=$(get_pod_list deployments)
-  statefulset_list=$(get_pod_list statefulsets)
+  deployment_list=$(get_resource_list deployments)
+  statefulset_list=$(get_resource_list statefulsets)
 
-  for pod in $deployment_list; do
-    [[ "$pod" == "app-$1" ]] && return 0
+  for name in $deployment_list; do
+    [[ "$name" == "app-$1" ]] && return 0
   done
 
-  for pod in $statefulset_list; do
-    [[ "$pod" == "app-$1" ]] && return 0
+  for name in $statefulset_list; do
+    [[ "$name" == "app-$1" ]] && return 0
   done
 
   return 1
 }
 
 function print_create_list() {
-  echo "[List]"
   for app in $APP_LIST; do
     if [ -d "$MYPATH/${app}/kustomize/overlays" ]; then
       env_list=$(ls -d $MYPATH/${app}/kustomize/overlays/*/ | rev | cut -f2 -d'/' | rev)
       for env in $env_list; do
-        echo "* $app $env"
+        echo "$app $env"
       done
     fi
   done
 }
 
 function print_running_list() {
-  deployment_list=$(get_pod_list deployments)
-  statefulset_list=$(get_pod_list statefulsets)
+  deployment_list=$(get_resource_list deployments)
+  statefulset_list=$(get_resource_list statefulsets)
 
   if [[ ! -z "$deployment_list" || ! -z "$statefulset_list" ]]; then
-    echo "[List]"
-    for pod in $deployment_list; do
-      echo "* ${pod:4}"
+    for name in $deployment_list; do
+      echo "${name:4}"
     done
   fi
 }
@@ -108,7 +116,7 @@ function get_configmap() {
   echo "* ENV_NAME=${CONFIGMAP_ENV_NAME}"
 }
 
-function get_pod_list() {
+function get_resource_list() {
   local kind=$1
 
   if [ -z "$kind" ]; then
@@ -118,6 +126,47 @@ function get_pod_list() {
 
   pod_names=$(kubectl get $kind -o jsonpath='{.items[*].metadata}' | jq -r .name | grep -e '^app-')
   echo $pod_names
+}
+
+function get_resource_image() {
+  local name=$1
+
+  if [ -z "$name" ]; then
+    echo "Error: there is no arguments to get resource image."
+    exit 1
+  fi
+
+  res=$(kubectl get pods -o json | jq -c '[ .items|.[]|.spec.containers|.[] | select( .name | contains("'app-${name}'")) ]' | jq -r .[0].image)
+  arr=(${res//:/ })
+  echo ${arr[0]}
+}
+
+function update_configmap() {
+  kubectl apply -k $MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}
+  if [ $? -ne 0 ]; then
+    echo "Error: failed to run update_configmap()"
+    exit 1
+  fi
+}
+
+function update_image() {
+  local kind=$1
+  local name=$2
+  local tagname=$3
+
+  if [[ -z "$kind" || -z "$name" || -z "$tagname" ]]; then
+    echo "Error: there is no arguments for update image."
+    exit 1
+  fi
+
+  echo "Starting update ${name:4} $kind to $tagname..."
+  sleep 1
+  local image=$(get_resource_image ${name:4})
+  if [ $tagname == "undo" ]; then
+    kubectl rollout undo $kind/$name
+  else
+    kubectl set image $kind/$name $name=$image:$tagname
+  fi
 }
 
 function rollout_restart() {
@@ -151,6 +200,20 @@ function ask_going() {
 }
 
 case $ACTION in
+  tag|tags)
+    image=$(get_resource_image $APP_NAME)
+
+    if [ -z "$image" ]; then
+      echo "Error: could not find $APP_NAME image."
+      echo "$APP_NAME should be already created."
+      exit 1
+    fi
+    tags=$(curl -s https://hub.docker.com/v2/repositories/${image}/tags/?page_size=1000 | jq -r '.results|.[]|"\(.name)(\(.last_updated))"')
+
+    for tag in $tags; do
+      [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
+    done
+    ;;
   create)
     if [ "$2" == "list" ]; then
       print_create_list
@@ -254,17 +317,43 @@ case $ACTION in
       exit 1
     fi
 
+    if [ -z "$3" ]; then
+      echo "Error: write tag version you want to update or write 'config'"
+      exit 1
+    fi
+
     if !(ask_going); then
       echo "aborted."
       exit 0
     fi
 
-    get_configmap
+    if [[ "$3" =~ ^config$|^configmap$ ]]; then
+      get_configmap
+      update_configmap
+    else
+      tagname=$3
+      deployment_list=$(get_resource_list deployments)
+      statefulset_list=$(get_resource_list statefulsets)
+      res=0
+      for name in $deployment_list; do
+        if [ "app-$APP_NAME" == $name ]; then
+          update_image deployment $name $tagname
+          res=1
+        fi
+      done
 
-    kubectl apply -k $MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}
-    if [ $? -ne 0 ]; then
-      echo "Error: failed to run update_configmap()"
-      exit 1
+      for name in $statefulset_list; do
+        if [ "app-$APP_NAME" == $name ]; then
+          update_image statefulset $name $tagname
+          res=1
+        fi
+      done
+
+      if [ $res == 0 ]; then
+        echo "Error: could not find resource ($APP_NAME)"
+        print_running_list
+        exit 1
+      fi
     fi
     ;;
   reload|restart)
@@ -279,28 +368,28 @@ case $ACTION in
     fi
 
     res=0
-    deployment_list=$(get_pod_list deployments)
-    statefulset_list=$(get_pod_list statefulsets)
+    deployment_list=$(get_resource_list deployments)
+    statefulset_list=$(get_resource_list statefulsets)
 
     if [[ "$APP_NAME" == "all" ]];then
-      for pod in $deployment_list; do
-        rollout_restart deployment $pod
+      for name in $deployment_list; do
+        rollout_restart deployment $name
       done
 
-      for pod in $statefulset_list; do
-        rollout_restart statefulset $pod
+      for name in $statefulset_list; do
+        rollout_restart statefulset $name
       done
     else
-      for pod in $deployment_list; do
-        if [ "app-$APP_NAME" == $pod ]; then
-          rollout_restart deployment $pod
+      for name in $deployment_list; do
+        if [ "app-$APP_NAME" == $name ]; then
+          rollout_restart deployment $name
           res=1
         fi
       done
 
-      for pod in $statefulset_list; do
-        if [ "app-$APP_NAME" == $pod ]; then
-          rollout_restart statefulset $pod
+      for name in $statefulset_list; do
+        if [ "app-$APP_NAME" == $name ]; then
+          rollout_restart statefulset $name
           res=1
         fi
       done

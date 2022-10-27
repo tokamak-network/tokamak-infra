@@ -14,7 +14,7 @@ spec:
         - name: l1chain
           image: onthertech/optimism.hardhat-node
           imagePullPolicy: IfNotPresent
-          command: ["yarn", "start", "--hostname", "0.0.0.0"]
+          command: ['yarn', 'start', '--hostname', '0.0.0.0']
           ports:
             - containerPort: 8545
               protocol: TCP

@@ -41,6 +41,9 @@ spec:
         - name: batch-submitter
           image: onthertech/optimism.batch-submitter-service
           imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 7300
+              protocol: TCP
           command: ['./batch-submitter.sh']
           resources: {}
           envFrom:

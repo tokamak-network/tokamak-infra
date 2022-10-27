@@ -14,3 +14,6 @@ spec:
     - name: websocket
       port: 8546
       targetPort: 8546
+    - name: metric
+      port: 6060
+      targetPort: 6060

@@ -387,20 +387,34 @@ cp secret.env.example secret.env
 Use `tokamak-optimism.sh` script to run.
 
 ```
-$ ./tokamak-optimism.sh help
+./tokamak-optimism.sh help
 Usage:
-  ./tokamak-optimism.sh [command] ([cluster_name] [env_name]|[pod_name])
-    * command list
-      - create [list|cluster_name env_name]
+  ./tokamak-optimism.sh [command]
+    * commands
+      - create
+         - list
+         - [cluster_name] [env_name]
       - delete
+      - tag|tags ([resource])
       - update
-      - reload(restart) [list|all|pod_name]
+         - config|list
+         - all [tag_name]|undo
+         - [resource] [tag_name]|undo
+      - reload(restart)
+         - list|all|[resource]
 
 Examples:
  ./tokamak-optimism.sh create list
  ./tokamak-optimism.sh create hardhat-remote local
  ./tokamak-optimism.sh delete
- ./tokamak-optimism.sh update
+ ./tokamak-optimism.sh tag
+ ./tokamak-optimism.sh tag batch-submitter
+ ./tokamak-optimism.sh update config
+ ./tokamak-optimism.sh update list
+ ./tokamak-optimism.sh update all release-1.0.1
+ ./tokamak-optimism.sh update all undo
+ ./tokamak-optimism.sh update batch-submitter release-1.0.1
+ ./tokamak-optimism.sh update batch-submitter undo
  ./tokamak-optimism.sh reload list
  ./tokamak-optimism.sh reload all
  ./tokamak-optimism.sh reload batch-submitter
@@ -423,15 +437,45 @@ create optimism to local cluster:
 Modify environment variables.
 
 ```
-$ ./tokamak-optimism.sh update
-$ ./tokamak-optimism.sh reload list
-[List]
-* batch-submitter
-* relayer
-* data-transport-layer
-* l2geth
+./tokamak-optimism.sh update config
+./tokamak-optimism.sh reload list
+batch-submitter
+relayer
+data-transport-layer
+l2geth
 
-$ ./tokamak-optimism.sh reload relayer
+./tokamak-optimism.sh reload relayer
+```
+
+### Update Image
+
+```
+./tokamak-optimism.sh update list
+config
+batch-submitter
+relayer
+data-transport-layer
+l2geth
+
+./tokamak-optimism.sh tag
+latest(2022-10-25T06:48:11.085338Z)
+nightly(2022-10-27T07:38:14.018041Z)
+release-0.1.1(2022-10-25T06:48:10.415968Z)
+release-0.1.0(2022-10-17T08:49:47.894557Z)
+
+./tokamak-optimism.sh update relayer latest
+```
+
+All resource can be update at once.
+
+```
+./tokamak-optimism.sh update all latest
+```
+
+The resource can be rollback.
+
+```
+./tokamak-optimism.sh update all undo
 ```
 
 ### Delete

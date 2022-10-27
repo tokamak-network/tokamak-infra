@@ -138,10 +138,17 @@ function rollout_restart() {
   fi
 }
 
-echo "[ARGS]"
-echo "* ACTION=${ACTION}"
-echo "* ...ARGS=$2 $3 $4"
-echo
+function ask_going() {
+  local current_context=$(kubectl config current-context)
+  local message="Current context is \"${current_context}\"."$'\n'
+  message+="going to \"${ACTION}\"?"
+  local res=1
+  read -p "$message (n) " -n 1 -r
+  echo
+  echo
+  [[ $REPLY =~ ^[Yy]$ ]] && res=0
+  return $res
+}
 
 case $ACTION in
   create)
@@ -166,6 +173,37 @@ case $ACTION in
       exit 1
     fi
 
+    # Add applications and config files
+    declare -a config_apps=(
+      "gateway"
+    )
+    declare -a config_files=(
+      "$MYPATH/${APP_NAME}/config/config.json"
+    )
+
+    message="Do you check environment and config files?"$'\n'
+    [ "$env_name" == "aws" ] && message+=" - $app_path/.env"$'\n'
+
+    idx=0
+    for app in ${config_apps[@]}; do
+      if [ "$APP_NAME" == "$app" ]; then
+        message+=" - ${config_files[$idx]}"$'\n'
+      fi
+      ((idx++))
+    done
+
+    read -p "$message(n) " -n 1 -r
+    echo
+    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+      echo "aborted."
+      exit 0
+    fi
+
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     if [ -f $app_path/create.sh ]; then
       sh $app_path/create.sh
       if [ $? -ne 0 ]; then
@@ -185,6 +223,11 @@ case $ACTION in
       echo "Error: could not find app ($APP_NAME)"
       print_running_list
       exit 1
+    fi
+
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
     fi
 
     get_configmap
@@ -211,6 +254,11 @@ case $ACTION in
       exit 1
     fi
 
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     get_configmap
 
     kubectl apply -k $MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}
@@ -222,6 +270,11 @@ case $ACTION in
   reload|restart)
     if [ "$2" == "list" ]; then
       print_running_list
+      exit 0
+    fi
+
+    if !(ask_going); then
+      echo "aborted."
       exit 0
     fi
 

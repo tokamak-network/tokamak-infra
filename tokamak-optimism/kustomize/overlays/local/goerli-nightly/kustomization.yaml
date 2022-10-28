@@ -16,6 +16,9 @@ resources:
   - local-path-provisioner.yaml
   - pvc.yaml
 
+patchesStrategicMerge:
+  - resource_override.yaml
+
 configMapGenerator:
   - name: chain-config
     literals:

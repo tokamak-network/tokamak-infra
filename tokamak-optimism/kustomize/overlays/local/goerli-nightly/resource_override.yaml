@@ -10,10 +10,6 @@ spec:
         - name: batch-submitter
           image: onthertech/optimism.batch-submitter-service:nightly
           imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: 1
-              memory: 1.5Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -26,10 +22,6 @@ spec:
         - name: data-transport-layer
           image: onthertech/optimism.data-transport-layer:nightly
           imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: 1
-              memory: 1.5Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -42,10 +34,6 @@ spec:
         - name: l2geth
           image: onthertech/optimism.l2geth:nightly
           imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: 2
-              memory: 3.5Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -58,7 +46,3 @@ spec:
         - name: relayer
           image: onthertech/optimism.tokamak-message-relayer:nightly
           imagePullPolicy: Always
-          resources:
-            requests:
-              cpu: 1
-              memory: 1.5Gi

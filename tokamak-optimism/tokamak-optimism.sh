@@ -13,6 +13,7 @@ function print_help() {
   echo "         - config|list"
   echo "         - all [tag_name]|undo"
   echo "         - [resource] [tag_name]|undo"
+  echo "         - [resource] list"
   echo "      - reload(restart)"
   echo "         - list|all|[resource]"
   echo
@@ -28,6 +29,7 @@ function print_help() {
   echo " $0 update all undo"
   echo " $0 update batch-submitter release-1.0.1"
   echo " $0 update batch-submitter undo"
+  echo " $0 update batch-submitter list"
   echo " $0 reload list"
   echo " $0 reload all"
   echo " $0 reload batch-submitter"
@@ -100,11 +102,35 @@ function update_image() {
 
   echo "Starting update $name $kind to $tagname..."
   sleep 1
+
   local image=$(get_resource_image $name)
-  if [ $tagname == "undo" ]; then
-    kubectl rollout undo $kind/$name
+  local is_tag=0
+  local tags=$(get_tags $image)
+
+  for tag in $tags; do
+    [[ "$tagname" == "$tag" || "$tagname" == "undo" ]] && is_tag=1 && break
+  done
+
+  if [ "$is_tag" == 0 ]; then
+    echo "Error: could not find tag name($tagname) on '$image'"
+    exit 1
+  fi
+
+  if [[ "$kind" == "deployment" || "$kind" == "deploy" ]]; then
+    if [ $tagname == "undo" ]; then
+      kubectl rollout undo $kind/$name
+    else
+      kubectl set image $kind/$name $name=$image:$tagname
+    fi
+  elif [[ "$kind" == "statefulset" || "$kind" == "sts" ]]; then
+    if [ $tagname == "undo" ]; then
+      echo "Warning: statefulset($name) is not supported undo!"
+    else
+      kubectl patch statefulset $name --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"'${image}':'${tagname}'"}]'
+    fi
   else
-    kubectl set image $kind/$name $name=$image:$tagname
+    echo "Error: Wrong resource kind: $kind"
+    exit 1
   fi
 }
 
@@ -186,10 +212,25 @@ function ask_going() {
   return $res
 }
 
+function get_tags() {
+  local image=$1
+  if [ -z "$image" ]; then
+    echo "Error: there is no arguments to get tags."
+    exit 1
+  fi
+
+  local tags=$(curl -s https://hub.docker.com/v2/repositories/${image}/tags/?page_size=1000 | jq -r '.results|.[]|"\(.name)"')
+  echo $tags
+}
+
 case $ACTION in
   tag|tags)
     if [ -z "$2" ]; then
       image="onthertech/optimism.l2geth"
+      tags=$(get_tags $image)
+      for tag in $tags; do
+        [[ "$tag" =~ ^release|^nightly$|^latest ]] && echo $tag
+      done
     else
       image=$(get_resource_image $2)
       if [ -z "$image" ]; then
@@ -197,12 +238,11 @@ case $ACTION in
         echo "$2 should be already created."
         exit 1
       fi
+      tags=$(get_tags $image)
+      for tag in $tags; do
+        echo $tag
+      done
     fi
-    tags=$(curl -s https://hub.docker.com/v2/repositories/${image}/tags/?page_size=1000 | jq -r '.results|.[]|"\(.name)(\(.last_updated))"')
-
-    for tag in $tags; do
-      [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
-    done
     ;;
   create)
     if [ "$2" == "list" ]; then
@@ -294,23 +334,33 @@ case $ACTION in
       exit 0
     fi
 
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
     if [[ "$2" =~ ^config$|^configmap$ ]]; then
+      if !(ask_going); then
+        echo "aborted."
+        exit 0
+      fi
       get_configmap
       update_configmap
     else
+      image=$(get_resource_image $2)
       tagname=$3
       if [ -z "$tagname" ]; then
         print_help
         echo "Error: write tag version you want to update!"
         echo "You can show tags as running '$0 tag'"
         exit 1
+      elif [ "$tagname" == "list" ]; then
+        tags=$(get_tags $image)
+        for tag in $tags; do
+          echo $tag
+        done
+        exit 0
       fi
 
+      if !(ask_going); then
+        echo "aborted."
+        exit 0
+      fi
       if [ "$2" == "all" ]; then
         for name in $deployment_list; do
           update_image deployment $name $tagname

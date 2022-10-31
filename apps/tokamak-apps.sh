@@ -12,7 +12,7 @@ function print_help() {
   echo "      - tag|tags [app_name]"
   echo "      - update"
   echo "         - list"
-  echo "         - [app_name] config|[tag_name]|undo"
+  echo "         - [app_name] config|[tag_name]|undo|list"
   echo "      - reload(restart)"
   echo "         - list|all|[app_name]"
   echo

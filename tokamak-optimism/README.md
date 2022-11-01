@@ -415,6 +415,7 @@ Usage:
          - config|list
          - all [tag_name]|undo
          - [resource] [tag_name]|undo
+         - [resource] list
       - reload(restart)
          - list|all|[resource]
 
@@ -430,6 +431,7 @@ Examples:
  ./tokamak-optimism.sh update all undo
  ./tokamak-optimism.sh update batch-submitter release-1.0.1
  ./tokamak-optimism.sh update batch-submitter undo
+ ./tokamak-optimism.sh update batch-submitter list
  ./tokamak-optimism.sh reload list
  ./tokamak-optimism.sh reload all
  ./tokamak-optimism.sh reload batch-submitter

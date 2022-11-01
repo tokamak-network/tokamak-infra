@@ -12,7 +12,7 @@ function print_help() {
   echo "      - tag|tags [app_name]"
   echo "      - update"
   echo "         - list"
-  echo "         - [app_name] config|[tag_name]|undo"
+  echo "         - [app_name] config|[tag_name]|undo|list"
   echo "      - reload(restart)"
   echo "         - list|all|[app_name]"
   echo
@@ -26,6 +26,7 @@ function print_help() {
   echo " $0 update gateway config"
   echo " $0 update gateway latest"
   echo " $0 update gateway undo"
+  echo " $0 update gateway list"
   echo " $0 reload list"
   echo " $0 reload all"
   echo " $0 reload gateway"
@@ -161,11 +162,35 @@ function update_image() {
 
   echo "Starting update ${name:4} $kind to $tagname..."
   sleep 1
+
   local image=$(get_resource_image ${name:4})
-  if [ $tagname == "undo" ]; then
-    kubectl rollout undo $kind/$name
+  local is_tag=0
+  local tags=$(get_tags $image)
+
+  for tag in $tags; do
+    [[ "$tagname" == "$tag" || "$tagname" == "undo" ]] && is_tag=1 && break
+  done
+
+  if [ "$is_tag" == 0 ]; then
+    echo "Error: could not find tag name($tagname) on '$image'"
+    exit 1
+  fi
+
+  if [[ "$kind" == "deployment" || "$kind" == "deploy" ]]; then
+    if [ $tagname == "undo" ]; then
+      kubectl rollout undo $kind/$name
+    else
+      kubectl set image $kind/$name $name=$image:$tagname
+    fi
+  elif [[ "$kind" == "statefulset" || "$kind" == "sts" ]]; then
+    if [ $tagname == "undo" ]; then
+      echo "Warning: statefulset($name) is not supported undo!"
+    else
+      kubectl patch statefulset $name --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"'${image}':'${tagname}'"}]'
+    fi
   else
-    kubectl set image $kind/$name $name=$image:$tagname
+    echo "Error: Wrong resource kind: $kind"
+    exit 1
   fi
 }
 
@@ -199,6 +224,17 @@ function ask_going() {
   return $res
 }
 
+function get_tags() {
+  local image=$1
+  if [ -z "$image" ]; then
+    echo "Error: there is no arguments to get tags."
+    exit 1
+  fi
+
+  local tags=$(curl -s https://hub.docker.com/v2/repositories/${image}/tags/?page_size=1000 | jq -r '.results|.[]|"\(.name)"')
+  echo $tags
+}
+
 case $ACTION in
   tag|tags)
     image=$(get_resource_image $APP_NAME)
@@ -208,10 +244,11 @@ case $ACTION in
       echo "$APP_NAME should be already created."
       exit 1
     fi
-    tags=$(curl -s https://hub.docker.com/v2/repositories/${image}/tags/?page_size=1000 | jq -r '.results|.[]|"\(.name)(\(.last_updated))"')
 
+    tags=$(get_tags $image)
     for tag in $tags; do
-      [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
+      echo $tag
+      # [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
     done
     ;;
   create)
@@ -322,37 +359,50 @@ case $ACTION in
       exit 1
     fi
 
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
     if [[ "$3" =~ ^config$|^configmap$ ]]; then
+      if !(ask_going); then
+        echo "aborted."
+        exit 0
+      fi
       get_configmap
       update_configmap
     else
+      image=$(get_resource_image $APP_NAME)
       tagname=$3
-      deployment_list=$(get_resource_list deployments)
-      statefulset_list=$(get_resource_list statefulsets)
-      res=0
-      for name in $deployment_list; do
-        if [ "app-$APP_NAME" == $name ]; then
-          update_image deployment $name $tagname
-          res=1
-        fi
-      done
 
-      for name in $statefulset_list; do
-        if [ "app-$APP_NAME" == $name ]; then
-          update_image statefulset $name $tagname
-          res=1
+      if [ "$tagname" == "list" ]; then
+        tags=$(get_tags $image)
+        for tag in $tags; do
+          echo $tag
+        done
+        exit 0
+      else
+        if !(ask_going); then
+          echo "aborted."
+          exit 0
         fi
-      done
+        deployment_list=$(get_resource_list deployments)
+        statefulset_list=$(get_resource_list statefulsets)
+        res=0
+        for name in $deployment_list; do
+          if [ "app-$APP_NAME" == $name ]; then
+            update_image deployment $name $tagname
+            res=1
+          fi
+        done
 
-      if [ $res == 0 ]; then
-        echo "Error: could not find resource ($APP_NAME)"
-        print_running_list
-        exit 1
+        for name in $statefulset_list; do
+          if [ "app-$APP_NAME" == $name ]; then
+            update_image statefulset $name $tagname
+            res=1
+          fi
+        done
+
+        if [ $res == 0 ]; then
+          echo "Error: could not find resource ($APP_NAME)"
+          print_running_list
+          exit 1
+        fi
       fi
     fi
     ;;

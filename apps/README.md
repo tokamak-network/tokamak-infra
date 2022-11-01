@@ -44,7 +44,7 @@ Usage:
       - tag|tags [app_name]
       - update
          - list
-         - [app_name] config|[tag_name]|undo
+         - [app_name] config|[tag_name]|undo|list
       - reload(restart)
          - list|all|[app_name]
 
@@ -58,6 +58,7 @@ Examples:
  ./tokamak-apps.sh update gateway config
  ./tokamak-apps.sh update gateway latest
  ./tokamak-apps.sh update gateway undo
+ ./tokamak-apps.sh update gateway list
  ./tokamak-apps.sh reload list
  ./tokamak-apps.sh reload all
  ./tokamak-apps.sh reload gateway

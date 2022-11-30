@@ -1,16 +1,12 @@
-alertmanager:
-  enabled: false
+# alertmanager:
+#   enabled: false
 
 nodeExporter:
   enabled: false
 
 prometheus:
-  # service:
-  #   type: LoadBalancer
-  #   additionalPorts:
-  #     - name: http
-  #       port: 9090
-  #       targetPort: 9090
+  service:
+    type: LoadBalancer
   prometheusSpec:
     retentionSize: '1GB'
     additionalScrapeConfigs:

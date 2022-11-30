@@ -26,13 +26,16 @@ grafana:
   #     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: '443'
   #   type: LoadBalancer
   # extraExposePorts:
-  #   - name: http
-  #     port: 80
+  #   - name: https
+  #     port: 443
   #     targetPort: 3000
   resources:
-    requests:
+    limits:
       cpu: 200m
       memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
   # persistence:
   #   type: pvc
   #   enabled: true

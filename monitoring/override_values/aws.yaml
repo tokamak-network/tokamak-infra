@@ -1,0 +1,42 @@
+prometheus:
+  prometheusSpec:
+    retentionSize: '1GB'
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    # storageSpec:
+    #   volumeClaimTemplate:
+    #     spec:
+    #       storageClassName: gp2
+    #       accessModes: ['ReadWriteOnce']
+    #       resources:
+    #         requests:
+    #           storage: 15Gi
+
+grafana:
+  # service:
+  #   annotations:
+  #     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+  #     service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: '*'
+  #     service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ${ACM_CERT_ARN}
+  #     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: '443'
+  #   type: LoadBalancer
+  # extraExposePorts:
+  #   - name: http
+  #     port: 80
+  #     targetPort: 3000
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  # persistence:
+  #   type: pvc
+  #   enabled: true
+  #   storageClassName: gp2
+  #   accessModes:
+  #     - ReadWriteOnce
+  #   size: 10Gi

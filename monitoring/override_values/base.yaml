@@ -1,0 +1,32 @@
+alertmanager:
+  enabled: false
+
+nodeExporter:
+  enabled: false
+
+prometheus:
+  # service:
+  #   type: LoadBalancer
+  #   additionalPorts:
+  #     - name: http
+  #       port: 9090
+  #       targetPort: 9090
+  prometheusSpec:
+    retentionSize: '1GB'
+    additionalScrapeConfigs:
+      - job_name: 'data-transport-layer'
+        static_configs:
+          - targets:
+              - 'data-transport-layer-0.data-transport-layer-svc.default.svc.cluster.local:7878'
+      - job_name: 'batch-submitter'
+        static_configs:
+          - targets:
+              - 'batch-submitter-svc.default.svc.cluster.local:7300'
+      - job_name: 'l2geth'
+        metrics_path: /debug/metrics/prometheus
+        static_configs:
+          - targets:
+              - 'l2geth-0.l2geth-svc.default.svc.cluster.local:6060'
+
+grafana:
+  adminPassword: admin

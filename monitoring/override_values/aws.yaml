@@ -29,6 +29,22 @@ grafana:
   #   - name: https
   #     port: 443
   #     targetPort: 3000
+
+  # network loadbalancing
+  service:
+    type: LoadBalancer
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: 'external'
+      service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: 'ip'
+      service.beta.kubernetes.io/aws-load-balancer-scheme: 'internet-facing'
+
+  # resources:
+  #   limits:
+  #     cpu: 0.5
+  #     memory: 0.75Gi
+  #   requests:
+  #     cpu: 0.5
+  #     memory: 0.75Gi
   resources:
     limits:
       cpu: 200m
@@ -36,6 +52,7 @@ grafana:
     requests:
       cpu: 100m
       memory: 128Mi
+
   # persistence:
   #   type: pvc
   #   enabled: true
@@ -43,3 +60,9 @@ grafana:
   #   accessModes:
   #     - ReadWriteOnce
   #   size: 10Gi
+
+  sidecar:
+    dashboards:
+      enabled: true
+    provider:
+      allowUiUpdates: true

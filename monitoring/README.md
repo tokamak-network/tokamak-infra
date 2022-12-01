@@ -16,6 +16,11 @@ kubectl get namespace
 kubectl create namespace monitoring
 ```
 
+## Add Dashboards
+```
+kubectl apply -k dashboards
+```
+
 ## Install Prometheus Stack
 
 ```

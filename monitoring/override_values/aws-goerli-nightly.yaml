@@ -1,0 +1,32 @@
+prometheus:
+  prometheusSpec:
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+
+grafana:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/b1591e34-3d8e-47b2-97b5-11a04db337e9
+    hosts:
+      - goerli-nightly.grafana.tokamak.network
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  sidecar:
+    provider:
+      allowUiUpdates: true

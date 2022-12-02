@@ -7,6 +7,7 @@ generatorOptions:
 configMapGenerator:
   - name: grafana-dashboards
     files:
+      - ./simple_system_dashboard.json
       - ./simple_application_dashboard.json
     options:
       labels:

@@ -2,11 +2,11 @@ prometheus:
   prometheusSpec:
     resources:
       limits:
-        cpu: 500m
-        memory: 512Mi
+        cpu: 700m
+        memory: 1.7Gi
       requests:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 700m
+        memory: 1.7Gi
 
 grafana:
   ingress:
@@ -22,11 +22,11 @@ grafana:
       - goerli.grafana.tokamak.network
   resources:
     limits:
-      cpu: 200m
+      cpu: 250m
       memory: 256Mi
     requests:
-      cpu: 100m
-      memory: 128Mi
+      cpu: 250m
+      memory: 256Mi
   sidecar:
     provider:
       allowUiUpdates: true

@@ -20,6 +20,13 @@ grafana:
       alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/b1591e34-3d8e-47b2-97b5-11a04db337e9
     hosts:
       - goerli-nightly.grafana.tokamak.network
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
   sidecar:
     provider:
       allowUiUpdates: true

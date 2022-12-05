@@ -75,7 +75,6 @@ echo $grafana_password
 
 ## Next Step
 
-- Ingress for aws
 - Persistent Volumes
 - 3rd APM Service
 - Advanced Application Monitoring

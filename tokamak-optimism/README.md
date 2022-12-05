@@ -135,6 +135,16 @@ Create an IAM OIDC Provider for eksctl iamserviceaccount
 eksctl utils associate-iam-oidc-provider --cluster ${cluster_name} --region ${region} --approve
 ```
 
+Add fargate profile for prometheus-stack
+
+```
+eksctl create fargateprofile \
+    --cluster ${cluster_name} \
+    --region ${region} \
+    --name monitoring \
+    --namespace monitoring
+```
+
 #### Test cluster
 
 check current context
@@ -284,81 +294,6 @@ helm install \
   --set vpcId=${vpc_id} \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller
-```
-
-#### Amazon Managed Service for Prometheus (Options)
-
-Create new Amazon Managed Service for Prometheus
-
-```
-export workspace_name=<my-workspace_name>
-export amp_region=<my-amp_region>
-
-aws amp create-workspace --alias ${workspace_name} --region ${amp_region}
-
-# remember your workspace id from output
-export workspace_id=<my-workspace id>
-```
-
-Add fargate profile for prometheus
-
-```
-eksctl create fargateprofile \
-    --cluster ${cluster_name} \
-    --region ${region} \
-    --name prometheus \
-    --namespace prometheus
-```
-
-Create an IAM Role and deploy Kubernetes ServiceAccount for Amazon Managed Service for Prometheus
-
-```
-eksctl create iamserviceaccount \
-  --cluster=${cluster_name} \
-  --namespace=prometheus \
-  --name=amp-iamproxy-ingest-service-account \
-  --role-name "amp-iamproxy-ingest-role" \
-  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusQueryAccess \
-  --attach-policy-arn=arn:aws:iam::aws:policy/AmazonPrometheusRemoteWriteAccess \
-  --region ${region} \
-  --approve
-```
-
-Install `prometheus` by helm
-
-```
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-
-helm repo update
-
-helm install amp-prometheus-chart prometheus-community/prometheus -n prometheus \
---set serviceAccounts.server.create=false \
---set serviceAccounts.server.name=amp-iamproxy-ingest-service-account \
---set server.resources.requests.cpu=1 \
---set server.resources.requests.memory=1.5Gi \
---set server.remoteWrite[0].url="https://aps-workspaces.${amp_region}.amazonaws.com/workspaces/${workspace_id}/api/v1/remote_write" \
---set server.remoteWrite[0].sigv4.region=${amp_region} \
---set server.remoteWrite[0].queue_config.max_samples_per_send=1000 \
---set server.remoteWrite[0].queue_config.max_shards=200 \
---set server.remoteWrite[0].queue_config.capacity=2500 \
---set server.persistentVolume.enabled=false \
---set alertmanager.enabled=false \
---set nodeExporter.enabled=false \
---set pushgateway.enabled=false \
---set extraScrapeConfigs='
-- job_name: "data-transport-layer"
-  static_configs:
-    - targets:
-      - "data-transport-layer-0.data-transport-layer-svc.default.svc.cluster.local:7878"
-- job_name: "batch-submitter"
-  static_configs:
-    - targets:
-      - "batch-submitter-svc.default.svc.cluster.local:7300"
-- job_name: "l2geth"
-  metrics_path: /debug/metrics/prometheus
-  static_configs:
-    - targets:
-      - "l2geth-0.l2geth-svc.default.svc.cluster.local:6060"'
 ```
 
 ### Environment

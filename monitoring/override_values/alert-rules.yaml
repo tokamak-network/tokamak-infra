@@ -1,0 +1,59 @@
+alertmanager:
+  config:
+    global:
+      # Also possible to place this URL in a file.
+      # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
+      slack_api_url: 'https://hooks.slack.com/services/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'
+
+    route:
+      receiver: no-alert
+      routes:
+        - matchers:
+            - group = tokamak
+          receiver: slack-notifications
+          group_wait: 30s
+          group_interval: 2m
+
+    receivers:
+      - name: no-alert
+      - name: slack-notifications
+        slack_configs:
+          - channel: test-alram
+            title: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}{{ .Annotations.message }}\n{{ end }}"
+
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+      - name: 'l2geth'
+        rules:
+          - alert: 'l2geth down'
+            labels:
+              group: tokamak
+              app: l2geth
+              severity: critical
+            expr: 'absent(up{job="l2geth"} == 1)'
+            annotations:
+              message: 'l2geth is down'
+
+      - name: 'data-transport-layer'
+        rules:
+          - alert: 'data-transport-layer down'
+            labels:
+              group: tokamak
+              app: data-transport-layer
+              severity: critical
+            expr: 'absent(up{job="data-transport-layer"} == 1)'
+            annotations:
+              message: 'data-transport-layer is down'
+
+      - name: 'batch-submitter'
+        rules:
+          - alert: 'batch-submitter down'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+            expr: 'absent(up{job="batch-submitter"} == 1)'
+            annotations:
+              message: 'batch-submitter is down'

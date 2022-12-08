@@ -6,36 +6,38 @@
 
 Install `helm`
 
-## Set Variables for Cluster
+## Create .env file
 
 ### for Local
 
 ```
-cluster=local
+cp override_values/.env.local override_values/.env
 ```
 
 ### for AWS Goerli
 
 ```
-cluster=aws-goerli
+cp override_values/.env.goerli override_values/.env
 ```
 
 ### for AWS Goerli Nightly
 
 ```
-cluster=aws-goerli-nightly
+cp override_values/.env.goerli-nightly override_values/.env
 ```
 
 ## Install Prometheus Stack
 
-```
-helm install -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml -f override_values/alert-rules.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
-```
-
-## Add Grafana Dashboards
+### for aws
 
 ```
-kubectl apply -k dashboards
+./tokamak-monitoring.sh create aws
+```
+
+### for local
+
+```
+./tokamak-monitoring.sh create local
 ```
 
 ## Connect Prometheus/Grafana
@@ -52,26 +54,27 @@ kubectl apply -k dashboards
 
 ## Upgrade Promethes Stack
 
+### for aws
+
 ```
-helm upgrade -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml -f override_values/alert-rules.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
+./tokamak-monitoring.sh upgrade aws
+```
+
+### for local
+
+```
+./tokamak-monitoring.sh upgrade local
 ```
 
 ## Uninstall Promethes STack
 
 ```
-helm uninstall -n monitoring tokamak-optimism-monitoring
+./tokamak-monitoring delete
 ```
 
 ## Grafana Account
 
-```
-grafana_user=$(kubectl get secret prometheus-stack-grafana -o jsonpath="{.data.admin-user}" -n monitoring |base64 -d; echo)
-
-grafana_password=$(kubectl get secret prometheus-stack-grafana -o jsonpath="{.data.admin-password}" -n monitoring |base64 -d; echo)
-
-echo $grafana_user
-echo $grafana_password
-```
+default username is `admin` and default password is `admin`.
 
 ## Next Step
 

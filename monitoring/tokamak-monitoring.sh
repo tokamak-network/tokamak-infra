@@ -106,8 +106,9 @@ case $ACTION in
     [ "$ENV_NAME" == "aws" ] && helm_file_list+=" -f override_values/aws.yaml"
 
     cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
-
     eval $cmd
+
+    kubectl apply -k dashboards
     ;;
   delete|remove|uninstall)
     if !(ask_going); then
@@ -117,6 +118,8 @@ case $ACTION in
 
     cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
     eval $cmd
+
+    kubectl delete -k dashboards
     ;;
   *)
     print_help

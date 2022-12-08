@@ -64,6 +64,18 @@ function generate_helm_files() {
   envsubst '$SLACK_API_URL' < $template_file | cat > $generated_file
 }
 
+function ask_going() {
+  local current_context=$(kubectl config current-context)
+  local message="Current context is \"${current_context}\"."$'\n'
+  message+="going to \"${ACTION}\"?"
+  local res=1
+  read -p "$message (n) " -n 1 -r
+  echo
+  echo
+  [[ $REPLY =~ ^[Yy]$ ]] && res=0
+  return $res
+}
+
 case $ACTION in
   create|install|upgrade|update)
     if !(check_env $ENV_NAME); then
@@ -80,23 +92,31 @@ case $ACTION in
       exit 0
     fi
 
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
     generate_helm_files $ENV_NAME
 
     cmd=install
     [[ $ACTION == "upgrade" || $ACTION == "update" ]] && cmd=upgrade
 
-    echo "$cmd"
-
-    helm_file_list="-f override_vallues/base.yaml -f override_vallues/alert-rules.yaml"
+    helm_file_list="-f override_values/base.yaml -f override_values/alert-rules.yaml"
     [ "$ENV_NAME" == "aws" ] && helm_file_list+=" -f override_values/aws.yaml"
 
     cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
 
-    sh $cmd
+    eval $cmd
     ;;
   delete|remove|uninstall)
-   cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
-    sh $cmd
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
+    cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
+    eval $cmd
     ;;
   *)
     print_help

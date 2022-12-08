@@ -29,7 +29,7 @@ cluster=aws-goerli-nightly
 ## Install Prometheus Stack
 
 ```
-helm install -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
+helm install -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml -f override_values/alert-rules.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
 ```
 
 ## Add Grafana Dashboards
@@ -53,7 +53,7 @@ kubectl apply -k dashboards
 ## Upgrade Promethes Stack
 
 ```
-helm upgrade -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
+helm upgrade -n monitoring --create-namespace -f override_values/base.yaml -f override_values/${cluster}.yaml -f override_values/alert-rules.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack
 ```
 
 ## Uninstall Promethes STack

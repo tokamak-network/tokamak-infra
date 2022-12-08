@@ -29,15 +29,10 @@ function check_env() {
   return 0
 }
 
-function generate_aws_helm_file() {
+function generate_helm_files() {
+  local env_name=$1
   local template_path=$MYPATH/override_values
-  local template_file=$template_path/aws.yaml.template
   local env_file=$template_path/.env
-
-  if [ ! -f "$template_file" ]; then
-    echo "Error: Can't find template file: $template_file"
-    exit 1
-  fi
 
   if [ -f "$env_file" ]; then
     export $(cat ${env_file} | sed 's/#.*//g' | xargs)
@@ -47,7 +42,26 @@ function generate_aws_helm_file() {
     exit 1
   fi
 
-  envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $template_path/aws.yaml
+  if [ "$env_name" == "aws" ]; then
+    template_file=$template_path/aws.yaml.template
+    generated_file=$template_path/aws.yaml
+
+    if [ ! -f "$template_file" ]; then
+      echo "Error: Can't find template file: $template_file"
+      exit 1
+    fi
+    envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
+  fi
+
+  template_file=$template_path/alert-rules.yaml.template
+  generated_file=$template_path/alert-rules.yaml
+
+  if [ ! -f "$template_file" ]; then
+    echo "Error: Can't find template file: $template_file"
+    exit 1
+  fi
+
+  envsubst '$SLACK_API_URL' < $template_file | cat > $generated_file
 }
 
 case $ACTION in
@@ -57,33 +71,35 @@ case $ACTION in
       exit 1
     fi
 
-    if [ "$ENV_NAME" == "aws" ]; then
-      message="Do you check environment files?"$'\n'
-      message+=" - $MYPATH/.env"$'\n'
-      read -p "$message(n) " -n 1 -r
-      echo
-      if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo "aborted."
-        exit 0
-      fi
-
-      generate_aws_helm_file
-
-      cmd=install
-      [[ $ACTION == "upgrade" || $ACTION == "update" ]] && cmd=upgrade
-
-      echo "$cmd"
-      # helm $cmd -n $HELM_NAMESPACE --create-namespace -f override_vallues/base.yaml -f override_values/aws.yaml $HELM_RELEASE prometheus-community/kube-prometheus-stack
+    message="Do you check environment files?"$'\n'
+    message+=" - $MYPATH/.env"$'\n'
+    read -p "$message(n) " -n 1 -r
+    echo
+    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+      echo "aborted."
+      exit 0
     fi
+
+    generate_helm_files $ENV_NAME
+
+    cmd=install
+    [[ $ACTION == "upgrade" || $ACTION == "update" ]] && cmd=upgrade
+
+    echo "$cmd"
+
+    helm_file_list="-f override_vallues/base.yaml -f override_vallues/alert-rules.yaml"
+    [ "$ENV_NAME" == "aws" ] && helm_file_list+=" -f override_values/aws.yaml"
+
+    cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
+
+    sh $cmd
     ;;
   delete|remove|uninstall)
-  # helm delete -n $HELM_NAMESPACE $HELM_RELEASE
-    echo "helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
+   cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
+    sh $cmd
     ;;
   *)
     print_help
     exit 1
     ;;
 esac
-
-#helm install -n monitoring --create-namespace -f override_values/base.yaml -f override_values/aws-goerli-nightly.yaml tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack

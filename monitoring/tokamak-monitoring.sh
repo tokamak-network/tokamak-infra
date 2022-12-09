@@ -13,6 +13,7 @@ function print_help() {
 }
 
 MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+OVERRIDE_PATH=$MYPATH/override_values
 ACTION=$1
 ENV_NAME=$2
 HELM_RELEASE=tokamak-optimism-monitoring
@@ -31,8 +32,7 @@ function check_env() {
 
 function generate_helm_files() {
   local env_name=$1
-  local template_path=$MYPATH/override_values
-  local env_file=$template_path/.env
+  local env_file=$OVERRIDE_PATH/.env
 
   if [ -f "$env_file" ]; then
     export $(cat ${env_file} | sed 's/#.*//g' | xargs)
@@ -43,8 +43,8 @@ function generate_helm_files() {
   fi
 
   if [ "$env_name" == "aws" ]; then
-    template_file=$template_path/aws.yaml.template
-    generated_file=$template_path/aws.yaml
+    template_file=$OVERRIDE_PATH/aws.yaml.template
+    generated_file=$OVERRIDE_PATH/aws.yaml
 
     if [ ! -f "$template_file" ]; then
       echo "Error: Can't find template file: $template_file"
@@ -53,8 +53,8 @@ function generate_helm_files() {
     envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
   fi
 
-  template_file=$template_path/alert-rules.yaml.template
-  generated_file=$template_path/alert-rules.yaml
+  template_file=$OVERRIDE_PATH/alert-rules.yaml.template
+  generated_file=$OVERRIDE_PATH/alert-rules.yaml
 
   if [ ! -f "$template_file" ]; then
     echo "Error: Can't find template file: $template_file"
@@ -102,10 +102,15 @@ case $ACTION in
     cmd=install
     [[ $ACTION == "upgrade" || $ACTION == "update" ]] && cmd=upgrade
 
-    helm_file_list="-f override_values/base.yaml -f override_values/alert-rules.yaml"
-    [ "$ENV_NAME" == "aws" ] && helm_file_list+=" -f override_values/aws.yaml"
+    if [ ! -f "$OVERRIDE_PATH/$ENV_NAME.yaml" ]; then
+      echo "Error: Can't find helm file: $OVERRIDE_PATH/$ENV_NAME.yaml"
+      exit 1
+    fi
+
+    helm_file_list="-f $OVERRIDE_PATH/base.yaml -f $OVERRIDE_PATH/alert-rules.yaml -f $OVERRIDE_PATH/$ENV_NAME.yaml"
 
     cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
+
     eval $cmd
 
     kubectl apply -k dashboards

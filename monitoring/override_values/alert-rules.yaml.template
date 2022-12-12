@@ -19,7 +19,7 @@ alertmanager:
       - name: slack-notifications
         slack_configs:
           - channel: test-alram
-            title: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Labels.app }}\n{{ end }}"
+            title: "{{ range .Alerts }}[{{ .Labels.severity }}] ${CLUSTER_NAME} - {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}{{ .Annotations.message }}\n{{ end }}"
 
 additionalPrometheusRulesMap:

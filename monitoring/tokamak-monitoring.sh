@@ -1,0 +1,133 @@
+#!/bin/bash -e
+
+function print_help() {
+  echo "Usage: "
+  echo "  $0 [command] ([env_name])"
+  echo "    * command list"
+  echo "      - create local"
+  echo "      - create aws"
+  echo "      - update local"
+  echo "      - update aws"
+  echo "      - delete"
+  echo
+}
+
+MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+OVERRIDE_PATH=$MYPATH/override_values
+ACTION=$1
+ENV_NAME=$2
+HELM_RELEASE=tokamak-optimism-monitoring
+HELM_NAMESPACE=monitoring
+
+function check_env() {
+  local env_name=$1
+
+  if [[ "$env_name" != "local" && "$env_name" != "aws" ]]; then
+    echo "Error: wrong ENV_NAME!!"
+    return 1
+  fi
+  # [[ "$env_name" != "local" && "$env_name" != "aws" ]] && return 1
+  return 0
+}
+
+function generate_helm_files() {
+  local env_name=$1
+  local env_file=$OVERRIDE_PATH/.env
+
+  if [ -f "$env_file" ]; then
+    export $(cat ${env_file} | sed 's/#.*//g' | xargs)
+  else
+    echo "ERROR: Can't not find .env file($env_file)"
+    echo "Generate .env file"
+    exit 1
+  fi
+
+  if [ "$env_name" == "aws" ]; then
+    template_file=$OVERRIDE_PATH/aws.yaml.template
+    generated_file=$OVERRIDE_PATH/aws.yaml
+
+    if [ ! -f "$template_file" ]; then
+      echo "Error: Can't find template file: $template_file"
+      exit 1
+    fi
+    envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
+  fi
+
+  template_file=$OVERRIDE_PATH/alert-rules.yaml.template
+  generated_file=$OVERRIDE_PATH/alert-rules.yaml
+
+  if [ ! -f "$template_file" ]; then
+    echo "Error: Can't find template file: $template_file"
+    exit 1
+  fi
+
+  envsubst '$SLACK_API_URL' < $template_file | cat > $generated_file
+}
+
+function ask_going() {
+  local current_context=$(kubectl config current-context)
+  local message="Current context is \"${current_context}\"."$'\n'
+  message+="going to \"${ACTION}\"?"
+  local res=1
+  read -p "$message (n) " -n 1 -r
+  echo
+  echo
+  [[ $REPLY =~ ^[Yy]$ ]] && res=0
+  return $res
+}
+
+case $ACTION in
+  create|install|upgrade|update)
+    if !(check_env $ENV_NAME); then
+      print_help
+      exit 1
+    fi
+
+    message="Do you check environment files?"$'\n'
+    message+=" - $MYPATH/.env"$'\n'
+    read -p "$message(n) " -n 1 -r
+    echo
+    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+      echo "aborted."
+      exit 0
+    fi
+
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
+    generate_helm_files $ENV_NAME
+
+    cmd=install
+    [[ $ACTION == "upgrade" || $ACTION == "update" ]] && cmd=upgrade
+
+    if [ ! -f "$OVERRIDE_PATH/$ENV_NAME.yaml" ]; then
+      echo "Error: Can't find helm file: $OVERRIDE_PATH/$ENV_NAME.yaml"
+      exit 1
+    fi
+
+    helm_file_list="-f $OVERRIDE_PATH/base.yaml -f $OVERRIDE_PATH/alert-rules.yaml -f $OVERRIDE_PATH/$ENV_NAME.yaml"
+
+    cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
+
+    eval $cmd
+
+    kubectl apply -k dashboards
+    ;;
+  delete|remove|uninstall)
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+
+    cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
+    eval $cmd
+
+    kubectl delete -k dashboards
+    ;;
+  *)
+    print_help
+    exit 1
+    ;;
+esac

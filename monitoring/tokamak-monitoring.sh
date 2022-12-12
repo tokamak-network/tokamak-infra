@@ -84,7 +84,7 @@ case $ACTION in
     fi
 
     message="Do you check environment files?"$'\n'
-    message+=" - $MYPATH/.env"$'\n'
+    message+=" - $OVERRIDE_PATH/.env"$'\n'
     read -p "$message(n) " -n 1 -r
     echo
     if ! [[ $REPLY =~ ^[Yy]$ ]]; then

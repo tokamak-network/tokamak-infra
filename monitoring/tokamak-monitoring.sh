@@ -61,7 +61,7 @@ function generate_helm_files() {
     exit 1
   fi
 
-  envsubst '$SLACK_API_URL' < $template_file | cat > $generated_file
+  envsubst '$SLACK_API_URL,$AWS_EKS_CLUSTER_NAME' < $template_file | cat > $generated_file
 }
 
 function ask_going() {

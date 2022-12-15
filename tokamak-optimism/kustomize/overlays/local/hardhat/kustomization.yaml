@@ -15,6 +15,7 @@ resources:
   - ../../../bases/deployer
   - ../../../bases/batch-submitter
   - ../../../bases/relayer
+  - ../../../bases/roles
   - local-path-provisioner.yaml
   - pvc.yaml
 

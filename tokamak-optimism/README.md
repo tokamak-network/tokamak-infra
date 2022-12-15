@@ -384,6 +384,54 @@ create optimism to local cluster:
 ./tokamak-optimism.sh create goerli-nightly local
 ```
 
+### Add IAM user
+
+Edit `aws-auth` configmap to add new IAM user on AWS EKS
+
+```
+kubectl edit configmaps/aws-auth -n kube-system
+```
+
+Add `mapUsers` section.
+Fill out `<Account_ID>` and `<USER_NAME>` to yours.
+
+```
+apiVersion: v1
+data:
+  mapRoles: |
+    - groups:
+      - system:bootstrappers
+      - system:nodes
+      - system:node-proxier
+      rolearn: arn:aws:iam::***********:role/eksctl-tokamak-optimism-go-FargatePodExecutionRole-1XH184K0CW6YD
+      username: system:node:{{SessionName}}
+  mapUsers: |
+    # Add user for develop
+    - userarn: arn:aws:iam::<ACCOUNT_ID>:user/<USER_NAME>
+      username: <USER_NAME>
+      groups:
+        - developer
+    # Add user for master
+    - userarn: arn:aws:iam::<ACCOUNT_ID>:user/<USER_NAME>
+      username: <USER_NAME>
+      groups:
+        - system:masters
+    .
+    .
+    .
+```
+
+Also you can get own IAM information.
+
+```
+$ aws sts get-caller-identity
+{
+    "UserId": "AIDASI4G3********",
+    "Account": "<ACCOUNT_ID>",
+    "Arn": "arn:aws:iam::<ACCOUNT_ID>:user/<USER_NAME>"
+}
+```
+
 ### Change config
 
 Modify environment variables.

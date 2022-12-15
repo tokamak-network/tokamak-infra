@@ -13,6 +13,7 @@ resources:
   - ../../../bases/l2geth
   - ../../../bases/batch-submitter
   - ../../../bases/relayer
+  - ../../../bases/roles
   - ingress.yaml
   - sc.yaml
   - pv.yaml

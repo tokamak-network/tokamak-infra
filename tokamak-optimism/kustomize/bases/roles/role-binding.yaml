@@ -1,26 +1,37 @@
-kind: RoleBinding
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: default
   name: developer-rolebinding
 subjects:
   - kind: Group
     name: developer
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: developer-role
   apiGroup: rbac.authorization.k8s.io
 
 ---
-kind: RoleBinding
+kind: ClusterRoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  namespace: monitoring
-  name: developer-rolebinding
+  name: master-rolebinding
 subjects:
   - kind: Group
-    name: developer
+    name: master
 roleRef:
-  kind: Role
-  name: developer-role
+  kind: ClusterRole
+  name: master-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: operator-rolebinding
+subjects:
+  - kind: Group
+    name: operator
+roleRef:
+  kind: ClusterRole
+  name: operator-role
   apiGroup: rbac.authorization.k8s.io

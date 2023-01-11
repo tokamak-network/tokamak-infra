@@ -14,6 +14,7 @@ function print_help() {
 
 MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 OVERRIDE_PATH=$MYPATH/override_values
+VOLUME_PATH=$MYPATH/volume
 ACTION=$1
 ENV_NAME=$2
 HELM_RELEASE=tokamak-optimism-monitoring
@@ -51,6 +52,15 @@ function generate_helm_files() {
       exit 1
     fi
     envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
+
+    template_file=$VOLUME_PATH/pv.yaml.template
+    generated_file=$VOLUME_PATH/pv.yaml
+
+    if [ ! -f "$template_file" ]; then
+      echo "Error: Can't find template file: $template_file"
+      exit 1
+    fi
+    envsubst '$EFS_VOLUME_ID' < $template_file | cat > $generated_file
   fi
 
   template_file=$OVERRIDE_PATH/alert-rules.yaml.template
@@ -107,13 +117,13 @@ case $ACTION in
       exit 1
     fi
 
+    kubectl apply -k dashboards
+    kubectl apply -f $VOLUME_PATH/pv.yaml
+
     helm_file_list="-f $OVERRIDE_PATH/base.yaml -f $OVERRIDE_PATH/alert-rules.yaml -f $OVERRIDE_PATH/$ENV_NAME.yaml"
 
     cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
-
     eval $cmd
-
-    kubectl apply -k dashboards
     ;;
   delete|remove|uninstall)
     if !(ask_going); then
@@ -125,6 +135,7 @@ case $ACTION in
     eval $cmd
 
     kubectl delete -k dashboards
+    kubectl delete -f $VOLUME_PATH/pv.yaml
     ;;
   *)
     print_help

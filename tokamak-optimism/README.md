@@ -117,7 +117,7 @@ example:
 ```
 cluster_name=tokamak-optimism-cluster
 region=ap-northeast-2
-account_id=123123123
+account_id==$(aws sts get-caller-identity --query "Account" --output text)
 ```
 
 #### Create KMS Customer managed key
@@ -142,14 +142,14 @@ aws kms create-alias --alias-name alias/${cluster_name} --target-key-id ${kms_ke
 Create eks cluster with fargate.
 
 ```
-eksctl create cluster --name ${cluster_name} --region ${region} --version 1.24 --fargate
+eksctl create cluster --name ${cluster_name} --region ${region} --version 1.23 --fargate
 
 ```
 
 Enabl KMS encryption on crated eks cluster
 
 ```
-$ eksctl utils enable-secrets-encryption --cluster=kms-cluster --key-arn=arn:aws:kms:us-west-2:<account>:key/<key> --region=<region>
+$ eksctl utils enable-secrets-encryption --cluster=${cluster_name} --key-arn=arn:aws:kms:${region}:${account_id}:key/${kms_keyid} --region=${region}
 
 ```
 

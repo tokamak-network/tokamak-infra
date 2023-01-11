@@ -65,7 +65,8 @@ spec:
             - name: liveliness-script
               mountPath: /script/liveliness
             - name: l2geth-volume
-              mountPath: /geth
+              mountPath: /root/.ethereum
+              subPath: l2geth
           livenessProbe:
             exec:
               command:

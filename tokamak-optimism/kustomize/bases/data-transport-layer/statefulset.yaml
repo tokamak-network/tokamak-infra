@@ -36,6 +36,7 @@ spec:
               mountPath: /script/liveliness
             - name: data-transport-layer-volume
               mountPath: /db
+              subPath: data-transaport-layer
           livenessProbe:
             exec:
               command:

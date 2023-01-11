@@ -117,7 +117,7 @@ example:
 ```
 cluster_name=tokamak-optimism-cluster
 region=ap-northeast-2
-account_id==$(aws sts get-caller-identity --query "Account" --output text)
+account_id=$(aws sts get-caller-identity --query "Account" --output text)
 ```
 
 #### Create KMS Customer managed key

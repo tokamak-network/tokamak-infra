@@ -107,17 +107,34 @@ Set `Cluster Name` and `Region Code`, `Account ID` on AWS to variables.
 `Cluster Name` can be made you want.
 
 ```
-export cluster_name=<Cluster Name>
-export region=<Region Code>
-export account_id=<Account ID>
+cluster_name=<Cluster Name>
+region=<Region Code>
+account_id=<Account ID>
 ```
 
 example:
 
 ```
-export cluster_name=tokamak-optimism-cluster
-export region=ap-northeast-2
-export account_id=123123123
+cluster_name=tokamak-optimism-cluster
+region=ap-northeast-2
+account_id=$(aws sts get-caller-identity --query "Account" --output text)
+```
+
+#### Create KMS Customer managed key
+
+Create KMS Key
+
+```
+kms_keyid=$(aws kms create-key \
+            --description ${cluster_name} \
+            --query "KeyMetadata.KeyId" \
+            --output text)
+```
+
+Cretae alias for the key
+
+```
+aws kms create-alias --alias-name alias/${cluster_name} --target-key-id ${kms_keyid}
 ```
 
 #### AWS EKS cluster
@@ -126,6 +143,13 @@ Create eks cluster with fargate.
 
 ```
 eksctl create cluster --name ${cluster_name} --region ${region} --version 1.23 --fargate
+
+```
+
+Enabl KMS encryption on crated eks cluster
+
+```
+$ eksctl utils enable-secrets-encryption --cluster=${cluster_name} --key-arn=arn:aws:kms:${region}:${account_id}:key/${kms_keyid} --region=${region}
 
 ```
 

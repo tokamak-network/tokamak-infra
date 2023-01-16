@@ -6,7 +6,8 @@
       "chainId": 5,
       "endpoint": "https://goerli.rpc.tokamak.network",
       "oppositeChainId": null,
-      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "explorer": "https://goerli.etherscan.io/tx/"
     },
     {
       "name": "Tokamak Goerli Nightly",
@@ -14,7 +15,8 @@
       "chainId": 5051,
       "endpoint": "https://goerli-nightly.optimism.tokamak.network",
       "oppositeChainId": 5,
-      "iconURL": "/logos/tokamak-symbol.svg"
+      "iconURL": "/logos/tokamak-symbol.svg",
+      "explorer": "https://goerli-nightly.explorer.tokamak.network/tx/"
     }
   ],
   "SUPPORTED_TOKENS": [

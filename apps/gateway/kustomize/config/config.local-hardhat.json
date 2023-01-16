@@ -6,7 +6,8 @@
       "chainId": 31337,
       "endpoint": "http://localhost:9545",
       "oppositeChainId": null,
-      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010"
+      "iconURL": "https://cryptologos.cc/logos/ethereum-eth-logo.png?v=010",
+      "explorer": "http://localhost:8888/tx/"
     },
     {
       "name": "Local Tokamak",
@@ -14,7 +15,8 @@
       "chainId": 2090,
       "endpoint": "http://localhost:8545",
       "oppositeChainId": 31337,
-      "iconURL": "/logos/tokamak-symbol.svg"
+      "iconURL": "/logos/tokamak-symbol.svg",
+      "explorer": "http://localhost:8080/tx/"
     }
   ],
   "SUPPORTED_TOKENS": [

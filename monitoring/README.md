@@ -4,7 +4,13 @@
 
 ### Helm
 
-Install `helm`
+* [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)
+* add helm chart repository
+
+```
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+```
 
 ## Create .env file
 

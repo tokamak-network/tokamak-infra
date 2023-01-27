@@ -72,7 +72,7 @@ cp override_values/.env.goerli-nightly override_values/.env
 ./tokamak-monitoring.sh upgrade local
 ```
 
-## Uninstall Promethes STack
+## Uninstall Promethes Stack
 
 ```
 ./tokamak-monitoring delete
@@ -82,8 +82,18 @@ cp override_values/.env.goerli-nightly override_values/.env
 
 default username is `admin` and default password is `admin`.
 
+## Alert Manager
+
+Create a slack webhook (https://api.slack.com/messaging/webhooks)
+
+Modify slack informations in `.env`
+
+```
+SLACK_API_URL=xxxxx
+SLACK_CHANNEL=xxxxx
+```
+
 ## Next Step
 
-- Persistent Volumes
 - 3rd APM Service
 - Advanced Application Monitoring

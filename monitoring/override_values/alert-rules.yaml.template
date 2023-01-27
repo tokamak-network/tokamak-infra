@@ -18,7 +18,7 @@ alertmanager:
       - name: no-alert
       - name: slack-notifications
         slack_configs:
-          - channel: test-alram
+          - channel: "#${SLACK_CHANNEL}"
             title: "{{ range .Alerts }}[${CLUSTER_NAME}] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
 

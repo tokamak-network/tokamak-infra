@@ -1215,7 +1215,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {

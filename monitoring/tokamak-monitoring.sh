@@ -17,7 +17,6 @@ OVERRIDE_PATH=$MYPATH/override_values
 VOLUME_PATH=$MYPATH/volume
 ACTION=$1
 ENV_NAME=$2
-HELM_RELEASE=tokamak-optimism-monitoring
 HELM_NAMESPACE=monitoring
 
 function check_env() {
@@ -132,8 +131,11 @@ case $ACTION in
 
     helm_file_list="-f $OVERRIDE_PATH/base.yaml -f $OVERRIDE_PATH/alert-rules.yaml -f $OVERRIDE_PATH/$ENV_NAME.yaml"
 
-    cmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list $HELM_RELEASE prometheus-community/kube-prometheus-stack"
-    eval $cmd
+    execcmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack"
+    eval $execcmd
+
+    execcmd="helm $cmd -n $HELM_NAMESPACE blackbox-exporter prometheus-community/prometheus-blackbox-exporter"
+    eval $execcmd
     ;;
   delete|remove|uninstall)
     if !(ask_going); then
@@ -141,7 +143,10 @@ case $ACTION in
       exit 0
     fi
 
-    cmd="helm delete -n $HELM_NAMESPACE $HELM_RELEASE"
+    cmd="helm delete -n $HELM_NAMESPACE tokamak-optimism-monitoring"
+    eval $cmd
+
+    cmd="helm delete -n $HELM_NAMESPACE blackbox-exporter"
     eval $cmd
 
     kubectl delete -k dashboards

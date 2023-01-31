@@ -143,11 +143,11 @@ case $ACTION in
       exit 0
     fi
 
-    cmd="helm delete -n $HELM_NAMESPACE tokamak-optimism-monitoring"
-    eval $cmd
+    execcmd="helm delete -n $HELM_NAMESPACE tokamak-optimism-monitoring"
+    eval $execcmd
 
-    cmd="helm delete -n $HELM_NAMESPACE blackbox-exporter"
-    eval $cmd
+    execcmd="helm delete -n $HELM_NAMESPACE blackbox-exporter"
+    eval $execcmd
 
     kubectl delete -k dashboards
     kubectl delete -f $VOLUME_PATH/pv.yaml

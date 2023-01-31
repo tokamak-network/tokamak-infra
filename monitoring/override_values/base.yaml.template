@@ -22,6 +22,6 @@ prometheus:
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - '${L1_RPC_ENDPOINT}:6060'
+              - '${L1_ADDR}:6060'
 grafana:
   adminPassword: admin

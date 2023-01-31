@@ -81,7 +81,7 @@ function generate_helm_files() {
     exit 1
   fi
 
-  envsubst '$L1_RPC_ENDPOINT' < $template_file | cat > $generated_file
+  envsubst '$L1_ADDR' < $template_file | cat > $generated_file
 }
 
 function ask_going() {

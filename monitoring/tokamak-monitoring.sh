@@ -72,6 +72,16 @@ function generate_helm_files() {
   fi
 
   envsubst '$SLACK_API_URL,$SLACK_CHANNEL,$CLUSTER_NAME' < $template_file | cat > $generated_file
+
+  template_file=$OVERRIDE_PATH/base.yaml.template
+  generated_file=$OVERRIDE_PATH/base.yaml
+
+  if [ ! -f "$template_file" ]; then
+    echo "Error: Can't find template file: $template_file"
+    exit 1
+  fi
+
+  envsubst '$L1_RPC_ENDPOINT' < $template_file | cat > $generated_file
 }
 
 function ask_going() {

@@ -18,6 +18,10 @@ prometheus:
         static_configs:
           - targets:
               - 'l2geth-0.l2geth-svc.default.svc.cluster.local:6060'
-
+      - job_name: 'l1geth'
+        metrics_path: /debug/metrics/prometheus
+        static_configs:
+          - targets:
+              - '${L1_RPC_ENDPOINT}:6060'
 grafana:
   adminPassword: admin

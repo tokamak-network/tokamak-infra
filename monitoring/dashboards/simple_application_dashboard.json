@@ -90,7 +90,7 @@
       },
       "id": 141,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -100,6 +100,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -170,7 +173,7 @@
       },
       "id": 136,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -180,6 +183,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -250,7 +256,7 @@
       },
       "id": 137,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -260,6 +266,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -330,7 +339,7 @@
       },
       "id": 138,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -340,6 +349,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -410,7 +422,7 @@
       },
       "id": 146,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -420,6 +432,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -1849,6 +1864,6 @@
   "timezone": "",
   "title": "Application DashBoard",
   "uid": "bUki4MF4z",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

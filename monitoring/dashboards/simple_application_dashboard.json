@@ -64,7 +64,7 @@
                 "1": {
                   "color": "green",
                   "index": 1,
-                  "text": "Running"
+                  "text": "UP"
                 }
               },
               "type": "value"
@@ -84,13 +84,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
+        "w": 4,
         "x": 0,
         "y": 1
       },
       "id": 141,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -100,6 +100,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -144,7 +147,7 @@
                 "1": {
                   "color": "green",
                   "index": 1,
-                  "text": "Running"
+                  "text": "UP"
                 }
               },
               "type": "value"
@@ -164,13 +167,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 6,
+        "w": 4,
+        "x": 4,
         "y": 1
       },
       "id": 136,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -180,6 +183,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -224,7 +230,7 @@
                 "1": {
                   "color": "green",
                   "index": 1,
-                  "text": "Running"
+                  "text": "UP"
                 }
               },
               "type": "value"
@@ -244,13 +250,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 12,
+        "w": 4,
+        "x": 8,
         "y": 1
       },
       "id": 137,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -260,6 +266,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -304,7 +313,7 @@
                 "1": {
                   "color": "green",
                   "index": 1,
-                  "text": "Running"
+                  "text": "UP"
                 }
               },
               "type": "value"
@@ -324,13 +333,13 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 6,
-        "x": 18,
+        "w": 4,
+        "x": 12,
         "y": 1
       },
       "id": 138,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -340,6 +349,9 @@
           ],
           "fields": "",
           "values": false
+        },
+        "text": {
+          "valueSize": 20
         },
         "textMode": "auto"
       },
@@ -360,6 +372,89 @@
         }
       ],
       "title": "Data Transport Layer",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Down"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "UP"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 146,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 20
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.3.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "probe_success{target=~\"http://app-gateway-svc.default\"}",
+          "instant": true,
+          "legendFormat": "Data Transport Layer",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Gateway",
       "type": "stat"
     },
     {
@@ -1738,7 +1833,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {

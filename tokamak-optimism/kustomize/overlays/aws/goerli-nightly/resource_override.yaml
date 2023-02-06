@@ -12,8 +12,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.5
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -28,8 +28,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.5
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -44,8 +44,8 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: 2
-              memory: 3.5Gi
+              cpu: 1
+              memory: 1.75Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -60,5 +60,5 @@ spec:
           imagePullPolicy: Always
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.25
+              memory: 0.25Gi

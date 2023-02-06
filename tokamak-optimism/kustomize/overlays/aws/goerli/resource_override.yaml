@@ -10,8 +10,8 @@ spec:
         - name: batch-submitter
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.5
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -24,8 +24,8 @@ spec:
         - name: data-transport-layer
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.5
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -38,8 +38,8 @@ spec:
         - name: l2geth
           resources:
             requests:
-              cpu: 2
-              memory: 3.5Gi
+              cpu: 1
+              memory: 1.75Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -52,5 +52,5 @@ spec:
         - name: relayer
           resources:
             requests:
-              cpu: 1
-              memory: 1.5Gi
+              cpu: 0.25
+              memory: 0.25Gi

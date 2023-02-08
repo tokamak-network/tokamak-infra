@@ -1,0 +1,12 @@
+server:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/bdb799f6-2c38-43b2-b57b-36b3784ae312
+    hosts:
+      - goerli-nightly.argocd.tokamak.network

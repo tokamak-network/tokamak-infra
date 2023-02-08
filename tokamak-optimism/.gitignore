@@ -1,5 +1,1 @@
 **/secret.env
-
-kustomize/overlays/aws/**/ingress.yaml
-kustomize/overlays/aws/**/pv.yaml
-kustomize/overlays/aws/**/.env

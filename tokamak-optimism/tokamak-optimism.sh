@@ -269,28 +269,6 @@ case $ACTION in
       exit 1
     fi
 
-    secret_file=$MYPATH/kustomize/envs/$cluster_name/secret.env
-
-    message="Do you check environment files?"$'\n'
-    message+=" - $secret_file"$'\n'
-    read -p "$message(n) " -n 1 -r
-    echo
-    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-      echo "aborted."
-      exit 0
-    fi
-
-    if [ ! -f $secret_file ]; then
-      echo "Not found secret.env file($secret_file)"
-      echo "Generate secret.env file from secret.env.example"
-      exit 1
-    fi
-
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
     kubectl apply -k $cluster_path
     ;;
   delete)

@@ -269,36 +269,6 @@ case $ACTION in
       exit 1
     fi
 
-    secret_file=$MYPATH/kustomize/envs/$cluster_name/secret.env
-
-    message="Do you check environment files?"$'\n'
-    [ "$env_name" == "aws" ] && message+=" - $cluster_path/.env"$'\n'
-    message+=" - $secret_file"$'\n'
-    read -p "$message(n) " -n 1 -r
-    echo
-    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-      echo "aborted."
-      exit 0
-    fi
-
-    if [ ! -f $secret_file ]; then
-      echo "Not found secret.env file($secret_file)"
-      echo "Generate secret.env file from secret.env.example"
-      exit 1
-    fi
-
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
-    if [ -f $cluster_path/create.sh ]; then
-      sh $cluster_path/create.sh
-      if [ $? -ne 0 ]; then
-        echo "Error: failed to run $cluster_path/create.sh"
-        exit 1
-      fi
-    fi
     kubectl apply -k $cluster_path
     ;;
   delete)
@@ -311,13 +281,6 @@ case $ACTION in
 
     delete_cluster_path=$MYPATH/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
     kubectl delete -k $delete_cluster_path
-    if [ -f $delete_cluster_path/delete.sh ]; then
-      sh $delete_cluster_path/delete.sh
-      if [ $? -ne 0 ]; then
-        echo "Error: failed to run $delete_cluster_path/delete.sh"
-        exit 1
-      fi
-    fi
     ;;
   update|upgrade)
     deployment_list=$(get_resource_list deployments)

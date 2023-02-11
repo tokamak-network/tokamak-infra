@@ -7,7 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/15cf91aa-0c86-4512-9ed4-29b3de73598c
 spec:
   rules:
     - http:

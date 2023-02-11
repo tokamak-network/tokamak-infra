@@ -2,13 +2,13 @@
 
 function print_help() {
   echo "Usage: "
-  echo "  $0 [command] [app_name] [env_name]"
-  echo "    * command list"
+  echo "  $0 [command]"
+  echo "    * commands"
   echo "      - create"
-  echo "         - list|all"
-  echo "         - [app_name] [env_name]"
+  echo "         - list"
+  echo "         - [app_name] [cluster_name] [env_name]"
   echo "      - delete"
-  echo "         - list|all|[app_name]"
+  echo "         - list|[app_name]"
   echo "      - tag|tags [app_name]"
   echo "      - update"
   echo "         - list"
@@ -18,7 +18,8 @@ function print_help() {
   echo
   echo "Examples: "
   echo " $0 create list"
-  echo " $0 create gateway local"
+  echo " $0 create gateway hardhat local"
+  echo " $0 create gateway goerli-nightly aws"
   echo " $0 delete list"
   echo " $0 delete gateway"
   echo " $0 tag gateway"
@@ -42,6 +43,13 @@ if [[ -z "$ACTION" || -z "$APP_NAME" ]]; then
   print_help
   exit 1
 fi
+
+function check_cluster() {
+  for i in $CLUSTER_LIST; do
+    [[ "$i" == "$1" ]] && return 0
+  done
+  return 1
+}
 
 function check_app() {
   for i in $APP_LIST; do
@@ -77,7 +85,10 @@ function print_create_list() {
     if [ -d "$MYPATH/${app}/kustomize/overlays" ]; then
       env_list=$(ls -d $MYPATH/${app}/kustomize/overlays/*/ | rev | cut -f2 -d'/' | rev)
       for env in $env_list; do
-        echo "$app $env"
+        cluster_list=$(ls -d $MYPATH/${app}/kustomize/overlays/${env}/*/ | rev | cut -f2 -d'/' | rev)
+        for cluster in $cluster_list; do
+          echo "* $app $env $cluster"
+        done
       done
     fi
   done
@@ -106,8 +117,9 @@ function configmap() {
 function get_configmap() {
   CONFIGMAP_APP_NAME=$(configmap "app-${APP_NAME}-config" "APP_NAME")
   CONFIGMAP_ENV_NAME=$(configmap "app-${APP_NAME}-config" "ENV_NAME")
+  CONFIGMAP_CLUSTER_NAME=$(configmap "app-${APP_NAME}-config" "CLUSTER_NAME")
 
-  if [[ -z "$CONFIGMAP_APP_NAME" || -z "$CONFIGMAP_ENV_NAME" ]]; then
+  if [[ -z "$CONFIGMAP_APP_NAME" || -z "$CONFIGMAP_ENV_NAME" || -z "$CONFIGMAP_CLUSTER_NAME" ]]; then
     echo "Error: failed to get app informations"
     exit 1
   fi
@@ -115,6 +127,7 @@ function get_configmap() {
   echo "[Configmaps]"
   echo "* APP_NAME=${CONFIGMAP_APP_NAME}"
   echo "* ENV_NAME=${CONFIGMAP_ENV_NAME}"
+  echo "* CLUSTER_NAME=${CONFIGMAP_CLUSTER_NAME}"
 }
 
 function get_resource_list() {
@@ -143,7 +156,7 @@ function get_resource_image() {
 }
 
 function update_configmap() {
-  kubectl apply -k $MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}
+  kubectl apply -k $MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
   if [ $? -ne 0 ]; then
     echo "Error: failed to run update_configmap()"
     exit 1
@@ -257,11 +270,20 @@ case $ACTION in
       exit 0
     fi
 
-    env_name=$3
+    cluster_name=$3
+    env_name=$4
     app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${env_name}
     ENV_LIST=$(ls -d ${app_path}/../*/ | rev | cut -f2 -d'/' | rev)
+    CLUSTER_LIST=$(ls -d ${app_path}/*/ | rev | cut -f2 -d'/' | rev)
+    cluseter_path=$app_path/${cluster_name}
 
     if !(check_app $APP_NAME); then
+      print_help
+      print_create_list
+      exit 1
+    fi
+
+    if !(check_cluster $cluster_name); then
       print_help
       print_create_list
       exit 1
@@ -273,45 +295,12 @@ case $ACTION in
       exit 1
     fi
 
-    # Add applications and config files
-    declare -a config_apps=(
-      "gateway"
-    )
-    declare -a config_files=(
-      "$MYPATH/${APP_NAME}/config/config.json"
-    )
-
-    message="Do you check environment and config files?"$'\n'
-    [ "$env_name" == "aws" ] && message+=" - $app_path/.env"$'\n'
-
-    idx=0
-    for app in ${config_apps[@]}; do
-      if [ "$APP_NAME" == "$app" ]; then
-        message+=" - ${config_files[$idx]}"$'\n'
-      fi
-      ((idx++))
-    done
-
-    read -p "$message(n) " -n 1 -r
-    echo
-    if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-      echo "aborted."
-      exit 0
-    fi
-
     if !(ask_going); then
       echo "aborted."
       exit 0
     fi
 
-    if [ -f $app_path/create.sh ]; then
-      sh $app_path/create.sh
-      if [ $? -ne 0 ]; then
-        echo "Error: failed to run $app_path/create.sh"
-        exit 1
-      fi
-    fi
-    kubectl apply -k $app_path
+    kubectl apply -k $cluseter_path
     ;;
   delete)
     if [ "$2" == "list" ]; then
@@ -332,15 +321,9 @@ case $ACTION in
 
     get_configmap
 
-    delete_app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}
+    delete_app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
+
     kubectl delete -k $delete_app_path
-    if [ -f $delete_app_path/delete.sh ]; then
-      sh $delete_app_path/delete.sh
-      if [ $? -ne 0 ]; then
-        echo "Error: failed to run $delete_app_path/delete.sh"
-        exit 1
-      fi
-    fi
     ;;
   update|upgrade)
     if [ "$2" == "list" ]; then

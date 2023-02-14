@@ -9,38 +9,24 @@
 
 ### Configuration
 
-**config.json**
+Check configuraion files at `gateway/kustomize/overlays/aws/<cluster_name>`
 
-create `config.json` file at `gateway/kustomize/config/` or copy template configuraion files like `config.xxxx.json`
-
-```
-cd gateway/kustomize/config
-cp config.aws-goerli-nightly.json config.json
-```
-
-**.env**
-
-create `.env` file at `gateway/kustomize/overlays/aws/` to deploy to aws cluster(eks) or copy template env files like `.env.xxx`
-
-```
-cd gateway/kustomize/overlays
-cp .env.goerli-nightly .env
-```
+* config.json: gateway configuration
+* ingress.yml: aws loadbalancer configuration
 
 ## Run
 
 Use `tokamak-apps.sh` script to run gateway.
 
 ```
-./tokamak-apps.sh help
 Usage:
-  ./tokamak-apps.sh [command] [app_name] [env_name]
-    * command list
+  ./tokamak-apps.sh [command]
+    * commands
       - create
-         - list|all
-         - [app_name] [env_name]
+         - list
+         - [app_name] [cluster_name] [env_name]
       - delete
-         - list|all|[app_name]
+         - list|[app_name]
       - tag|tags [app_name]
       - update
          - list
@@ -50,7 +36,8 @@ Usage:
 
 Examples:
  ./tokamak-apps.sh create list
- ./tokamak-apps.sh create gateway local
+ ./tokamak-apps.sh create gateway hardhat local
+ ./tokamak-apps.sh create gateway goerli-nightly aws
  ./tokamak-apps.sh delete list
  ./tokamak-apps.sh delete gateway
  ./tokamak-apps.sh tag gateway
@@ -64,16 +51,16 @@ Examples:
  ./tokamak-apps.sh reload gateway
 ```
 
-**deploy gateway to local cluster**
+**deploy goerli-nightly gateway to local cluster**
 
 ```
-$ ./tokamak-apps.sh create gateway local
+$ ./tokamak-apps.sh create gateway goerli-nightly local
 ```
 
-**deploy gateway to aws cluster**
+**deploy goerli-nightly gateway to aws cluster**
 
 ```
-$ ./tokamak-apps.sh create gateway aws
+$ ./tokamak-apps.sh create gateway goerli-nightly aws
 ```
 
 **remove gateway to aws cluster**

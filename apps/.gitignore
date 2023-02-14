@@ -1,3 +1,0 @@
-gateway/kustomize/config/config.json
-gateway/kustomize/overlays/aws/ingress.yaml
-**/**/*.env

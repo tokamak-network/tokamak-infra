@@ -4,7 +4,14 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
+resources:
+  - ../../../bases
+
 configMapGenerator:
   - name: app-gateway-config
+    literals:
+      - APP_NAME=gateway
+      - CLUSTER_NAME=goerli
+      - ENV_NAME=local
     files:
       - config.json

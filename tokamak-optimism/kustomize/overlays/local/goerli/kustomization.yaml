@@ -4,21 +4,29 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-bases:
-  - ../../../envs/goerli
-  - ../../../scripts
 
 resources:
-  - ../../../bases/data-transport-layer
-  - ../../../bases/l2geth
-  - ../../../bases/batch-submitter
-  - ../../../bases/relayer
-  - ../../../bases/roles
-  - local-path-provisioner.yaml
-  - pvc.yaml
+- ../../../bases/data-transport-layer
+- ../../../bases/l2geth
+- ../../../bases/batch-submitter
+- ../../../bases/relayer
+- ../../../bases/roles
+- local-path-provisioner.yaml
+- pvc.yaml
+- ../../../envs/goerli
+- ../../../scripts
 
 configMapGenerator:
-  - name: chain-config
-    literals:
-      - CLUSTER_NAME=goerli
-      - ENV_NAME=local
+- literals:
+  - CLUSTER_NAME=goerli
+  - ENV_NAME=local
+  name: chain-config
+images:
+- name: onthertech/optimism.batch-submitter-service
+  newTag: release-0.1.3
+- name: onthertech/optimism.data-transport-layer
+  newTag: release-0.1.3
+- name: onthertech/optimism.l2geth
+  newTag: release-0.1.3
+- name: onthertech/optimism.tokamak-message-relayer
+  newTag: release-0.1.3

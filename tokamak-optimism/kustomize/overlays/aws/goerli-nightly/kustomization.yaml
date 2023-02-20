@@ -29,4 +29,4 @@ configMapGenerator:
   name: chain-config
 images:
 - name: onthertech/tokamak.gateway
-  newTag: nightly-
+  newTag: nightly-0.2.51

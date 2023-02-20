@@ -1,30 +1,32 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-bases:
-  - ../../../envs/goerli-nightly
-  - ../../../scripts
 
 generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - ../../../bases/data-transport-layer
-  - ../../../bases/l2geth
-  - ../../../bases/batch-submitter
-  - ../../../bases/relayer
-  - ../../../bases/roles
-  - ingress.yaml
-  - sc.yaml
-  - pv.yaml
-  - pvc.yaml
+- ../../../bases/data-transport-layer
+- ../../../bases/l2geth
+- ../../../bases/batch-submitter
+- ../../../bases/relayer
+- ../../../bases/roles
+- ingress.yaml
+- sc.yaml
+- pv.yaml
+- pvc.yaml
+- ../../../envs/goerli-nightly
+- ../../../scripts
 
 patchesStrategicMerge:
-  - resource_override.yaml
-  - service_override.yaml
+- resource_override.yaml
+- service_override.yaml
 
 configMapGenerator:
-  - name: chain-config
-    literals:
-      - CLUSTER_NAME=goerli-nightly
-      - ENV_NAME=aws
+- literals:
+  - CLUSTER_NAME=goerli-nightly
+  - ENV_NAME=aws
+  name: chain-config
+images:
+- name: onthertech/tokamak.gateway
+  newTag: nightly-0.2.46

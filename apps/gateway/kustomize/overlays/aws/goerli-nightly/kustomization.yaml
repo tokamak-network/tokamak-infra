@@ -5,18 +5,21 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - ../../../bases
-  - ingress.yaml
+- ../../../bases
+- ingress.yaml
 
 patchesStrategicMerge:
-  - resource_override.yaml
-  - service_override.yaml
+- resource_override.yaml
+- service_override.yaml
 
 configMapGenerator:
-  - name: app-gateway-config
-    literals:
-      - APP_NAME=gateway
-      - CLUSTER_NAME=goerli-nightly
-      - ENV_NAME=aws
-    files:
-      - config.json
+- files:
+  - config.json
+  literals:
+  - APP_NAME=gateway
+  - CLUSTER_NAME=goerli-nightly
+  - ENV_NAME=aws
+  name: app-gateway-config
+images:
+- name: onthertech/tokamak.gateway
+  newTag: nightly-0.2.52

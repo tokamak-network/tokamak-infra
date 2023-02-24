@@ -22,4 +22,4 @@ configMapGenerator:
   name: app-gateway-config
 images:
 - name: onthertech/tokamak.gateway
-  newTag: nightly-0.2.52
+  newTag: nightly-0.2.53

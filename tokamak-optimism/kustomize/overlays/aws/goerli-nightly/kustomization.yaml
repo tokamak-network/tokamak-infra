@@ -15,6 +15,7 @@ resources:
 - sc.yaml
 - pv.yaml
 - pvc.yaml
+- aws-logging.yaml
 - ../../../envs/goerli-nightly
 - ../../../scripts
 

@@ -320,6 +320,28 @@ helm install \
   --set serviceAccount.name=aws-load-balancer-controller
 ```
 
+#### Create IAM for logging
+
+Create an IAM Policy named `eks-fargate-logging-policy` for Load Balancer Controller
+
+```
+curl -O https://raw.githubusercontent.com/aws-samples/amazon-eks-fluent-logging-examples/mainline/examples/fargate/cloudwatchlogs/permissions.json
+
+aws iam create-policy --policy-name eks-fargate-logging-policy --policy-document file://permissions.json
+
+rm -f permissions.json
+```
+
+Attach a policy to the automatically created eks role.
+
+```
+eks_rolearn=$(kubectl get configmaps/aws-auth -n kube-system -o=jsonpath='{.data.mapRoles}'|grep rolearn|cut -d ":" -f 2-|cut -d "/" -f 2|xargs)
+
+aws iam attach-role-policy \
+  --policy-arn arn:aws:iam::156512274928:policy/eks-fargate-logging-policy \
+  --role-name ${eks_rolearn}
+```
+
 ### Environment
 
 #### Deploy contracts

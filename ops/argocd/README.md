@@ -72,7 +72,7 @@ cp override_values/.env.goerli-nightly override_values/.env
 ### Get admin password
 
 ```
-kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d | xargs
 ```
 
 ## Uninstall ArgoCD

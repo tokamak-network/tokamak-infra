@@ -22,6 +22,7 @@ resources:
 patchesStrategicMerge:
 - resource_override.yaml
 - service_override.yaml
+- env_override.yaml
 
 configMapGenerator:
 - literals:

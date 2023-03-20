@@ -39,6 +39,25 @@ ACTION=$1
 APP_NAME=$2
 APP_LIST=$(ls -d $MYPATH/*/ | rev | cut -f2 -d'/' | rev)
 
+while [[ $# -gt 0 ]]
+do
+  option="$1"
+  case $option in
+    -n)
+      NAMESPACE="$2"
+      shift
+      ;;
+    *)
+      POSITIONAL+=("$1")
+      shift
+      ;;
+  esac
+done
+set -- "${POSITIONAL[@]}"
+
+NAMESPACE_STR="-n app-${APP_NAME}"
+[[ $NAMESPACE ]] && NAMESPACE_STR="-n $NAMESPACE"
+
 if [[ -z "$ACTION" || -z "$APP_NAME" ]]; then
   print_help
   exit 1
@@ -110,7 +129,7 @@ function configmap() {
   local key=$2
 
   if [[ "$configmap" && "$key" ]]; then
-    echo $(kubectl get cm $configmap -o "jsonpath={.data}" | jq -r .$key)
+    echo $(kubectl get cm $configmap $NAMESPACE_STR -o "jsonpath={.data}" | jq -r .$key)
   fi
 }
 
@@ -138,7 +157,7 @@ function get_resource_list() {
     exit 1
   fi
 
-  pod_names=$(kubectl get $kind -o jsonpath='{.items[*].metadata}' | jq -r .name | grep -e '^app-')
+  pod_names=$(kubectl get $kind $NAMESPACE_STR -o jsonpath='{.items[*].metadata}' | jq -r .name | grep -e '^app-')
   echo $pod_names
 }
 
@@ -150,7 +169,7 @@ function get_resource_image() {
     exit 1
   fi
 
-  res=$(kubectl get pods -o json | jq -c '[ .items|.[]|.spec.containers|.[] | select( .name | contains("'app-${name}'")) ]' | jq -r .[0].image)
+  res=$(kubectl get pods $NAMESPACE_STR -o json | jq -c '[ .items|.[]|.spec.containers|.[] | select( .name | contains("'app-${name}'")) ]' | jq -r .[0].image)
   arr=(${res//:/ })
   echo ${arr[0]}
 }
@@ -191,15 +210,15 @@ function update_image() {
 
   if [[ "$kind" == "deployment" || "$kind" == "deploy" ]]; then
     if [ $tagname == "undo" ]; then
-      kubectl rollout undo $kind/$name
+      kubectl $NAMESPACE_STR rollout undo $kind/$name
     else
-      kubectl set image $kind/$name $name=$image:$tagname
+      kubectl $NAMESPACE_STR set image $kind/$name $name=$image:$tagname
     fi
   elif [[ "$kind" == "statefulset" || "$kind" == "sts" ]]; then
     if [ $tagname == "undo" ]; then
       echo "Warning: statefulset($name) is not supported undo!"
     else
-      kubectl patch statefulset $name --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"'${image}':'${tagname}'"}]'
+      kubectl $NAMESPACE_STR patch statefulset $name --type='json' -p='[{"op": "replace", "path": "/spec/template/spec/containers/0/image", "value":"'${image}':'${tagname}'"}]'
     fi
   else
     echo "Error: Wrong resource kind: $kind"
@@ -218,7 +237,7 @@ function rollout_restart() {
 
   echo "Restart $kind $name..."
 
-  kubectl rollout restart $kind $name
+  kubectl rollout restart $kind $name $NAMESPACE_STR
   if [ $? -ne 0 ]; then
     echo "Error: failed to run rollout_restart()"
     exit 1
@@ -264,18 +283,19 @@ case $ACTION in
       # [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
     done
     ;;
+
   create)
     if [ "$2" == "list" ]; then
       print_create_list
       exit 0
     fi
 
-    cluster_name=$3
-    env_name=$4
+    env_name=$3
+    cluster_name=$4
     app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${env_name}
     ENV_LIST=$(ls -d ${app_path}/../*/ | rev | cut -f2 -d'/' | rev)
     CLUSTER_LIST=$(ls -d ${app_path}/*/ | rev | cut -f2 -d'/' | rev)
-    cluseter_path=$app_path/${cluster_name}
+    cluster_path=$app_path/${cluster_name}
 
     if !(check_app $APP_NAME); then
       print_help
@@ -300,8 +320,9 @@ case $ACTION in
       exit 0
     fi
 
-    kubectl apply -k $cluseter_path
+    kubectl apply -k $cluster_path
     ;;
+
   delete)
     if [ "$2" == "list" ]; then
       print_running_list
@@ -325,6 +346,7 @@ case $ACTION in
 
     kubectl delete -k $delete_app_path
     ;;
+
   update|upgrade)
     if [ "$2" == "list" ]; then
       print_running_list
@@ -389,6 +411,7 @@ case $ACTION in
       fi
     fi
     ;;
+
   reload|restart)
     if [ "$2" == "list" ]; then
       print_running_list
@@ -434,6 +457,7 @@ case $ACTION in
       fi
     fi
     ;;
+
   *)
     print_help
     exit 1

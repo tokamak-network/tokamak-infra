@@ -23,7 +23,7 @@ patchesStrategicMerge:
 - service_override.yaml
 
 configMapGenerator:
-- name: blockscout-config
+- name: app-blockscout-config
   literals:
   - APP_NAME=blockscout
   - CLUSTER_NAME=goerli-nightly

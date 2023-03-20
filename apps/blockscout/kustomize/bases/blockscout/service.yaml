@@ -5,7 +5,7 @@ metadata:
   name: blockscout-svc
 spec:
   selector:
-    app: blockscout
+    app: app-blockscout
   ports:
     - name: http
       port: 80

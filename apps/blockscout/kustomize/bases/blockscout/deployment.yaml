@@ -22,7 +22,7 @@ spec:
 
       containers:
         - name: app-blockscout
-          image: 005310045109.dkr.ecr.ap-northeast-2.amazonaws.com/tokamak-optimism-blockscout
+          image: onthertech/tokamak.blockscout
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4000

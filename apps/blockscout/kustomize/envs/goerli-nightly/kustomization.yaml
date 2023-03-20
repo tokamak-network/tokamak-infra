@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: blockscout
+    envs:
+      - common-blockscout.env
+  - name: smart-contract-verifier
+    envs:
+      - common-smart-contract-verifier.env
+  - name: visualizer
+    envs:
+      - common-visualizer.env
+
+secretGenerator:
+  - name: secret
+    envs:
+      - ./secret.env

@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blockscout
+  name: app-blockscout
 spec:
   replicas: 1
   template:
@@ -21,7 +21,7 @@ spec:
           command: ['sh', '-c', 'until nc -vz smart-contract-verifier-svc 8050; do echo "Waiting for smart-contract-verifier..."; sleep 1; done;']
 
       containers:
-        - name: blockscout
+        - name: app-blockscout
           image: 005310045109.dkr.ecr.ap-northeast-2.amazonaws.com/tokamak-optimism-blockscout
           imagePullPolicy: IfNotPresent
           ports:

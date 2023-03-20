@@ -4,4 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
 commonLabels:
-  app: blockscout
+  app: app-blockscout

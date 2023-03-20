@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: app-blockscout
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- namespace.yaml
+- pv.yaml
+- pvc.yaml
+- ingress.yaml
+- ../../../envs/goerli-nightly
+- ../../../bases/redis
+- ../../../bases/postgresql
+- ../../../bases/blockscout
+- ../../../bases/smart-contract-verifier
+- ../../../bases/visualizer
+- ../../../bases/sig-provider
+
+patchesStrategicMerge:
+- resource_override.yaml
+- service_override.yaml
+
+configMapGenerator:
+- name: app-blockscout-config
+  literals:
+  - APP_NAME=blockscout
+  - CLUSTER_NAME=goerli-nightly
+  - ENV_NAME=aws

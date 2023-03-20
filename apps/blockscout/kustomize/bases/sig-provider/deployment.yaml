@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sig-provider
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: sig-provider
+          image: ghcr.io/blockscout/sig-provider:main
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8050
+              protocol: TCP

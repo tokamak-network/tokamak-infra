@@ -25,10 +25,10 @@ patchesStrategicMerge:
 - env_override.yaml
 
 configMapGenerator:
-- name: chain-config
-  literals:
+- literals:
   - CLUSTER_NAME=goerli-nightly
   - ENV_NAME=aws
+  name: chain-config
 
 images:
 - name: onthertech/optimism.batch-submitter-service

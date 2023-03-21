@@ -25,17 +25,17 @@ patchesStrategicMerge:
 - env_override.yaml
 
 configMapGenerator:
-- name: chain-config
-  literals:
+- literals:
   - CLUSTER_NAME=goerli
   - ENV_NAME=aws
+  name: chain-config
 
 images:
 - name: onthertech/optimism.batch-submitter-service
-  newTag: release-0.1.3
+  newTag: release-0.1.4
 - name: onthertech/optimism.data-transport-layer
-  newTag: release-0.1.3
+  newTag: release-0.1.4
 - name: onthertech/optimism.l2geth
-  newTag: release-0.1.3
+  newTag: release-0.1.4
 - name: onthertech/optimism.tokamak-message-relayer
-  newTag: release-0.1.3
+  newTag: release-0.1.4

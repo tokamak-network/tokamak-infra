@@ -31,8 +31,8 @@ prometheus:
           module: [http_2xx]
         static_configs:
           - targets:
-            - http://app-gateway-svc.default
-            - https://goerli.explorer.tokamak.network
+            - http://app-gateway-svc.app-gateway
+            - http://blockscout-svc.app-blockscout
         relabel_configs:
         - source_labels: [__address__]
           target_label: __param_target

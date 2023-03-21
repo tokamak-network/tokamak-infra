@@ -7,12 +7,14 @@ alertmanager:
 
     route:
       receiver: no-alert
+      group_by: ['namespace', 'group']
       routes:
         - matchers:
             - group = tokamak
           receiver: slack-notifications
           group_wait: 30s
           group_interval: 2m
+          repeat_interval: 1h
 
     receivers:
       - name: no-alert
@@ -57,3 +59,25 @@ additionalPrometheusRulesMap:
             expr: 'absent(up{job="batch-submitter"} == 1)'
             annotations:
               message: 'batch-submitter is down'
+      
+      - name: 'sequencer balance'
+        rules:
+          - alert: 'sequencer balance'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+            expr: 'batch_submitter_sequencer_balance_eth < 0.5'
+            annotations:
+              message: 'sequencer balance is low than 0.5 ether'
+      
+      - name: 'proposer balance'
+        rules:
+          - alert: 'proposer balance'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+            expr: 'batch_submitter_proposer_balance_eth < 0.5'
+            annotations:
+              message: 'proposer balance is low than 0.5 ether'

@@ -7,8 +7,9 @@ generatorOptions:
 configMapGenerator:
   - name: grafana-dashboards
     files:
-      - ./simple_system_dashboard.json
-      - ./simple_application_dashboard.json
+      - simple_system_dashboard.json
+      - simple_application_dashboard.json
+      - prometheus_blackbox_exporter.json
     options:
       labels:
         grafana_dashboard: '1'

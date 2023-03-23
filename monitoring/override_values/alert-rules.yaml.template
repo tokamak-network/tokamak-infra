@@ -67,9 +67,9 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: batch-submitter
               severity: critical
-            expr: 'batch_submitter_sequencer_balance_eth < 0.5'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://${L1_ADDR}"} == 1 and on() batch_submitter_sequencer_balance_eth < 0.5'
             annotations:
-              message: 'sequencer balance is low than 0.5 ether'
+              message: 'sequencer balance is lower than 0.5 ether'
       
       - name: 'proposer balance'
         rules:
@@ -78,6 +78,6 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: batch-submitter
               severity: critical
-            expr: 'batch_submitter_proposer_balance_eth < 0.5'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://${L1_ADDR}"} == 1 and on() batch_submitter_proposer_balance_eth < 0.5'
             annotations:
-              message: 'proposer balance is low than 0.5 ether'
+              message: 'proposer balance is lower than 0.5 ether'

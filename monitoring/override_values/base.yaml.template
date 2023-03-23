@@ -40,5 +40,21 @@ prometheus:
           target_label: target
         - target_label: __address__
           replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+      - job_name: blackbox-eth-node-synced
+        metrics_path: /probe
+        params:
+          module: [http_post_eth_node_synced_2xx]
+        static_configs:
+          - targets:
+            - https://${L1_ADDR}
+        relabel_configs:
+        - source_labels: [module]
+          target_label: __param_module   
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: target
+        - target_label: __address__
+          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
 grafana:
   adminPassword: admin

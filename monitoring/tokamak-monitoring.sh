@@ -70,7 +70,7 @@ function generate_helm_files() {
     exit 1
   fi
 
-  envsubst '$SLACK_API_URL,$SLACK_CHANNEL,$CLUSTER_NAME' < $template_file | cat > $generated_file
+  envsubst '$L1_ADDR,$SLACK_API_URL,$SLACK_CHANNEL,$CLUSTER_NAME' < $template_file | cat > $generated_file
 
   template_file=$OVERRIDE_PATH/base.yaml.template
   generated_file=$OVERRIDE_PATH/base.yaml
@@ -134,7 +134,9 @@ case $ACTION in
     execcmd="helm $cmd -n $HELM_NAMESPACE --create-namespace $helm_file_list tokamak-optimism-monitoring prometheus-community/kube-prometheus-stack"
     eval $execcmd
 
-    execcmd="helm $cmd -n $HELM_NAMESPACE blackbox-exporter prometheus-community/prometheus-blackbox-exporter"
+    helm_file_list="-f $OVERRIDE_PATH/blackbox.yaml"
+
+    execcmd="helm $cmd -n $HELM_NAMESPACE $helm_file_list blackbox-exporter prometheus-community/prometheus-blackbox-exporter"
     eval $execcmd
     ;;
   delete|remove|uninstall)

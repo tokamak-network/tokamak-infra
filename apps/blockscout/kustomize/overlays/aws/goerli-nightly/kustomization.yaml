@@ -30,4 +30,4 @@ configMapGenerator:
   name: app-blockscout-config
 images:
 - name: onthertech/tokamak.blockscout
-  newTag: nightly-1.0.8
+  newTag: nightly-1.0.9

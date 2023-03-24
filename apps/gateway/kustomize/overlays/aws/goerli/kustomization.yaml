@@ -14,10 +14,13 @@ patchesStrategicMerge:
 - resource_override.yaml
 
 configMapGenerator:
-- name: app-gateway-config
+- files:
+  - config.json
   literals:
   - APP_NAME=gateway
   - CLUSTER_NAME=goerli
   - ENV_NAME=aws
-  files:
-  - config.json
+  name: app-gateway-config
+images:
+- name: onthertech/tokamak.gateway
+  newTag: release-0.2.55

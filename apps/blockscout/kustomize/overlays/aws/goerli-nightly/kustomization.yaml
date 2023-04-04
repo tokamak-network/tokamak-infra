@@ -7,19 +7,14 @@ generatorOptions:
 
 resources:
 - namespace.yaml
-- pv.yaml
-- pvc.yaml
 - ingress.yaml
 - ../../../envs/goerli-nightly
-- ../../../bases/redis
-- ../../../bases/postgresql
 - ../../../bases/blockscout
 - ../../../bases/smart-contract-verifier
 - ../../../bases/visualizer
 - ../../../bases/sig-provider
 
 patchesStrategicMerge:
-- resource_override.yaml
 - service_override.yaml
 
 configMapGenerator:

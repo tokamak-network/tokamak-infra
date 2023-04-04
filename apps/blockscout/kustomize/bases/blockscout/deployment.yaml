@@ -12,10 +12,10 @@ spec:
       initContainers:
         - name: wait-for-database
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz postgresql-0.postgresql-svc 5432; do echo "Waiting for database..."; sleep 1; done;']
+          command: ['sh', '-c', 'until nc -vz postgresql-svc.postgresql 5432; do echo "Waiting for database..."; sleep 1; done;']
         - name: wait-for-redis
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz redis-0.redis-svc 6379; do echo "Waiting for redis..."; sleep 1; done;']
+          command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
         - name: wait-for-smart-contract-verifier
           image: busybox:latest
           command: ['sh', '-c', 'until nc -vz smart-contract-verifier-svc 8050; do echo "Waiting for smart-contract-verifier..."; sleep 1; done;']

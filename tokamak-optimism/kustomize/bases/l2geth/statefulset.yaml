@@ -59,8 +59,6 @@ spec:
           envFrom:
             - configMapRef:
                 name: l2geth
-            - secretRef:
-                name: secret
           volumeMounts:
             - name: liveliness-script
               mountPath: /script/liveliness

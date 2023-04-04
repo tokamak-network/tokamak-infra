@@ -1,0 +1,86 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: l2geth-replica
+spec:
+  replicas: 1
+  serviceName: l2geth-replica-svc
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      initContainers:
+        - name: wait-for-dtl
+          image: nicolaka/netshoot
+          command: ['bash', '-c', '/script/wait/wait-for-dtl.sh']
+          envFrom:
+            - configMapRef:
+                name: common
+          volumeMounts:
+            - name: wait-scripts
+              mountPath: /script/wait
+        - name: wait-for-l2
+          image: nicolaka/netshoot
+          command: ['bash', '-c', '/script/wait/wait-for-l2.sh']
+          envFrom:
+            - configMapRef:
+                name: common
+          volumeMounts:
+            - name: wait-scripts
+              mountPath: /script/wait
+      containers:
+        - name: l2geth-replica
+          image: onthertech/optimism.l2geth
+          command:
+            [
+              'sh',
+              './geth.sh',
+              '--metrics',
+              '--metrics.addr',
+              '0.0.0.0',
+              '--metrics.port',
+              '6060',
+            ]
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8545
+              protocol: TCP
+            - containerPort: 8546
+              protocol: TCP
+            - containerPort: 6060
+              protocol: TCP
+          resources: {}
+          env:
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          envFrom:
+            - configMapRef:
+                name: l2geth-replica
+          volumeMounts:
+            - name: liveliness-script
+              mountPath: /script/liveliness
+            - name: l2geth-replica-volume
+              mountPath: /root/.ethereum
+              subPath: l2geth-replica
+          livenessProbe:
+            exec:
+              command:
+                - /script/liveliness/test.sh
+                - geth
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      volumes:
+        - name: l2geth-replica-volume
+          persistentVolumeClaim:
+            claimName: l2geth-replica-pvc
+        - name: liveliness-script
+          configMap:
+            name: liveliness-script
+            defaultMode: 0777
+        - name: wait-scripts
+          configMap:
+            name: wait-scripts
+            defaultMode: 0777

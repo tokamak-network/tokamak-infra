@@ -7,10 +7,10 @@ spec:
   template:
     spec:
       containers:
-      - name: batch-submitter
-        env:
-        - name: BATCH_SUBMITTER_LOG_LEVEL
-          value: info
+        - name: batch-submitter
+          env:
+            - name: BATCH_SUBMITTER_LOG_LEVEL
+              value: info
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -20,10 +20,10 @@ spec:
   template:
     spec:
       containers:
-      - name: data-transport-layer
-        env:
-        - name: DATA_TRANSPORT_LAYER__LOG_LEVEL
-          value: info
+        - name: data-transport-layer
+          env:
+            - name: DATA_TRANSPORT_LAYER__LOG_LEVEL
+              value: info
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -33,10 +33,10 @@ spec:
   template:
     spec:
       containers:
-      - name: l2geth
-        env:
-        - name: VERBOSITY
-          value: "3"
+        - name: l2geth
+          env:
+            - name: VERBOSITY
+              value: '3'
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -46,7 +46,20 @@ spec:
   template:
     spec:
       containers:
-      - name: relayer
-        env:
-        - name: MESSAGE_RELAYER__LOG_LEVEL
-          value: info
+        - name: relayer
+          env:
+            - name: MESSAGE_RELAYER__LOG_LEVEL
+              value: info
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: l2geth-replica
+spec:
+  template:
+    spec:
+      containers:
+        - name: l2geth-replica
+          env:
+            - name: VERBOSITY
+              value: '3'

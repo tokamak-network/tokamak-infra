@@ -1,0 +1,22 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: postgresql
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- namespace.yaml
+- pv.yaml
+- pvc.yaml
+- ../../../bases
+
+patchesStrategicMerge:
+- resource_override.yaml
+
+configMapGenerator:
+- literals:
+  - APP_NAME=postgresql
+  - CLUSTER_NAME=goerli-nightly
+  - ENV_NAME=aws
+  name: postgresql-config

@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxyd
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      initContainers:
+        - name: wait-for-redis
+          image: busybox:latest
+          command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
+      containers:
+        - name: proxyd
+          image: onthertech/optimism.proxyd
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          command: ['bin/proxyd', '/config/proxyd-config.toml']
+          resources: {}
+          volumeMounts:
+            - name: config-files
+              mountPath: /config
+
+      volumes:
+        - name: config-files
+          configMap:
+            name: config-files
+            defaultMode: 0777

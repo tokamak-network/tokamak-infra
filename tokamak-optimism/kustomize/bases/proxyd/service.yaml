@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxyd-svc
+spec:
+  ports:
+    - name: http
+      port: 8545
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: proxyd
+  type: ClusterIP

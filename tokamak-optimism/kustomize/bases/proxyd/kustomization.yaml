@@ -4,4 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
 commonLabels:
-  app: batch-submitter
+  app: proxyd

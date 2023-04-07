@@ -6,7 +6,6 @@ metadata:
 spec:
   selector:
     app: data-transport-layer
-  type: LoadBalancer
   ports:
     - name: http
       port: 7878

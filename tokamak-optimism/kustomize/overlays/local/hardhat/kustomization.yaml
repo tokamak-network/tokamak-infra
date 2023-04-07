@@ -33,8 +33,6 @@ images:
   newTag: nightly
 - name: onthertech/optimism.tokamak-message-relayer
   newTag: nightly
-- name: onthertech/optimism.proxyd
-  newTag: nightly
 - name: onthertech/optimism.hardhat-node
   newTag: nightly
 - name: onthertech/optimism.deployer

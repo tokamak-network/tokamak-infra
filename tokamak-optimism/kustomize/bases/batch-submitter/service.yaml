@@ -11,4 +11,3 @@ spec:
       targetPort: 7300
   selector:
     app: batch-submitter
-  type: ClusterIP

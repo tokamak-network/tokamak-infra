@@ -30,7 +30,7 @@ port = 9761
 response_timeout_seconds = 15
 max_response_size_bytes = 5242880
 max_retries = 3
-out_of_service_seconds = 10
+out_of_service_seconds = 600
 
 [backends]
 [backends.infura]

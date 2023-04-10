@@ -4,15 +4,15 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
+- ../../../bases/l2geth-replica
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
 - ../../../bases/roles
-- sc.yaml
 - ingress.yaml
+- sc.yaml
 - pv.yaml
 - pvc.yaml
 - aws-logging.yaml

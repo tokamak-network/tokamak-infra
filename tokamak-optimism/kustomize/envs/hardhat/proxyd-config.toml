@@ -61,6 +61,8 @@ eth_getTransactionByHash = "main"
 eth_getTransactionCount = "main"
 eth_getTransactionReceipt = "main"
 eth_sendRawTransaction = "main"
+eth_maxPriorityFeePerGas = "main"
+
 hardhat_setBalance = "main"
 
 [rate_limit]

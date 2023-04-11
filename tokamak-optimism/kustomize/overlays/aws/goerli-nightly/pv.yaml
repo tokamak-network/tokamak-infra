@@ -25,7 +25,7 @@ metadata:
     app: data-transport-layer
 spec:
   capacity:
-    storage: 10Gi
+    storage: 500Gi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany

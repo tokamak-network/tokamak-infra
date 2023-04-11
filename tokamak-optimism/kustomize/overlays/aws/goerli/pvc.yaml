@@ -24,7 +24,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 500Gi
   selector:
     matchLabels:
       app: data-transport-layer

@@ -6,7 +6,6 @@ metadata:
 spec:
   selector:
     app: l2geth-replica
-  type: ClusterIP
   ports:
     - name: rpc
       port: 8545

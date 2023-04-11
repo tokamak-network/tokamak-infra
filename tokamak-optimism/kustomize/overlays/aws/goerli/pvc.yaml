@@ -24,7 +24,22 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 10Gi
+      storage: 500Gi
   selector:
     matchLabels:
       app: data-transport-layer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: l2geth-replica-pvc
+spec:
+  storageClassName: efs-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  selector:
+    matchLabels:
+      app: l2geth-replica

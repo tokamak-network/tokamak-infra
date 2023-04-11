@@ -23,11 +23,3 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-        volumeMounts:
-        - name: redis-volume
-          mountPath: /data
-          subPath: redis
-      volumes:
-      - name: redis-volume
-        persistentVolumeClaim:
-          claimName: redis-pvc

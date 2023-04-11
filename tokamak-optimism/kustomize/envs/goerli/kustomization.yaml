@@ -20,6 +20,9 @@ configMapGenerator:
   - name: common
     envs:
       - ./common.env
+  - name: config-files
+    files:
+      - ./proxyd-config.toml
 
 secretGenerator:
   - name: secret

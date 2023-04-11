@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: batch-submitter-svc
+  name: proxyd-svc
 spec:
   ports:
     - name: http
-      port: 7300
+      port: 8545
       protocol: TCP
-      targetPort: 7300
+      targetPort: 8080
   selector:
-    app: batch-submitter
+    app: proxyd

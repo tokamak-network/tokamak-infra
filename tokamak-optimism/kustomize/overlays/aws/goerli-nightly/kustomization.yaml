@@ -1,7 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-
 generatorOptions:
   disableNameSuffixHash: true
 
@@ -10,6 +9,7 @@ resources:
 - ../../../bases/l2geth
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
+- ../../../bases/proxyd
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml
@@ -39,3 +39,5 @@ images:
   newTag: nightly-0.5.24
 - name: onthertech/optimism.tokamak-message-relayer
   newTag: nightly-0.5.5
+# - name: onthertech/optimism.proxyd
+#   newTag: release-0.1.4

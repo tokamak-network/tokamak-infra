@@ -6,7 +6,6 @@ metadata:
 spec:
   selector:
     app: l2geth
-  type: LoadBalancer
   ports:
     - name: rpc
       port: 8545

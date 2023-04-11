@@ -6,8 +6,7 @@ metadata:
 spec:
   selector:
     app: l1chain
-  type: LoadBalancer
   ports:
     - name: rpc
-      port: 9545
+      port: 8545
       targetPort: 8545

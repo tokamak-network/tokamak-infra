@@ -4,12 +4,12 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
+- ../../../bases/proxyd
 - ../../../bases/roles
 - local-path-provisioner.yaml
 - pvc.yaml
@@ -21,6 +21,7 @@ configMapGenerator:
   - CLUSTER_NAME=goerli-nightly
   - ENV_NAME=local
   name: chain-config
+
 images:
 - name: onthertech/optimism.batch-submitter-service
   newTag: nightly

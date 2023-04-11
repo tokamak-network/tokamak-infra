@@ -4,15 +4,15 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
+- ../../../bases/proxyd
 - ../../../bases/roles
-- sc.yaml
 - ingress.yaml
+- sc.yaml
 - pv.yaml
 - pvc.yaml
 - aws-logging.yaml
@@ -39,3 +39,5 @@ images:
   newTag: release-0.1.4
 - name: onthertech/optimism.tokamak-message-relayer
   newTag: release-0.1.4
+# - name: onthertech/optimism.proxyd
+#   newTag: release-0.1.4

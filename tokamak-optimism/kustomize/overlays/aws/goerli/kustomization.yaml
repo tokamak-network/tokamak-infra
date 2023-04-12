@@ -10,6 +10,7 @@ resources:
 - ../../../bases/l2geth-replica
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
+- ../../../bases/proxyd
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml
@@ -41,3 +42,4 @@ images:
   newTag: release-0.1.6
 - name: onthertech/optimism.tokamak-message-relayer
   newTag: release-0.1.6
+

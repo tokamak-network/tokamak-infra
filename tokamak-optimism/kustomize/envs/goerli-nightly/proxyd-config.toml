@@ -13,6 +13,7 @@ ws_host = "0.0.0.0"
 ws_port = 8085
 max_body_size_bytes = 10485760
 max_concurrent_rpcs = 10000
+log_level = "warn"
 
 [redis]
 url = "redis://redis-svc.redis:6379"
@@ -29,17 +30,29 @@ port = 9761
 [backend]
 response_timeout_seconds = 15
 max_response_size_bytes = 5242880
-max_retries = 3
+max_retries = 2
 out_of_service_seconds = 600
 
 [backends]
-[backends.infura]
-rpc_url = "https://goerli.infura.io/v3/e42179120b8a4d9685943d8a43b3da34"
-ws_url = "wss://goerli.infura.io/ws/v3/e42179120b8a4d9685943d8a43b3da34"
+[backends.infura_harry1]
+rpc_url = "https://goerli.infura.io/v3/186eabd9aafb4012a6916de780348a4e"
+ws_url = "wss://goerli.infura.io/ws/v3/186eabd9aafb4012a6916de780348a4e"
 max_rps = 1000
 max_ws_conns = 1
 
-[backends.alchemy]
+[backends.infura_harry2]
+rpc_url = "https://goerli.infura.io/v3/8485ff6b2da443c28c37faae6d42a06b"
+ws_url = "wss://goerli.infura.io/ws/v3/8485ff6b2da443c28c37faae6d42a06b"
+max_rps = 1000
+max_ws_conns = 1
+
+[backends.infura_harry3]
+rpc_url = "https://goerli.infura.io/v3/a07126fa968a4f918e275164f25a6862"
+ws_url = "wss://goerli.infura.io/ws/v3/a07126fa968a4f918e275164f25a6862"
+max_rps = 1000
+max_ws_conns = 1
+
+[backends.alchemy_harry1]
 rpc_url = "https://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
 ws_url = "wss://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
 max_rps = 1000
@@ -53,10 +66,13 @@ max_ws_conns = 1
 
 [backend_groups]
 [backend_groups.main]
-backends = ["office", "infura", "alchemy"]
+backends = ["office", "infura_harry1", "infura_harry2", "infura_harry3", "alchemy_harry1"]
 
-[backend_groups.office]
-backends = ["office"]
+[backend_groups.alchemy]
+backends = ["alchemy_harry1"]
+
+[backend_groups.infura]
+backends = ["infura_harry1", "infura_harry2", "infura_harry3"]
 
 [rpc_method_mappings]
 net_version = "main"

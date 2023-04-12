@@ -23,6 +23,9 @@ configMapGenerator:
   - name: config-files
     files:
       - ./proxyd-config.toml
+  - name: l2geth-replica
+    envs:
+      - ./l2geth-replica.env
 
 secretGenerator:
   - name: secret

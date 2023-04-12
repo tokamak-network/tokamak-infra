@@ -2,24 +2,15 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: l2geth
+  name: l2geth-replica
 spec:
   replicas: 1
-  serviceName: l2geth-svc
+  serviceName: l2geth-replica-svc
   template:
     spec:
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       initContainers:
-        - name: wait-for-deployer
-          image: nicolaka/netshoot
-          command: ['bash', '-c', '/script/wait/wait-for-deployer.sh']
-          envFrom:
-            - configMapRef:
-                name: common
-          volumeMounts:
-            - name: wait-scripts
-              mountPath: /script/wait
         - name: wait-for-dtl
           image: nicolaka/netshoot
           command: ['bash', '-c', '/script/wait/wait-for-dtl.sh']
@@ -29,8 +20,17 @@ spec:
           volumeMounts:
             - name: wait-scripts
               mountPath: /script/wait
+        - name: wait-for-l2
+          image: nicolaka/netshoot
+          command: ['bash', '-c', '/script/wait/wait-for-l2.sh']
+          envFrom:
+            - configMapRef:
+                name: common
+          volumeMounts:
+            - name: wait-scripts
+              mountPath: /script/wait
       containers:
-        - name: l2geth
+        - name: l2geth-replica
           image: onthertech/optimism.l2geth
           command:
             [
@@ -58,13 +58,13 @@ spec:
                   fieldPath: metadata.namespace
           envFrom:
             - configMapRef:
-                name: l2geth
+                name: l2geth-replica
           volumeMounts:
             - name: liveliness-script
               mountPath: /script/liveliness
-            - name: l2geth-volume
+            - name: l2geth-replica-volume
               mountPath: /root/.ethereum
-              subPath: l2geth
+              subPath: l2geth-replica
           livenessProbe:
             exec:
               command:
@@ -73,9 +73,9 @@ spec:
             initialDelaySeconds: 15
             periodSeconds: 10
       volumes:
-        - name: l2geth-volume
+        - name: l2geth-replica-volume
           persistentVolumeClaim:
-            claimName: l2geth-pvc
+            claimName: l2geth-replica-pvc
         - name: liveliness-script
           configMap:
             name: liveliness-script

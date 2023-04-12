@@ -7,6 +7,7 @@ generatorOptions:
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
+- ../../../bases/l2geth-replica
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
 - ../../../bases/proxyd
@@ -32,12 +33,13 @@ configMapGenerator:
 
 images:
 - name: onthertech/optimism.batch-submitter-service
-  newTag: release-0.1.4
+  newTag: release-0.1.6
 - name: onthertech/optimism.data-transport-layer
-  newTag: release-0.1.4
+  newTag: release-0.1.6
 - name: onthertech/optimism.l2geth
-  newTag: release-0.1.4
+  newTag: release-0.1.6
+- name: onthertech/optimism.proxyd
+  newTag: release-0.1.6
 - name: onthertech/optimism.tokamak-message-relayer
-  newTag: release-0.1.4
-# - name: onthertech/optimism.proxyd
-#   newTag: release-0.1.4
+  newTag: release-0.1.6
+

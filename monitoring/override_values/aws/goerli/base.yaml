@@ -10,7 +10,7 @@ prometheus:
       - job_name: data-transport-layer
         static_configs:
           - targets:
-              - data-transport-layer-0.data-transport-layer-svc.default:7878
+              - data-transport-layer-svc.default:7878
       - job_name: batch-submitter
         static_configs:
           - targets:
@@ -19,7 +19,7 @@ prometheus:
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - l2geth-0.l2geth-svc.default:6060
+               - l2geth-svc.default:6060
       - job_name: l1geth
         metrics_path: /debug/metrics/prometheus
         static_configs:
@@ -49,7 +49,7 @@ prometheus:
             - https://goerli.rpc.tokamak.network
         relabel_configs:
         - source_labels: [module]
-          target_label: __param_module   
+          target_label: __param_module
         - source_labels: [__address__]
           target_label: __param_target
         - source_labels: [__param_target]

@@ -49,7 +49,7 @@ prometheus:
             - https://goerli.rpc.tokamak.network
         relabel_configs:
         - source_labels: [module]
-          target_label: __param_module   
+          target_label: __param_module
         - source_labels: [__address__]
           target_label: __param_target
         - source_labels: [__param_target]

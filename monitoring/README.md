@@ -12,46 +12,21 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 ```
 
-## Create .env file
-
-### for Local
-
-```
-cp override_values/.env.local override_values/.env
-```
-
-### for AWS Goerli
-
-```
-cp override_values/.env.goerli override_values/.env
-```
-
-### for AWS Goerli Nightly
-
-```
-cp override_values/.env.goerli-nightly override_values/.env
-```
-
 ## Install Prometheus Stack
 
-### for aws
+### for aws goerli
 
 ```
-./tokamak-monitoring.sh create aws
+./tokamak-monitoring.sh create aws goerli
 ```
 
-### for local
+### for aws goerli-nightly
 
 ```
-./tokamak-monitoring.sh create local
+./tokamak-monitoring.sh create aws goerli-nightly
 ```
 
 ## Connect Prometheus/Grafana
-
-### for Local
-
-- prometheus: http://localhost:9090
-- grafana: http://localhost:3000
 
 ### for AWS
 
@@ -60,40 +35,24 @@ cp override_values/.env.goerli-nightly override_values/.env
 
 ## Upgrade Promethes Stack
 
-### for aws
+### for aws goerli
 
 ```
-./tokamak-monitoring.sh upgrade aws
+./tokamak-monitoring.sh upgrade aws goerli
 ```
 
-### for local
+### for aws goerli
 
 ```
-./tokamak-monitoring.sh upgrade local
+./tokamak-monitoring.sh upgrade aws goerli-nightly
 ```
 
 ## Uninstall Promethes Stack
 
 ```
-./tokamak-monitoring delete
+./tokamak-monitoring delete aws goerli
 ```
 
 ## Grafana Account
 
 default username is `admin` and default password is `admin`.
-
-## Alert Manager
-
-Create a slack webhook (https://api.slack.com/messaging/webhooks)
-
-Modify slack informations in `.env`
-
-```
-SLACK_API_URL=xxxxx
-SLACK_CHANNEL=xxxxx
-```
-
-## Next Step
-
-- 3rd APM Service
-- Advanced Application Monitoring

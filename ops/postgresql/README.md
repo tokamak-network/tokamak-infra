@@ -26,5 +26,7 @@ eksctl create fargateprofile \
 ### Add postgresql to cluster
 
 ```
+kubectl apply -k postgresql/kustomize/overlays/aws/goerli
+
 kubectl apply -k postgresql/kustomize/overlays/aws/goerli-nightly
 ```

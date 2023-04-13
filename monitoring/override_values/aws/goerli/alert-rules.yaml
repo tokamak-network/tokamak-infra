@@ -3,7 +3,7 @@ alertmanager:
     global:
       # Also possible to place this URL in a file.
       # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
-      slack_api_url: '${SLACK_API_URL}'
+      slack_api_url: 'https://hooks.slack.com/services/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'
 
     route:
       receiver: no-alert
@@ -20,8 +20,8 @@ alertmanager:
       - name: no-alert
       - name: slack-notifications
         slack_configs:
-          - channel: "#${SLACK_CHANNEL}"
-            title: "{{ range .Alerts }}[${CLUSTER_NAME}] {{ .Labels.app }}\n{{ end }}"
+          - channel: "#optimism-alarm-logs"
+            title: "{{ range .Alerts }}[tokamak-optimism-goerli] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
 
 additionalPrometheusRulesMap:
@@ -59,7 +59,7 @@ additionalPrometheusRulesMap:
             expr: 'absent(up{job="batch-submitter"} == 1)'
             annotations:
               message: 'batch-submitter is down'
-      
+
       - name: 'sequencer balance'
         rules:
           - alert: 'sequencer balance'
@@ -67,10 +67,10 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: batch-submitter
               severity: critical
-            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://${L1_ADDR}"} == 1 and on() batch_submitter_sequencer_balance_eth < 0.5'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() batch_submitter_sequencer_balance_eth < 0.5'
             annotations:
               message: 'sequencer balance is lower than 0.5 ether'
-      
+
       - name: 'proposer balance'
         rules:
           - alert: 'proposer balance'
@@ -78,6 +78,6 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: batch-submitter
               severity: critical
-            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://${L1_ADDR}"} == 1 and on() batch_submitter_proposer_balance_eth < 0.5'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() batch_submitter_proposer_balance_eth < 0.5'
             annotations:
               message: 'proposer balance is lower than 0.5 ether'

@@ -7,13 +7,21 @@ alertmanager:
 
     route:
       receiver: no-alert
-      group_by: ['namespace', 'group']
       routes:
         - matchers:
             - group = tokamak
+            - severity_resolved = info
+          receiver: slack-notifications-resolve
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - group = tokamak
           receiver: slack-notifications
-          group_wait: 30s
-          group_interval: 2m
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
           repeat_interval: 1h
 
     receivers:
@@ -23,6 +31,12 @@ alertmanager:
           - channel: "#optimism-alarm-logs"
             title: "{{ range .Alerts }}[tokamak-optimism-goerli-nightly] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
+      - name: slack-notifications-resolve
+        slack_configs:
+          - channel: "#optimism-alarm-logs"
+            send_resolved: true
+            title: "{{ range .Alerts }}[tokamak-optimism-goerli-nightly] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
 
 additionalPrometheusRulesMap:
   rule-name:
@@ -34,10 +48,11 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: l2geth
               severity: critical
+              severity_resolved: info
             expr: 'absent(up{job="l2geth"} == 1)'
             annotations:
               message: 'l2geth is down'
-
+              message_resolved: 'l2geth is up'
       - name: 'data-transport-layer'
         rules:
           - alert: 'data-transport-layer down'
@@ -45,10 +60,11 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: data-transport-layer
               severity: critical
+              severity_resolved: info
             expr: 'absent(up{job="data-transport-layer"} == 1)'
             annotations:
               message: 'data-transport-layer is down'
-
+              message_resolved: 'data-transport-layer is up'
       - name: 'batch-submitter'
         rules:
           - alert: 'batch-submitter down'
@@ -56,10 +72,11 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: batch-submitter
               severity: critical
+              severity_resolved: info
             expr: 'absent(up{job="batch-submitter"} == 1)'
             annotations:
               message: 'batch-submitter is down'
-
+              message_resolved: 'batch-submitter is up'
       - name: 'sequencer balance'
         rules:
           - alert: 'sequencer balance'
@@ -70,7 +87,6 @@ additionalPrometheusRulesMap:
             expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() batch_submitter_sequencer_balance_eth < 0.5'
             annotations:
               message: 'sequencer balance is lower than 0.5 ether'
-
       - name: 'proposer balance'
         rules:
           - alert: 'proposer balance'

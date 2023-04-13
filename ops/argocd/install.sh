@@ -2,24 +2,20 @@
 
 function print_help() {
   echo "Usage: "
-  echo "  $0 aws"
-  echo "  $0 local"
+  echo "  $0 goerli"
+  echo "  $0 goerli-nightly"
   echo
 }
 
-ENV_NAME=$1
+CLUSTER_NAME=$1
 MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-OVERRIDE_PATH=$MYPATH/override_values
-ENV_FILE=$OVERRIDE_PATH/.env
+CLUSTER_LIST=$(ls $MYPATH/override_values/* | rev | cut -f1 -d'/' | rev |cut -f1 -d'.' | xargs)
 
-function check_env() {
-  local env_name=$1
-
-  if [[ "$env_name" != "local" && "$env_name" != "aws" ]]; then
-    echo "Error: wrong ENV_NAME!!"
-    return 1
-  fi
-  return 0
+function check_cluster() {
+  for i in $CLUSTER_LIST; do
+    [[ "$i" == "$1" ]] && return 0
+  done
+  return 1
 }
 
 function ask_going() {
@@ -34,26 +30,9 @@ function ask_going() {
   return $res
 }
 
-if !(check_env $ENV_NAME); then
+if !(check_cluster $CLUSTER_NAME); then
   print_help
   exit 1
-fi
-
-if [ -f "$ENV_FILE" ]; then
-  export $(cat ${ENV_FILE} | sed 's/#.*//g' | xargs)
-else
-  echo "ERROR: Can't not find .env file($ENV_FILE)"
-  echo "Generate .env file"
-  exit 1
-fi
-
-message="Do you check environment files?"$'\n'
-message+=" - $ENV_FILE"$'\n'
-read -p "$message(n) " -n 1 -r
-echo
-if ! [[ $REPLY =~ ^[Yy]$ ]]; then
-  echo "aborted."
-  exit 0
 fi
 
 if !(ask_going); then
@@ -61,20 +40,8 @@ if !(ask_going); then
   exit 0
 fi
 
-helm_file_list="-f $OVERRIDE_PATH/base.yaml"
-
-if [ "$ENV_NAME" == "aws" ]; then
-  template_file=$OVERRIDE_PATH/aws.yaml.template
-  generated_file=$OVERRIDE_PATH/aws.yaml
-
-  if [ ! -f "$template_file" ]; then
-    echo "Error: Can't find template file: $template_file"
-    exit 1
-  fi
-  envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
-
-  helm_file_list+=" -f $OVERRIDE_PATH/$ENV_NAME.yaml"
-fi
+helm_file_list="-f $MYPATH/override_values/${CLUSTER_NAME}.yaml"
 
 execcmd="helm install -n argocd --create-namespace $helm_file_list argocd argo/argo-cd"
+echo $execcmd
 eval $execcmd

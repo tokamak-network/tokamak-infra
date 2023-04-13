@@ -8,7 +8,9 @@ function print_help() {
   echo "        - list"
   echo "        - [cluster_name] [env_name]"
   echo "      - update"
+  echo "        - [cluster_name] [env_name]"
   echo "      - delete"
+  echo "        - [cluster_name] [env_name]"
   echo
 }
 

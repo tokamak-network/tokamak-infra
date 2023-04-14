@@ -1,3 +1,6 @@
+configs:
+  params:
+    server.insecure: true
 server:
   ingress:
     enabled: true
@@ -7,6 +10,6 @@ server:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
       alb.ingress.kubernetes.io/ssl-redirect: '443'
-      alb.ingress.kubernetes.io/certificate-arn: ${CERTIFICATE_ARN}
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/bdb799f6-2c38-43b2-b57b-36b3784ae312
     hosts:
-      - ${HOST_NAME}
+      - goerli-nightly.argocd.tokamak.network

@@ -1,5 +1,0 @@
-.env
-aws.yaml
-alert-rules.yaml
-pv.yaml
-base.yaml

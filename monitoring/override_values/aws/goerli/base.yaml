@@ -19,12 +19,12 @@ prometheus:
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - l2geth-svc.default:6060
+               - l2geth-svc.default:6060
       - job_name: l1geth
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - ${L1_ADDR}:6060
+              - goerli.rpc.tokamak.network:6060
       - job_name: blackbox
         metrics_path: /probe
         params:
@@ -46,10 +46,10 @@ prometheus:
           module: [http_post_eth_node_synced_2xx]
         static_configs:
           - targets:
-            - https://${L1_ADDR}
+            - https://goerli.rpc.tokamak.network
         relabel_configs:
         - source_labels: [module]
-          target_label: __param_module   
+          target_label: __param_module
         - source_labels: [__address__]
           target_label: __param_target
         - source_labels: [__param_target]

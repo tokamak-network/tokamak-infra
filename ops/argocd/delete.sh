@@ -23,20 +23,5 @@ if !(ask_going); then
   exit 0
 fi
 
-helm_file_list="-f $OVERRIDE_PATH/base.yaml"
-
-if [ "$ENV_NAME" == "aws" ]; then
-  template_file=$OVERRIDE_PATH/aws.yaml.template
-  generated_file=$OVERRIDE_PATH/aws.yaml
-
-  if [ ! -f "$template_file" ]; then
-    echo "Error: Can't find template file: $template_file"
-    exit 1
-  fi
-  envsubst '$CERTIFICATE_ARN,$HOST_NAME' < $template_file | cat > $generated_file
-
-  helm_file_list+=" -f $OVERRIDE_PATH/$ENV_NAME.yaml"
-fi
-
 execcmd="helm delete -n argocd argocd"
 eval $execcmd

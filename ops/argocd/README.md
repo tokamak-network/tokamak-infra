@@ -35,38 +35,18 @@ eksctl create fargateprofile \
     --namespace argocd
 ```
 
-## Create .env file
-
-### for Local
-
-```
-cp override_values/.env.local override_values/.env
-```
-
-### for AWS Goerli
-
-```
-cp override_values/.env.goerli override_values/.env
-```
-
-### for AWS Goerli Nightly
-
-```
-cp override_values/.env.goerli-nightly override_values/.env
-```
-
 ## Install ArgoCD
 
-### for aws
+### for aws goerli
 
 ```
-./install.sh aws
+./install.sh goerli
 ```
 
-### for local
+### for aws goerli-nightly
 
 ```
-./install.sh local
+./install.sh goerli-nightly
 ```
 
 ### Get admin password

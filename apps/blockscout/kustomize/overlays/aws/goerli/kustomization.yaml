@@ -15,7 +15,7 @@ resources:
 - ../../../bases/sig-provider
 
 patchesStrategicMerge:
-- resource_override.yaml
+# - resource_override.yaml
 - service_override.yaml
 
 configMapGenerator:

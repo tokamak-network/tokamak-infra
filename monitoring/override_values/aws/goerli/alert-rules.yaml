@@ -77,6 +77,30 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'batch-submitter is down'
               message_resolved: 'batch-submitter is up'
+      - name: 'gateway'
+        rules:
+          - alert: 'gateway down'
+            labels:
+              group: tokamak
+              app: gateway
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="http://app-gateway-svc.app-gateway"} == 1)'
+            annotations:
+              message: 'gateway is down'
+              message_resolved: 'gateway is up'
+      - name: 'block-explorer'
+        rules:
+          - alert: 'block-explorer'
+            labels:
+              group: tokamak
+              app: block-explorer
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="http://blockscout-svc.app-blockscout"} == 1)'
+            annotations:
+              message: 'block-explorer is down'
+              message_resolved: 'block-explorer is up'
       - name: 'sequencer balance'
         rules:
           - alert: 'sequencer balance'

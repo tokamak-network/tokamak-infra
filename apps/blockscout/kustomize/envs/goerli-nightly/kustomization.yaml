@@ -14,8 +14,3 @@ configMapGenerator:
   - name: visualizer
     envs:
       - common-visualizer.env
-
-secretGenerator:
-  - name: secret
-    envs:
-      - ./secret.env

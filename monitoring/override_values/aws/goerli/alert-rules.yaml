@@ -53,6 +53,18 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'l2geth is down'
               message_resolved: 'l2geth is up'
+      - name: 'l2geth-replica'
+        rules:
+          - alert: 'l2geth-replica down'
+            labels:
+              group: tokamak
+              app: l2geth-replica
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="l2geth-replica"} == 1)'
+            annotations:
+              message: 'l2geth-replica is down'
+              message_resolved: 'l2geth-replica is up'
       - name: 'data-transport-layer'
         rules:
           - alert: 'data-transport-layer down'

@@ -32,5 +32,3 @@ spec:
           envFrom:
             - configMapRef:
                 name: blockscout
-            - secretRef:
-                name: secret

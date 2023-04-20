@@ -20,6 +20,11 @@ prometheus:
         static_configs:
           - targets:
               - l2geth-svc.default:6060
+      - job_name: l2geth-replica
+        metrics_path: /debug/metrics/prometheus
+        static_configs:
+        - targets:
+            - l2geth-replica-svc.default:6060
       - job_name: l1geth
         metrics_path: /debug/metrics/prometheus
         static_configs:

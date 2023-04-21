@@ -25,6 +25,10 @@ prometheus:
         static_configs:
         - targets:
             - l2geth-replica-svc.default:6060
+      - job_name: proxyd
+        static_configs:
+          - targets:
+              - proxyd-svc.default:9761
       - job_name: l1geth
         metrics_path: /debug/metrics/prometheus
         static_configs:

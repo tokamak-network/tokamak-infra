@@ -250,6 +250,16 @@ file_system_id=$(aws efs create-file-system \
     --output text)
 ```
 
+Create an EFS filesystem for l2geth-replica
+
+```
+replica_file_system_id=$(aws efs create-file-system \
+    --region ${region} \
+    --performance-mode generalPurpose \
+    --query 'FileSystemId' \
+    --output text)
+```
+
 Get the private subnet id to for fargate
 
 ```
@@ -267,6 +277,12 @@ Change `<my_subnet_id>` to the subnet id and execute next command each subnet id
 ```
 aws efs create-mount-target \
     --file-system-id ${file_system_id} \
+    --region ${region} \
+    --security-groups ${security_group_id} \
+    --subnet-id <my_subnet_id>
+
+aws efs create-mount-target \
+    --file-system-id ${replica_file_system_id} \
     --region ${region} \
     --security-groups ${security_group_id} \
     --subnet-id <my_subnet_id>
@@ -556,6 +572,8 @@ aws ec2 delete-security-group --group-id ${security_group_id} --region ${region}
 
 # delete file system
 aws efs delete-file-system --file-system-id ${file_system_id} --region ${region}
+
+# delete ${replica_file_system_id} file system such as ${file_system_id}
 
 # delete cluster
 eksctl delete cluster --name ${cluster_name} --region ${region}

@@ -56,6 +56,10 @@ prometheus:
         static_configs:
           - targets:
             - https://goerli.rpc.tokamak.network
+            - https://goerli.infura.io/v3/186eabd9aafb4012a6916de780348a4e
+            - https://goerli.infura.io/v3/8485ff6b2da443c28c37faae6d42a06b
+            - https://goerli.infura.io/v3/a07126fa968a4f918e275164f25a6862
+            - https://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1
         relabel_configs:
         - source_labels: [module]
           target_label: __param_module

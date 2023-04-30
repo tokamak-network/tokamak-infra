@@ -26,8 +26,3 @@ configMapGenerator:
   - name: l2geth-replica
     envs:
       - ./l2geth-replica.env
-
-secretGenerator:
-  - name: secret
-    envs:
-      - ./secret.env

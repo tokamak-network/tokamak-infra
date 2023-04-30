@@ -17,6 +17,8 @@ resources:
 - pv.yaml
 - pvc.yaml
 - aws-logging.yaml
+- secretstore.yaml
+- externalsecret.yaml
 - ../../../envs/goerli
 - ../../../scripts
 
@@ -42,4 +44,3 @@ images:
   newTag: release-0.1.6
 - name: onthertech/optimism.tokamak-message-relayer
   newTag: release-0.1.6
-

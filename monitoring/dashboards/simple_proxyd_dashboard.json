@@ -37,102 +37,6 @@
         "x": 0,
         "y": 0
       },
-      "id": 176,
-      "panels": [],
-      "title": "Proxyd Healthy",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "red",
-                  "index": 0,
-                  "text": "Down"
-                },
-                "1": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "UP"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 0,
-        "y": 1
-      },
-      "id": 174,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {
-          "valueSize": 20
-        },
-        "textMode": "auto"
-      },
-      "pluginVersion": "9.3.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "exemplar": false,
-          "expr": "up{job=\"proxyd\"}",
-          "instant": true,
-          "legendFormat": "__auto",
-          "range": false,
-          "refId": "A"
-        }
-      ],
-      "title": "Proxyd",
-      "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 5
-      },
       "id": 151,
       "panels": [],
       "title": "Proxyd Dashboard",
@@ -176,7 +80,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 6
+        "y": 1
       },
       "id": 159,
       "links": [],
@@ -285,7 +189,7 @@
         "h": 8,
         "w": 10,
         "x": 4,
-        "y": 6
+        "y": 1
       },
       "id": 157,
       "interval": "1m",
@@ -392,7 +296,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 6
+        "y": 1
       },
       "id": 158,
       "interval": "1m",
@@ -469,7 +373,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 10
+        "y": 5
       },
       "id": 154,
       "links": [],
@@ -538,7 +442,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 14
+        "y": 9
       },
       "id": 163,
       "links": [],
@@ -643,7 +547,7 @@
         "h": 8,
         "w": 10,
         "x": 4,
-        "y": 14
+        "y": 9
       },
       "id": 161,
       "interval": "1m",
@@ -739,7 +643,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 14
+        "y": 9
       },
       "id": 162,
       "interval": "1m",
@@ -799,7 +703,7 @@
         "h": 4,
         "w": 4,
         "x": 0,
-        "y": 18
+        "y": 13
       },
       "id": 165,
       "links": [],
@@ -878,7 +782,7 @@
         "h": 6,
         "w": 4,
         "x": 0,
-        "y": 22
+        "y": 17
       },
       "id": 155,
       "interval": "1m",
@@ -988,7 +892,7 @@
         "h": 6,
         "w": 20,
         "x": 4,
-        "y": 22
+        "y": 17
       },
       "id": 156,
       "interval": "1m",
@@ -1086,6 +990,6 @@
   "timezone": "",
   "title": "Proxyd Dashboard",
   "uid": "bUki4MF4zz",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }

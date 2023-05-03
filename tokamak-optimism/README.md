@@ -359,6 +359,78 @@ aws iam attach-role-policy \
   --role-name ${eks_rolearn}
 ```
 
+#### Create Secrets for AWS
+
+Create fargate profile for External-Secrets.
+
+```
+eksctl create fargateprofile \
+    --cluster ${cluster_name} \
+    --name externalsecrets \
+    --namespace external-secrets
+```
+
+Install External-Secrets using helm
+
+```
+helm repo add external-secrets https://charts.external-secrets.io
+
+helm repo update
+
+helm install external-secrets \
+   external-secrets/external-secrets \
+   -n external-secrets \
+   --create-namespace \
+   --set installCRDs=true \
+   --set webhook.port=9443
+
+kubectl get pods -n external-secrets
+```
+
+Generate Kay:Values on AWS Secret Manager.
+
+* BATCH_SUBMITTER_SEQUENCER_PRIVATE_KEY
+* BATCH_SUBMITTER_PROPOSER_PRIVATE_KEY
+* MESSAGE_RELAYER__L1_WALLET
+
+And copy `secret manager arn`
+
+See [create_secret](https://docs.aws.amazon.com/ko_kr/secretsmanager/latest/userguide/create_secret.html)
+
+Create a resource policy for the pod
+
+```
+# Fix it
+secret_arn=arn:aws:secretsmanager:ap-northeast-2:005310045109:secret:tokamak-optimism-goerli/secrets-S9qW4n
+
+# Fix it
+policy_name=tokamak-optimism-goerli-nightly-deployment
+
+POLICY_ARN=$(aws --region "${region}" --query Policy.Arn --output text iam create-policy --policy-name ${policy_name} --policy-document '{
+    "Version": "2012-10-17",
+    "Statement": [ {
+        "Effect": "Allow",
+        "Action": [
+            "secretsmanager:GetSecretValue",
+            "secretsmanager:DescribeSecret"
+        ],
+        "Resource": "'${secret_arn}'"
+    } ]
+}')
+```
+
+Create the service account for eks
+
+```
+eksctl create iamserviceaccount \
+  --name tokamak-optimism-deployment-sa \
+  --region=${region} \
+  --cluster ${cluster_name} \
+  --attach-policy-arn ${POLICY_ARN} \
+  --approve \
+  --override-existing-serviceaccounts
+```
+
 ### Environment
 
 #### Deploy contracts

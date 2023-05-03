@@ -9,6 +9,7 @@ configMapGenerator:
     files:
       - simple_system_dashboard.json
       - simple_application_dashboard.json
+      - simple_proxyd_dashboard.json
       - prometheus_blackbox_exporter.json
     options:
       labels:

@@ -89,6 +89,42 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'batch-submitter is down'
               message_resolved: 'batch-submitter is up'
+      - name: 'proxyd down'
+        rules:
+          - alert: 'proxyd down'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="proxyd"} == 1)'
+            annotations:
+              message: 'proxyd is down'
+              message_resolved: 'proxyd is up'
+      - name: 'proxyd unhealthy'
+        rules:
+          - alert: 'proxyd unhealthy'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="http://proxyd-svc.default:8545"} == 1)'
+            annotations:
+              message: 'proxyd is unhealthy'
+              message_resolved: 'proxyd is healthy'
+      - name: 'office l1'
+        rules:
+          - alert: 'office l1 unhealthy'
+            labels:
+              group: tokamak
+              app: l1
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="https://goerli.rpc.tokamak.network"} == 1)'
+            annotations:
+              message: 'office l1 unhealthy'
+              message_resolved: 'office l1 is healthy'
       - name: 'gateway'
         rules:
           - alert: 'gateway down'

@@ -1,7 +1,27 @@
 configs:
   params:
     server.insecure: true
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
 server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
   ingress:
     enabled: true
     annotations:
@@ -13,3 +33,17 @@ server:
       alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/8b277f21-22e0-4a07-b2e2-4dd5220280a1
     hosts:
       - goerli.argocd.tokamak.network
+applicationSet:
+  metrics:
+   enabled: true
+   serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+notifications:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring

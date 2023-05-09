@@ -5,12 +5,23 @@ generatorOptions:
   disableNameSuffixHash: true
 
 configMapGenerator:
-  - name: grafana-dashboards
+  - name: simple-dashboards
     files:
       - simple_system_dashboard.json
       - simple_application_dashboard.json
       - simple_proxyd_dashboard.json
+    options:
+      labels:
+        grafana_dashboard: '1'
+  - name: blackbox-dashboards
+    files:
       - prometheus_blackbox_exporter.json
+    options:
+      labels:
+        grafana_dashboard: '1'
+  - name: argocd-dashboards
+    files:
+      - argocd_dashboard.json
     options:
       labels:
         grafana_dashboard: '1'

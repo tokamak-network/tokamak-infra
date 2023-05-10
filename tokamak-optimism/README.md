@@ -548,7 +548,7 @@ aws iam attach-role-policy \
     ExportToS3: true
     ```
 
-9. Add `EventBridge` Trigger is named `export-log-groups` with scheduled `cron(0 * * * ? *)`
+9. Add `EventBridge` Trigger is named `export-log-groups` with scheduled `cron(0/30 * * * ? *)`
 
 10. Config lifecycle for s3 the bucket
 

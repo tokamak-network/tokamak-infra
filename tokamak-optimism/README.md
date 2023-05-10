@@ -358,6 +358,203 @@ aws iam attach-role-policy \
   --policy-arn arn:aws:iam::${account_id}:policy/eks-fargate-logging-policy \
   --role-name ${eks_rolearn}
 ```
+### Export cloudwatch logs to S3
+
+1. Create Bucket is named `BUCKET_NAME`
+2. Update the bucket permission
+
+    Change `${REGION}`, `${BUCKET_NAME}` to own name.
+
+    ```
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "logs.${REGION}.amazonaws.com"
+                },
+                "Action": "s3:GetBucketAcl",
+                "Resource": "arn:aws:s3:::${BUCKET_NAME}"
+            },
+            {
+                "Effect": "Allow",
+                "Principal": {
+                    "Service": "logs.${REGION}.amazonaws.com"
+                },
+                "Action": "s3:PutObject",
+                "Resource": "arn:aws:s3:::${BUCKET_NAME}/*",
+                "Condition": {
+                    "StringEquals": {
+                        "s3:x-amz-acl": "bucket-owner-full-control"
+                    }
+                }
+            }
+        ]
+    }
+    ```
+
+3. Create IAM Policy is named `cloudwatch_export_task` for Lambda
+
+    Change `${REGION}`, `${BUCKET_NAME}`, `${ACCOUNT_ID}` to own name.
+
+    **cloudwatch_export_task** policy
+
+    ```
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Action": [
+                    "logs:CreateExportTask",
+                    "logs:Describe*",
+                    "logs:ListTagsLogGroup"
+                ],
+                "Effect": "Allow",
+                "Resource": "*"
+            },
+            {
+                "Action": [
+                    "ssm:DescribeParameters",
+                    "ssm:GetParameter",
+                    "ssm:GetParameters",
+                    "ssm:GetParametersByPath",
+                    "ssm:PutParameter"
+                ],
+                "Resource": "arn:aws:ssm:${REGION}:${ACCOUNT_ID}:parameter/log-exporter-last-export/*",
+                "Effect": "Allow"
+            },
+            {
+                "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:${REGION}:${ACCOUNT_ID}:log-group:/aws/lambda/log-exporter-*",
+                "Effect": "Allow"
+            },
+            {
+                "Sid": "AllowCrossAccountObjectAcc",
+                "Effect": "Allow",
+                "Action": [
+                    "s3:PutObject",
+                    "s3:PutObjectACL"
+                ],
+                "Resource": "arn:aws:s3:::${BUCKET_NAME}/*"
+            },
+            {
+                "Sid": "AllowCrossAccountBucketAcc",
+                "Effect": "Allow",
+                "Action": [
+                    "s3:PutBucketAcl",
+                    "s3:GetBucketAcl"
+                ],
+                "Resource": "arn:aws:s3:::${BUCKET_NAME}"
+            }
+        ]
+    }
+    ```
+
+4. Create IAM Role is named `export_S3_for_lambda` included `cloudwatch_export_task` policy. and config timeout to `30s`
+5. Create Lambda Function using `export_S3_for_lambda` Role.
+6. Write follow code and deploy it.
+
+    **log-exporter-to-s3** (python 3.10)
+
+    ```
+    import boto3
+    import os
+    from pprint import pprint
+    import time
+
+    logs = boto3.client('logs')
+    ssm = boto3.client('ssm')
+
+    def lambda_handler(event, context):
+        extra_args = {}
+        log_groups = []
+        log_groups_to_export = []
+
+        if 'S3_BUCKET' not in os.environ:
+            print("Error: S3_BUCKET not defined")
+            return
+
+        print("--> S3_BUCKET=%s" % os.environ["S3_BUCKET"])
+
+        while True:
+            response = logs.describe_log_groups(**extra_args)
+            log_groups = log_groups + response['logGroups']
+
+
+            if not 'nextToken' in response:
+                break
+            extra_args['nextToken'] = response['nextToken']
+        for log_group in log_groups:
+            response = logs.list_tags_log_group(logGroupName=log_group['logGroupName'])
+            log_group_tags = response['tags']
+            if 'ExportToS3' in log_group_tags and log_group_tags['ExportToS3'] == 'true':
+                log_groups_to_export.append(log_group['logGroupName'])
+
+        for log_group_name in log_groups_to_export:
+            tm = time.gmtime()
+            export_to_time = int(round(time.time() * 1000))
+
+            ssm_parameter_name = ("/log-exporter-last-export/%s" % log_group_name).replace("//", "/")
+            try:
+                ssm_response = ssm.get_parameter(Name=ssm_parameter_name)
+                ssm_value = ssm_response['Parameter']['Value']
+            except ssm.exceptions.ParameterNotFound:
+                ssm_value = export_to_time - (24 * 60 * 60 * 1000)
+
+            print("--> Exporting %s to %s" % (log_group_name, os.environ['S3_BUCKET']))
+            if export_to_time - int(ssm_value) < (1 * 60 * 60 * 1000):
+                # Haven't been 24hrs from the last export of this log group
+                print("    Skipped until 24hrs from last export is completed")
+                continue
+            try:
+                response = logs.create_export_task(
+                    logGroupName=log_group_name,
+                    fromTime=ssm_value,
+                    to=export_to_time,
+                    destination=os.environ['S3_BUCKET'],
+                    destinationPrefix=time.strftime('%Y/%m/%d/%I/', tm) + log_group_name.strip("/")
+                )
+                print("    Task created: %s" % response['taskId'])
+                time.sleep(3)
+            except logs.exceptions.LimitExceededException:
+                print("    Need to wait until all tasks are finished (LimitExceededException). Continuing later...")
+                return
+            except Exception as e:
+                print("    Error exporting %s: %s" % (log_group_name, getattr(e, 'message', repr(e))))
+                continue
+            ssm_response = ssm.put_parameter(
+                Name=ssm_parameter_name,
+                Type="String",
+                Value=str(export_to_time),
+                Overwrite=True)
+    ```
+
+7. Add environments to lambda
+
+    Change `${BUCKET_NAME}` to own name.
+
+    ```
+    S3_BUCKET=${BUCKET_NAME}
+    ```
+
+8. Add tags to store log groups in CloudWatch.
+
+    ```
+    ExportToS3: true
+    ```
+
+9. Add `EventBridge` Trigger is named `export-log-groups` with scheduled `cron(0/30 * * * ? *)`
+
+10. Config lifecycle for s3 the bucket
+
+* transitions Standard-IA after 30 days
+* transitions Glacier Flexible Retrieval after 90 days
+
 
 #### Create Secrets for AWS
 

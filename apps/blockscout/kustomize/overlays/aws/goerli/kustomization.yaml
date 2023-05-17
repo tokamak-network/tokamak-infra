@@ -26,4 +26,4 @@ configMapGenerator:
   name: app-blockscout-config
 images:
 - name: onthertech/tokamak.blockscout
-  newTag: release-1.0.8
+  newTag: release-1.1.2

@@ -116,6 +116,7 @@ additionalPrometheusRulesMap:
       - name: 'office l1'
         rules:
           - alert: 'office l1 unhealthy'
+            for: 1m
             labels:
               group: tokamak
               app: l1

@@ -14,8 +14,8 @@ resources:
 - ../../../bases/visualizer
 - ../../../bases/sig-provider
 
-patchesStrategicMerge:
 # - resource_override.yaml
+patchesStrategicMerge:
 - service_override.yaml
 
 configMapGenerator:
@@ -26,4 +26,4 @@ configMapGenerator:
   name: app-blockscout-config
 images:
 - name: onthertech/tokamak.blockscout
-  newTag: nightly-1.0.10
+  newTag: nightly-1.1.0

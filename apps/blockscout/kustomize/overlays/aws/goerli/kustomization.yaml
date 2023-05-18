@@ -14,8 +14,8 @@ resources:
 - ../../../bases/visualizer
 - ../../../bases/sig-provider
 
-# - resource_override.yaml
 patchesStrategicMerge:
+- resource_override.yaml
 - service_override.yaml
 
 configMapGenerator:

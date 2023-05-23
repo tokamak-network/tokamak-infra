@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: redis
 spec:
@@ -10,12 +10,4 @@ spec:
         resources:
           requests:
             cpu: 0.5
-            memory: 0.75Gi
-        volumeMounts:
-        - name: redis-volume
-          mountPath: /data
-          subPath: redis
-      volumes:
-      - name: redis-volume
-        persistentVolumeClaim:
-          claimName: redis-pvc
+            memory: 1.75Gi

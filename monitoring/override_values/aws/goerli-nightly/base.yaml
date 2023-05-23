@@ -34,6 +34,10 @@ prometheus:
         static_configs:
           - targets:
               - goerli.rpc.tokamak.network:6060
+      - job_name: relayer
+        static_configs:
+          - targets:
+              - relayer-svc.default:7300
       - job_name: blackbox
         metrics_path: /probe
         params:

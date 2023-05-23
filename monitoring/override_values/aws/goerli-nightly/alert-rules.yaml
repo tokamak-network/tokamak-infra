@@ -150,6 +150,18 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'block-explorer is down'
               message_resolved: 'block-explorer is up'
+      - name: 'redis unhealthy'
+        rules:
+          - alert: 'redis unhealthy'
+            labels:
+              group: tokamak
+              app: redis
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="redis-svc.redis:6379"} == 1)'
+            annotations:
+              message: 'redis is unhealthy'
+              message_resolved: 'redis is healthy'
       - name: 'sequencer balance'
         rules:
           - alert: 'sequencer balance'

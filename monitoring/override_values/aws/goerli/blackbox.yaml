@@ -26,3 +26,6 @@ config:
         preferred_ip_protocol: 'ip4'
         ip_protocol_fallback: false
         fail_if_body_not_matches_regexp: ['0x']
+    tcp_connect:
+      prober: tcp
+      timeout: 5s

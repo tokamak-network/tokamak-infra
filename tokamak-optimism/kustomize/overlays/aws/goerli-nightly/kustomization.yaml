@@ -42,4 +42,4 @@ images:
 - name: onthertech/optimism.proxyd
   newTag: nightly-3.10.4
 - name: onthertech/optimism.tokamak-message-relayer
-  newTag: release-0.1.6
+  newTag: nightly-0.5.9

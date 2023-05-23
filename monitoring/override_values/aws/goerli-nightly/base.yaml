@@ -82,5 +82,21 @@ prometheus:
           target_label: target
         - target_label: __address__
           replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+      - job_name: tcp-health-check
+        metrics_path: /probe
+        params:
+          module: [tcp_connect]
+        static_configs:
+          - targets:
+            - redis-svc.redis:6379
+        relabel_configs:
+        - source_labels: [module]
+          target_label: __param_module
+        - source_labels: [__address__]
+          target_label: __param_target
+        - source_labels: [__param_target]
+          target_label: target
+        - target_label: __address__
+          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
 grafana:
   adminPassword: admin

@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: batch-submitter
+spec:
+  template:
+    spec:
+      containers:
+        - name: batch-submitter
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 0.75Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: data-transport-layer
+spec:
+  template:
+    spec:
+      containers:
+        - name: data-transport-layer
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 0.75Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: l2geth
+spec:
+  template:
+    spec:
+      containers:
+        - name: l2geth
+          resources:
+            requests:
+              cpu: 1
+              memory: 1.75Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: relayer
+spec:
+  template:
+    spec:
+      containers:
+        - name: relayer
+          resources:
+            requests:
+              cpu: 0.25
+              memory: 0.25Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: l2geth-replica
+spec:
+  template:
+    spec:
+      containers:
+        - name: l2geth-replica
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 0.75Gi

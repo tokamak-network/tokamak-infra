@@ -8,7 +8,7 @@ generatorOptions:
 resources:
 - namespace.yaml
 - ingress.yaml
-- ../../../envs/goerli
+- ../../../envs/mainnet
 - ../../../bases/blockscout
 - ../../../bases/smart-contract-verifier
 - ../../../bases/visualizer

@@ -19,7 +19,7 @@ resources:
 - aws-logging.yaml
 - secretstore.yaml
 - externalsecret.yaml
-- ../../../envs/goerli
+- ../../../envs/mainnet
 - ../../../scripts
 
 patchesStrategicMerge:

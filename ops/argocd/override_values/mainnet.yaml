@@ -1,0 +1,49 @@
+configs:
+  params:
+    server.insecure: true
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:292157676615:certificate/eed9d95f-8b39-494e-93eb-748c8c88bcd2
+    hosts:
+      - argocd.titan.tokamak.network
+applicationSet:
+  metrics:
+   enabled: true
+   serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring
+notifications:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      additionalLabels:
+        release: tokamak-optimism-monitoring

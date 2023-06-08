@@ -15,7 +15,7 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-08712993853d982e5
+    volumeHandle: fs-01892d9e603f46ad1
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -33,7 +33,7 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle:
+    volumeHandle: fs-01892d9e603f46ad1
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -51,4 +51,4 @@ spec:
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle:
+    volumeHandle: fs-0342dde9c2a636b18

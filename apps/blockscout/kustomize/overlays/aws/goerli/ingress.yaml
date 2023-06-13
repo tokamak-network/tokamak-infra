@@ -11,7 +11,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c3073fd3-34f1-4cf9-973b-6513c9f8084f
 spec:
   rules:
-    - http:
+    - host: goerli.explorer.tokamak.network
+      http:
         paths:
           - path: /
             pathType: Prefix

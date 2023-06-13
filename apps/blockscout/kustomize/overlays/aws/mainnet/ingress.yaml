@@ -11,7 +11,8 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:292157676615:certificate/eed9d95f-8b39-494e-93eb-748c8c88bcd2
 spec:
   rules:
-    - http:
+    - host: explorer.titan.tokamak.network
+      http:
         paths:
           - path: /
             pathType: Prefix

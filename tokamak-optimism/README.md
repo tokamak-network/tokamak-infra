@@ -142,11 +142,12 @@ aws kms create-alias --alias-name alias/${cluster_name} --target-key-id ${kms_ke
 Create eks cluster with fargate.
 
 ```
-eksctl create cluster --name ${cluster_name} --region ${region} --version 1.23 --fargate
+eksctl create cluster --name ${cluster_name} --region ${region} --version 1.24 --fargate
 
 ```
 
 Enabl KMS encryption on crated eks cluster
+It may take up to 45 minutes to complete.
 
 ```
 $ eksctl utils enable-secrets-encryption --cluster=${cluster_name} --key-arn=arn:aws:kms:${region}:${account_id}:key/${kms_keyid} --region=${region}
@@ -455,8 +456,8 @@ aws iam attach-role-policy \
     }
     ```
 
-4. Create IAM Role is named `export_S3_for_lambda` included `cloudwatch_export_task` policy. and config timeout to `30s`
-5. Create Lambda Function using `export_S3_for_lambda` Role.
+4. Create IAM Role is named `export_S3_for_lambda` included `cloudwatch_export_task` policy.
+5. Create Lambda Function using `export_S3_for_lambda` Role and config timeout to `30s`.
 6. Write follow code and deploy it.
 
     **log-exporter-to-s3** (python 3.10)
@@ -628,41 +629,9 @@ eksctl create iamserviceaccount \
   --override-existing-serviceaccounts
 ```
 
-### Environment
+### Install Redis
 
-#### Deploy contracts
-
-You have to deploy contracts in the l1. use the `Onther-Tech/tokamak-optimism-v2`.
-
-#### Env file
-
-You have to copy `.env` file from `.env.example` and modify it.
-
-**.env**
-
-```
-AWS_EKS_CLUSTER_NAME={your cluster name}
-AWS_VPC_ID={your cluster vpc id}
-AWS_REGION={region-code}
-EFS_VOLUME_ID={efs file system id}
-CERTIFICATE_ARN={certificate arn for https}
-```
-
-You have to set some `*.env` files in `./kustomize/envs/goerli`
-
-```
-# you have to set 'URL' to your contract address file's url in the 'batch-submitter.env', 'common.env', 'data-transport-layer.env', 'relayer.env'
-# you have to set 'ROLLUP_STATE_DUMP_PATH' to your state dump file's url in the 'l2geth.env'
-```
-
-You have to create and set `secret.env` file
-
-```
-cd ./kustomize/envs/goerli
-cp secret.env.example secret.env
-
-# set your private keys in secret.env
-```
+Read `ops/redis/README.md`
 
 ### Run
 
@@ -831,18 +800,21 @@ eksctl delete iamserviceaccount --cluster=${cluster_name} --namespace=kube-syste
 
 # all efs mount targets must be removed before removing the file system.
 # you can get mount target id following command
-aws efs describe-mount-targets --file-system-id ${file_system_id} --region ${region} --query MountTargets[].MountTargetId
+aws efs describe-mount-targets --file-system-id ${file_system_id} --region ${region} --query "MountTargets[].MountTargetId"
 
 # delete mount-target. you have to execute this command for each mount target.
 aws efs delete-mount-target --mount-target-id <mount target id> --region ${region}
 
-# delete security group used by efs file system
-aws ec2 delete-security-group --group-id ${security_group_id} --region ${region}
+# delete external-secrets
+
+helm uninstall external-secrets -n external-secrets
 
 # delete file system
 aws efs delete-file-system --file-system-id ${file_system_id} --region ${region}
+aws efs delete-file-system --file-system-id ${replica_file_system_id} --region ${region}
 
-# delete ${replica_file_system_id} file system such as ${file_system_id}
+# delete security group used by efs file system
+aws ec2 delete-security-group --group-id ${security_group_id} --region ${region}
 
 # delete cluster
 eksctl delete cluster --name ${cluster_name} --region ${region}

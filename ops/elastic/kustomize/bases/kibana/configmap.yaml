@@ -9,6 +9,6 @@ metadata:
     app: kibana
 data:
   kibana.yml: |
-    elasticsearch.hosts: http://elasticsearch:9200
+    elasticsearch.hosts: http://elasticsearch-0.elasticsearch:9200
     elasticsearch.username: kibana_system
     elasticsearch.password: tokamak!@#

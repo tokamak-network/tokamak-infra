@@ -15,6 +15,5 @@ patchesStrategicMerge:
 configMapGenerator:
 - literals:
   - APP_NAME=redis
-  - CLUSTER_NAME=goerli
   - ENV_NAME=aws
   name: redis-config

@@ -142,7 +142,7 @@ aws kms create-alias --alias-name alias/${cluster_name} --target-key-id ${kms_ke
 Create eks cluster with fargate.
 
 ```
-eksctl create cluster --name ${cluster_name} --region ${region} --version 1.24 --fargate
+eksctl create cluster --name ${cluster_name} --region ${region} --version 1.27 --fargate
 
 ```
 
@@ -633,7 +633,21 @@ eksctl create iamserviceaccount \
 
 Read `ops/redis/README.md`
 
-### Run
+### RUN
+
+modify `${cluster}`, `${network}`
+
+```
+kubectl apply -k kustomize/overlay/${cluster}/${network}
+```
+
+example:
+
+```
+kubectl apply -k kustomize/overlay/aws/goerli-nightly
+```
+
+### Run (Use tokamak-optimism.sh)
 
 Use `tokamak-optimism.sh` script to run.
 
@@ -731,6 +745,12 @@ $ aws sts get-caller-identity
     "Account": "<ACCOUNT_ID>",
     "Arn": "arn:aws:iam::<ACCOUNT_ID>:user/<USER_NAME>"
 }
+```
+
+### Register ingress address to dns
+
+```
+kubectl get ingress
 ```
 
 ### Change config

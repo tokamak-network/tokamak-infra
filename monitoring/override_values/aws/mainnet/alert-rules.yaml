@@ -1,0 +1,196 @@
+alertmanager:
+  config:
+    global:
+      # Also possible to place this URL in a file.
+      # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
+      slack_api_url: 'https://hooks.slack.com/services/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'
+
+    route:
+      receiver: no-alert
+      routes:
+        - matchers:
+            - group = tokamak
+            - severity_resolved = info
+          receiver: slack-notifications-resolve
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - group = tokamak
+          receiver: slack-notifications
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+
+    receivers:
+      - name: no-alert
+      - name: slack-notifications
+        slack_configs:
+          - channel: "#optimism-alarm-logs"
+            title: "{{ range .Alerts }}[Titan Mainnet] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
+      - name: slack-notifications-resolve
+        slack_configs:
+          - channel: "#optimism-alarm-logs"
+            send_resolved: true
+            title: "{{ range .Alerts }}[Titan Mainnet] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
+
+additionalPrometheusRulesMap:
+  rule-name:
+    groups:
+      - name: 'l2geth'
+        rules:
+          - alert: 'l2geth down'
+            labels:
+              group: tokamak
+              app: l2geth
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="l2geth"} == 1)'
+            annotations:
+              message: 'l2geth is down'
+              message_resolved: 'l2geth is up'
+      - name: 'l2geth-replica'
+        rules:
+          - alert: 'l2geth-replica down'
+            labels:
+              group: tokamak
+              app: l2geth-replica
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="l2geth-replica"} == 1)'
+            annotations:
+              message: 'l2geth-replica is down'
+              message_resolved: 'l2geth-replica is up'
+      - name: 'data-transport-layer'
+        rules:
+          - alert: 'data-transport-layer down'
+            labels:
+              group: tokamak
+              app: data-transport-layer
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="data-transport-layer"} == 1)'
+            annotations:
+              message: 'data-transport-layer is down'
+              message_resolved: 'data-transport-layer is up'
+      - name: 'batch-submitter'
+        rules:
+          - alert: 'batch-submitter down'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="batch-submitter"} == 1)'
+            annotations:
+              message: 'batch-submitter is down'
+              message_resolved: 'batch-submitter is up'
+      - name: 'relayer'
+        rules:
+          - alert: 'relayer down'
+            labels:
+              group: tokamak
+              app: relayer
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="relayer"} == 1)'
+            annotations:
+              message: 'relayer is down'
+              message_resolved: 'relayer is up'
+      - name: 'proxyd down'
+        rules:
+          - alert: 'proxyd down'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="proxyd"} == 1)'
+            annotations:
+              message: 'proxyd is down'
+              message_resolved: 'proxyd is up'
+      - name: 'proxyd unhealthy'
+        rules:
+          - alert: 'proxyd unhealthy'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="http://proxyd-svc.default:8545"} == 1)'
+            annotations:
+              message: 'proxyd is unhealthy'
+              message_resolved: 'proxyd is healthy'
+      - name: 'office l1'
+        rules:
+          - alert: 'office l1 unhealthy'
+            for: 1m
+            labels:
+              group: tokamak
+              app: l1
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{job="blackbox-eth-block-number", target="https://rpc.tokamak.network"} == 1)'
+            annotations:
+              message: 'office l1 unhealthy'
+              message_resolved: 'office l1 is healthy'
+      - name: 'block-explorer'
+        rules:
+          - alert: 'block-explorer'
+            labels:
+              group: tokamak
+              app: block-explorer
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="http://blockscout-svc.app-blockscout"} == 1)'
+            annotations:
+              message: 'block-explorer is down'
+              message_resolved: 'block-explorer is up'
+      - name: 'redis unhealthy'
+        rules:
+          - alert: 'redis unhealthy'
+            labels:
+              group: tokamak
+              app: redis
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="redis-svc.redis:6379"} == 1)'
+            annotations:
+              message: 'redis is unhealthy'
+              message_resolved: 'redis is healthy'
+      - name: 'postgresql unhealthy'
+        rules:
+          - alert: 'postgresql unhealthy'
+            labels:
+              group: tokamak
+              app: postgresql
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="postgresql-svc.postgresql:5432"} == 1)'
+            annotations:
+              message: 'postgresql is unhealthy'
+              message_resolved: 'postgresql is healthy'
+      - name: 'sequencer balance'
+        rules:
+          - alert: 'sequencer balance'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_sequencer_balance_eth < 0.5 and batch_submitter_sequencer_balance_eth != 0)'
+            annotations:
+              message: 'sequencer balance is lower than 0.5 ether'
+      - name: 'proposer balance'
+        rules:
+          - alert: 'proposer balance'
+            labels:
+              group: tokamak
+              app: batch-submitter
+              severity: critical
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_proposer_balance_eth < 0.5 and batch_submitter_proposer_balance_eth != 0)'
+            annotations:
+              message: 'proposer balance is lower than 0.5 ether'

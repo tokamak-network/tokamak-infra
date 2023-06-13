@@ -1,0 +1,12 @@
+---
+# Source: elasticsearch/templates/configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+  namespace: elastic-stack
+  labels:
+    app: "elasticsearch"
+data:
+  elasticsearch.yml: |
+    node.store.allow_mmap: false

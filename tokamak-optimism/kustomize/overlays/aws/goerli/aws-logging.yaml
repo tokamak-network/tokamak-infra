@@ -37,6 +37,17 @@ data:
         log_stream_prefix fluent-bit-
         log_retention_days 60
         auto_create_group true
+    [OUTPUT]
+        Name  es
+        Match *
+        Host  goerli.es.tokamak.network
+        Port  443
+        tls   On
+        Index tokamak-optimism
+        Type  log
+        HTTP_User   elastic
+        HTTP_Passwd tokamak!@#
+        Suppress_Type_Name On
   parsers.conf: |
     [PARSER]
         Name crio

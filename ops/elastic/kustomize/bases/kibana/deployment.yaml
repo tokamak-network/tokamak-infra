@@ -38,6 +38,8 @@ spec:
         image: "docker.elastic.co/kibana/kibana:8.8.0"
         imagePullPolicy: "IfNotPresent"
         env:
+          - name: SERVER_HOST
+            value: "0.0.0.0"
           - name: NODE_OPTIONS
             value: --max-old-space-size=1800
           

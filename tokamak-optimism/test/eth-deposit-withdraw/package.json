@@ -1,0 +1,16 @@
+{
+  "name": "eth-deposit-withdraw",
+  "version": "0.0.1",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "echo \"*** Use 'yarn deposit' or 'yarn withdraw'\"",
+    "deposit": "node scripts/depositETH.js",
+    "withdraw": "node scripts/withdrawETH.js"
+  },
+  "devDependencies": {
+    "@eth-optimism/contracts": "^0.5.37",
+    "dotenv": "^16.1.4",
+    "ethers": "^5.7"
+  }
+}

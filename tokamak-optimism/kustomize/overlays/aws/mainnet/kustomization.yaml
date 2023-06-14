@@ -33,12 +33,12 @@ configMapGenerator:
 
 images:
 - name: onthertech/optimism.batch-submitter-service
-  newTag: release-0.1.7
+  newTag: release-0.1.8
 - name: onthertech/optimism.data-transport-layer
-  newTag: release-0.1.7
+  newTag: release-0.1.8
 - name: onthertech/optimism.l2geth
-  newTag: release-0.1.7
+  newTag: release-0.1.8
 - name: onthertech/optimism.proxyd
-  newTag: release-0.1.7
+  newTag: release-0.1.8
 - name: onthertech/optimism.tokamak-message-relayer
-  newTag: release-0.1.7
+  newTag: release-0.1.8

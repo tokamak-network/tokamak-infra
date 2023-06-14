@@ -10,3 +10,18 @@ metadata:
 data:
   elasticsearch.yml: |
     node.store.allow_mmap: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-scripts
+  namespace: elastic-stack
+data:
+  init_password.sh: |-
+    #!/bin/bash
+    until curl -u "elastic:${ELASTIC_PASSWORD}" -s -f -o /dev/null "http://127.0.0.1:9200/_cluster/health?wait_for_status=yellow&timeout=1s"
+    do
+      sleep 1
+    done
+    
+    printf 'y\ntokamak!@#\ntokamak!@#\n' | bin/elasticsearch-reset-password -u kibana_system -i

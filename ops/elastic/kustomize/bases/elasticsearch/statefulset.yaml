@@ -52,9 +52,12 @@ spec:
         - name: elasticsearch-volume
           persistentVolumeClaim:
             claimName: elasticsearch-pvc
+        - name: elasticsearch-scripts
+          configMap:
+            name: elasticsearch-scripts
+            defaultMode: 0755
       enableServiceLinks: true
       initContainers:
-
       # Currently some extra blocks accept strings
       # to continue with backwards compatibility this is being kept
       # whilst also allowing for yaml to be specified too.
@@ -88,7 +91,7 @@ spec:
         - |
           ulimit -n 65535
           ulimit -u 65535
-          printf 'y\ntokamak!@#\ntokamak!@#\n' | bin/elasticsearch-reset-password -u kibana_system -i
+          scripts/init_password.sh &
           /bin/tini -- /usr/local/bin/docker-entrypoint.sh
         ports:
         - name: http
@@ -155,3 +158,5 @@ spec:
           - mountPath: /usr/share/elasticsearch/data
             name: elasticsearch-volume
             subPath: elasticsearch
+          - mountPath: /usr/share/elasticsearch/scripts
+            name: elasticsearch-scripts

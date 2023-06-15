@@ -2,6 +2,7 @@
 
 function print_help() {
   echo "Usage: "
+  echo "  $0 mainnet"
   echo "  $0 goerli"
   echo "  $0 goerli-nightly"
   echo

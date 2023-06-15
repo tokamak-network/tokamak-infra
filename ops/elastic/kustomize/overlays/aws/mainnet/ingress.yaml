@@ -10,10 +10,10 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/f56090da-7f0a-4cc2-a1dd-8cc68e6a991c
+    alb.ingress.kubernetes.io/certificate-arn: 
 spec:
   rules:
-    - host: goerli-nightly.es.tokamak.network
+    - host: es.titan.tokamak.network
       http:
         paths:
           - path: /
@@ -35,10 +35,10 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/89457504-79e5-4e58-a311-cec9fc4c6bc5
+    alb.ingress.kubernetes.io/certificate-arn: 
 spec:
   rules:
-    - host: goerli-nightly.kibana.tokamak.network
+    - host: kibana.titan.tokamak.network
       http:
         paths:
           - path: /

@@ -9,3 +9,6 @@ resources:
 - ../../../bases/kibana
 - pv.yaml
 - ingress.yaml
+
+patchesStrategicMerge:
+- resource_override.yaml

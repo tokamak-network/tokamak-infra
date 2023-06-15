@@ -14,6 +14,19 @@ Check configuraion files at `gateway/kustomize/overlays/aws/<cluster_name>`
 * config.json: gateway configuration
 * ingress.yml: aws loadbalancer configuration
 
+### Fargate Profile(AWS)
+
+If you want to deploy to AWS EKS, argocd profile should be created.
+Check `aws cli` before run next command.
+
+```
+eksctl create fargateprofile \
+    --cluster ${cluster_name} \
+    --region ${region} \
+    --name app-blockscout \
+    --namespace app-blockscout
+```
+
 ## Run
 
 Use `tokamak-apps.sh` script to run gateway.

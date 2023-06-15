@@ -27,6 +27,6 @@ eksctl create fargateprofile \
 
 ```
 kubectl apply -k postgresql/kustomize/overlays/aws/goerli
-
 kubectl apply -k postgresql/kustomize/overlays/aws/goerli-nightly
+kubectl apply -k postgresql/kustomize/overlays/aws/mainnet
 ```

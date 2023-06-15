@@ -29,6 +29,12 @@ eksctl create fargateprofile \
 
 ## Run
 
+If you want to create this cluster, execute follow command:
+
+```
+kubectl apply -k blockscout/kustomize/overlays/aws/goerli
+```
+
 Use `tokamak-apps.sh` script to run gateway.
 
 ```

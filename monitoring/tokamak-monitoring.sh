@@ -101,6 +101,8 @@ case $ACTION in
       exit 1
     fi
 
+    kubectl create namespace $HELM_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+
     execcmd="kubectl apply -k dashboards"
     echo $execcmd
     eval $execcmd

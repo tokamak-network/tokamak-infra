@@ -1,9 +1,6 @@
 prometheus:
   prometheusSpec:
     resources:
-      limits:
-        cpu: 700m
-        memory: 1.7Gi
       requests:
         cpu: 700m
         memory: 1.7Gi
@@ -21,7 +18,7 @@ prometheus:
           selector:
             matchLabels:
               app: prometheus
-    initContainers:        
+    initContainers:
       - command: ["chown","-R","1000:2000","/prometheus"]
         image: busybox
         name: prometheus-data-permission-fix
@@ -47,9 +44,6 @@ grafana:
     hosts:
       - goerli.grafana.tokamak.network
   resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
     requests:
       cpu: 250m
       memory: 256Mi

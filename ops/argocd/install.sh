@@ -2,6 +2,7 @@
 
 function print_help() {
   echo "Usage: "
+  echo "  $0 mainnet"
   echo "  $0 goerli"
   echo "  $0 goerli-nightly"
   echo
@@ -41,7 +42,6 @@ if !(ask_going); then
 fi
 
 helm_file_list="-f $MYPATH/override_values/${CLUSTER_NAME}.yaml"
-
 execcmd="helm install -n argocd --create-namespace $helm_file_list argocd argo/argo-cd"
 echo $execcmd
 eval $execcmd

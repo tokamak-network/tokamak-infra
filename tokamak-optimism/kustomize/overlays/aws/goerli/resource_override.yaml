@@ -52,8 +52,8 @@ spec:
         - name: relayer
           resources:
             requests:
-              cpu: 0.25
-              memory: 0.25Gi
+              cpu: 0.5
+              memory: 0.5Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet

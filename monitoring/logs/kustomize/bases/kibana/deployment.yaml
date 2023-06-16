@@ -4,8 +4,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kibana
-  namespace: elastic-stack
-  labels: 
+  namespace: log-monitoring
+  labels:
     app: kibana
 spec:
   replicas: 1
@@ -42,7 +42,7 @@ spec:
             value: "0.0.0.0"
           - name: NODE_OPTIONS
             value: --max-old-space-size=1800
-          
+
         readinessProbe:
           failureThreshold: 3
           initialDelaySeconds: 10

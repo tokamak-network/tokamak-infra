@@ -5,6 +5,7 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
+- namespace.yaml
 - ../../../bases/elasticsearch
 - ../../../bases/kibana
 - pv.yaml

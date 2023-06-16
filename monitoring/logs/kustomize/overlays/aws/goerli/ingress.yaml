@@ -3,17 +3,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: elasticsearch
-  namespace: elastic-stack
+  namespace: log-monitoring
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: 
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/4d331173-ca09-4da5-ba1e-1e9277abdab4
 spec:
   rules:
-    - host: es.titan.tokamak.network
+    - host: goerli.es.tokamak.network
       http:
         paths:
           - path: /
@@ -28,17 +28,17 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kibana
-  namespace: elastic-stack
+  namespace: log-monitoring
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: 
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/9a7153ed-a907-4518-bbdf-480824d02d34
 spec:
   rules:
-    - host: kibana.titan.tokamak.network
+    - host: goerli.kibana.tokamak.network
       http:
         paths:
           - path: /

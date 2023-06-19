@@ -16,7 +16,7 @@
       "endpoint": "https://goerli-nightly.optimism.tokamak.network",
       "oppositeChainId": 5,
       "iconURL": "/logos/tokamak-symbol.svg",
-      "explorer": "https://goerli-nightly.explorer.tokamak.network/tx/"
+      "explorer": "https://goerli-nightly.explorer.tokamak.network/"
     }
   ],
   "SUPPORTED_TOKENS": [

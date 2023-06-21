@@ -103,5 +103,13 @@ prometheus:
           target_label: target
         - target_label: __address__
           replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+    # Set absurdly high thresholds as a workaround for not being able to disable these and not having enough time to WAL replay
+    containers:
+    - name: prometheus
+      livenessProbe:
+        failureThreshold: 1000
+      readinessProbe:
+        failureThreshold: 1000
+        
 grafana:
   adminPassword: admin

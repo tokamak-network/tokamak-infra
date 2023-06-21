@@ -6,5 +6,6 @@ generatorOptions:
 
 resources:
 - configmap.yaml
+- dashboard.yaml
 - deployment.yaml
 - service.yaml

@@ -107,8 +107,9 @@ spec:
             value: "elasticsearch-0,"
           - name: node.roles
             value: "master,data,data_content,data_hot,data_warm,data_cold,ingest,ml,remote_cluster_client,transform,"
-          - name: discovery.seed_hosts
-            value: "elasticsearch"
+          # only for multi nodes
+          # - name: discovery.seed_hosts
+          #   value: "elasticsearch"
           - name: cluster.name
             value: "elasticsearch"
           - name: network.host

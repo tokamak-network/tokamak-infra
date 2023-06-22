@@ -68,7 +68,7 @@ max_ws_conns = 1
 
 [backend_groups]
 [backend_groups.main]
-backends = ["office", "infura_harry1", "infura_harry2", "infura_harry3", "alchemy_harry1"]
+backends = ["infura_harry1", "infura_harry2", "infura_harry3", "alchemy_harry1", "office"]
 
 [backend_groups.alchemy]
 backends = ["alchemy_harry1"]

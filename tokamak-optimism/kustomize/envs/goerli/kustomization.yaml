@@ -26,3 +26,6 @@ configMapGenerator:
   - name: l2geth-replica
     envs:
       - ./l2geth-replica.env
+  - name: gas-oracle
+    envs:
+      - ./gas-oracle.env

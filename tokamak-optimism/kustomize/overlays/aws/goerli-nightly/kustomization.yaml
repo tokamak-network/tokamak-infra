@@ -38,6 +38,8 @@ images:
   newTag: nightly-0.1.12
 - name: onthertech/optimism.data-transport-layer
   newTag: nightly-0.5.47
+- name: onthertech/optimism.gas-oracle
+  newTag: nightly-0.1.12
 - name: onthertech/optimism.l2geth
   newTag: nightly-0.5.24
 - name: onthertech/optimism.proxyd

@@ -11,6 +11,7 @@ resources:
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
 - ../../../bases/proxyd
+# - ../../../bases/gas-oracle
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml

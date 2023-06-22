@@ -25,3 +25,9 @@ data:
     done
 
     printf 'y\ntokamak!@#\ntokamak!@#\n' | bin/elasticsearch-reset-password -u kibana_system -i
+
+    curl  --location --request PUT 'http://127.0.0.1:9200/_settings' \
+          --header 'Content-Type: application/json' \
+          --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
+          --data '{"index": {"number_of_replicas": 0}}'
+    

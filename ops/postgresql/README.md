@@ -1,5 +1,7 @@
 # Postgresql
 
+## Warning: It is no longer required on AWS.
+
 ### Fargate Profile(AWS)
 
 If you want to deploy to AWS EKS, argocd profile should be created.

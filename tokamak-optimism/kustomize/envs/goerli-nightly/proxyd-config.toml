@@ -77,7 +77,7 @@ backends = ["alchemy_harry1"]
 backends = ["infura_harry1", "infura_harry2", "infura_harry3"]
 
 [backend_groups.heavy_request]
-backends = ["infura_harry3"]
+backends = ["alchemy_harry1", "infura_harry3", "infura_harry2", "infura_harry1"]
 
 [rpc_method_mappings]
 net_version = "main"

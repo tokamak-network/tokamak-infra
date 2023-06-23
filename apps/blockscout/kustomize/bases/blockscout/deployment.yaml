@@ -10,9 +10,6 @@ spec:
       terminationGracePeriodSeconds: 10
       restartPolicy: Always
       initContainers:
-        - name: wait-for-database
-          image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz postgresql-svc.postgresql 5432; do echo "Waiting for database..."; sleep 1; done;']
         - name: wait-for-redis
           image: busybox:latest
           command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']

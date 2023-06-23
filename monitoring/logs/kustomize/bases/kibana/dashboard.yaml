@@ -17,7 +17,7 @@ data:
         sleep 1
     done
 
-    response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?createNewCopies=true" \
+    response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
         --header 'kbn-xsrf: true' \
         --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
         --form file=@dashboards/dashboard.ndjson \

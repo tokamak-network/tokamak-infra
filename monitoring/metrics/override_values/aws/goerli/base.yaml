@@ -93,7 +93,6 @@ prometheus:
         static_configs:
           - targets:
             - redis-svc.redis:6379
-            - postgresql-svc.postgresql:5432
         relabel_configs:
         - source_labels: [module]
           target_label: __param_module
@@ -110,6 +109,6 @@ prometheus:
         failureThreshold: 1000
       readinessProbe:
         failureThreshold: 1000
-        
+
 grafana:
   adminPassword: admin

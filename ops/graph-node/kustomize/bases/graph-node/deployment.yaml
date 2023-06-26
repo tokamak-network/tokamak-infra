@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-node
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      initContainers:
+      - name: initial-postgres-database
+        image: postgres:15-alpine
+        command:
+        - /bin/sh
+        - -c
+        - >-
+          echo "SELECT 'CREATE DATABASE ${postgres_db} TEMPLATE template0 ENCODING UTF8 LC_COLLATE \"C\" LC_CTYPE \"C\"' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = '${postgres_db}')\gexec" | psql -h ${postgres_host} -U ${postgres_user} &&
+          echo "SELECT 'CREATE EXTENSION pg_trgm' WHERE NOT EXISTS (SELECT FROM pg_extension WHERE extname = 'pg_trgm')\gexec" | psql -h ${postgres_host} -U ${postgres_user} &&
+          echo "SELECT 'CREATE EXTENSION pg_stat_statements' WHERE NOT EXISTS (SELECT FROM pg_extension WHERE extname = 'pg_stat_statements')\gexec" | psql -h ${postgres_host} -U ${postgres_user} &&
+          echo "SELECT 'CREATE EXTENSION btree_gist' WHERE NOT EXISTS (SELECT FROM pg_extension WHERE extname = 'btree_gist')\gexec" | psql -h ${postgres_host} -U ${postgres_user} &&
+          echo "SELECT 'CREATE EXTENSION postgres_fdw' WHERE NOT EXISTS (SELECT FROM pg_extension WHERE extname = 'postgres_fdw')\gexec" | psql -h ${postgres_host} -U ${postgres_user} &&
+          echo "grant usage on foreign data wrapper postgres_fdw to ${postgres_user}" | psql -h ${postgres_host} -U ${postgres_user}
+        envFrom:
+        - configMapRef:
+            name: graph-node
+        - secretRef:
+            name: secret
+      containers:
+      - name: graph-node
+        image: graphprotocol/graph-node
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        - containerPort: 8001
+          protocol: TCP
+        - containerPort: 8020
+          protocol: TCP
+        - containerPort: 8030
+          protocol: TCP
+        - containerPort: 8040
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: graph-node
+        - secretRef:
+            name: secret

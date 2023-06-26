@@ -1,0 +1,28 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipfs
+spec:
+  replicas: 1
+  serviceName: ipfs-svc
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: ipfs
+          image: ipfs/go-ipfs
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5001
+              protocol: TCP
+          volumeMounts:
+            - name: ipfs-volume
+              mountPath: /data/ipfs
+              subPath: ipfs
+          resources: {}
+      volumes:
+        - name: ipfs-volume
+          persistentVolumeClaim:
+            claimName: ipfs-pvc

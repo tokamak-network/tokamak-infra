@@ -1,0 +1,70 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: graph-node-ingress-alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/9e188da9-426c-4ea7-9d04-659fc7c505c6
+spec:
+  rules:
+    - host: goerli-nightly.thegraph.tokamak.network
+      http:
+        paths:
+          - path: /deploy
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8020
+          - path: /subgraphs
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8000
+          - path: /graphql
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8030
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8040
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ipfs-ingress-alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/9e188da9-426c-4ea7-9d04-659fc7c505c6
+spec:
+  rules:
+    - host: goerli-nightly.ipfs.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 5001

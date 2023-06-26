@@ -10,15 +10,15 @@ spec:
     - name: http
       port: 8000
       targetPort: 8000
-    - name: http
+    - name: ws
       port: 8001
       targetPort: 8001
-    - name: http
+    - name: rpc
       port: 8020
       targetPort: 8020
-    - name: http
+    - name: index
       port: 8030
       targetPort: 8030
-    - name: http
+    - name: metric
       port: 8040
       targetPort: 8040

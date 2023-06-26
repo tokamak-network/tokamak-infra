@@ -19,7 +19,7 @@ spec:
 
       containers:
         - name: app-blockscout
-          image: onthertech/tokamak.blockscout
+          image: onthertech/titan-explorer
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4000

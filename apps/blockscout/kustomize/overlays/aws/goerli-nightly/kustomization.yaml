@@ -25,5 +25,5 @@ configMapGenerator:
   - ENV_NAME=aws
   name: app-blockscout-config
 images:
-- name: onthertech/tokamak.blockscout
-  newTag: nightly-1.1.7
+- name: onthertech/titan-explorer
+  newTag: nightly-1.2.1

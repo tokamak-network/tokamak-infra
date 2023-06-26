@@ -8,3 +8,8 @@ configMapGenerator:
   - name: graph-node
     envs:
       - graph-node.env
+
+secretGenerator:
+  - name: secret
+    envs:
+      - ./secret.env

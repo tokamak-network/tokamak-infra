@@ -14,9 +14,6 @@ spec:
         - name: ipfs
           image: ipfs/go-ipfs
           imagePullPolicy: IfNotPresent
-          envFrom:
-            - configMapRef:
-                name: ipfs
           ports:
             - containerPort: 5001
               protocol: TCP

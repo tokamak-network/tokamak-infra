@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-node
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      initContainers:
+      - name: initial-postgres-database
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - echo $ethereum
+        envFrom:
+        - configMapRef:
+            name: graph-node
+      containers:
+      - name: graph-node
+        image: graphprotocol/graph-node
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        - containerPort: 8001
+          protocol: TCP
+        - containerPort: 8020
+          protocol: TCP
+        - containerPort: 8030
+          protocol: TCP
+        - containerPort: 8040
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: graph-node

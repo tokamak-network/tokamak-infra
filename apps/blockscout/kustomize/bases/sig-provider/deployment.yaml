@@ -11,7 +11,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: sig-provider
-          image: ghcr.io/blockscout/sig-provider:main
+          image: ghcr.io/blockscout/sig-provider
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8050

@@ -11,7 +11,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: smart-contract-verifier
-          image: ghcr.io/blockscout/smart-contract-verifier:v1.0.0
+          image: ghcr.io/blockscout/smart-contract-verifier
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8050

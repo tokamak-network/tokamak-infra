@@ -11,7 +11,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: visualizer
-          image: ghcr.io/blockscout/visualizer:v0.2.0
+          image: ghcr.io/blockscout/visualizer
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8050

@@ -43,7 +43,7 @@ data:
         Host  goerli-nightly.es.tokamak.network
         Port  443
         tls   On
-        Index titan-log
+        Index titan-nightly
         Type  log
         HTTP_User   elastic
         HTTP_Passwd tokamak!@#

@@ -142,7 +142,7 @@ aws kms create-alias --alias-name alias/${cluster_name} --target-key-id ${kms_ke
 Create eks cluster with fargate.
 
 ```
-eksctl create cluster --name ${cluster_name} --region ${region} --version 1.27 --fargate
+eksctl create cluster --name ${cluster_name} --region ${region} --version 1.27 --fargate [--vpc-cidr 192.168.0.0/16]
 
 ```
 
@@ -158,16 +158,6 @@ Create an IAM OIDC Provider for eksctl iamserviceaccount
 
 ```
 eksctl utils associate-iam-oidc-provider --cluster ${cluster_name} --region ${region} --approve
-```
-
-Add fargate profile for prometheus-stack
-
-```
-eksctl create fargateprofile \
-    --cluster ${cluster_name} \
-    --region ${region} \
-    --name monitoring \
-    --namespace monitoring
 ```
 
 #### Test cluster
@@ -209,7 +199,7 @@ eksctl create iamserviceaccount \
     --cluster ${cluster_name} \
     --namespace kube-system \
     --name efs-csi-controller-sa \
-    --role-name "AmazonEKS_EFS_CSI_Driver_Role" \
+    --role-name "AmazonEKS_EFS_CSI_Driver_Role_mainnet" \
     --attach-policy-arn arn:aws:iam::${account_id}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
     --approve \
     --region ${region}

@@ -7,7 +7,7 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:292157676615:certificate/48e0e3c1-99fb-49e9-9409-0a555c5b71bd
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/aabae28d-83fd-4646-928d-1331cf9d90fd
 spec:
   rules:
     - host: rpc.titan.tokamak.network

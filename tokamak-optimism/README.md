@@ -199,7 +199,7 @@ eksctl create iamserviceaccount \
     --cluster ${cluster_name} \
     --namespace kube-system \
     --name efs-csi-controller-sa \
-    --role-name "AmazonEKS_EFS_CSI_Driver_Role_mainnet" \
+    --role-name "AmazonEKS_EFS_CSI_Driver_Role" \
     --attach-policy-arn arn:aws:iam::${account_id}:policy/AmazonEKS_EFS_CSI_Driver_Policy \
     --approve \
     --region ${region}

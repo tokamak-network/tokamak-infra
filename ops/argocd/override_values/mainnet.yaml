@@ -10,6 +10,6 @@ server:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
       alb.ingress.kubernetes.io/ssl-redirect: '443'
-      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:292157676615:certificate/48e0e3c1-99fb-49e9-9409-0a555c5b71bd
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/f58d87ca-6a31-4f49-a95f-56111ef81a6b
     hosts:
       - argocd.titan.tokamak.network

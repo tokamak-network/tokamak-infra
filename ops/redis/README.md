@@ -26,5 +26,5 @@ eksctl create fargateprofile \
 ### Add redis to cluster
 
 ```
-kubectl apply -k redis/kustomize/overlays/aws
+kubectl apply -k kustomize/overlays/aws
 ```

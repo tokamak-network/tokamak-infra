@@ -43,7 +43,7 @@ data:
         Host  es.titan.tokamak.network
         Port  443
         tls   On
-        Index titan-mainnet
+        Index titan-log
         Type  log
         HTTP_User   elastic
         HTTP_Passwd tokamak!@#

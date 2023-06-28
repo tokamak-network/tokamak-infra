@@ -31,7 +31,7 @@ spec:
               mountPath: /script/wait
       containers:
         - name: l2geth
-          image: onthertech/titan.l2geth
+          image: onthertech/titan-l2geth
           command:
             [
               'sh',

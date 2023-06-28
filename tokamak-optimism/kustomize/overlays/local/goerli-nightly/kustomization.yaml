@@ -21,13 +21,3 @@ configMapGenerator:
   - CLUSTER_NAME=goerli-nightly
   - ENV_NAME=local
   name: chain-config
-
-images:
-- name: onthertech/optimism.batch-submitter-service
-  newTag: nightly
-- name: onthertech/optimism.data-transport-layer
-  newTag: nightly
-- name: onthertech/optimism.l2geth
-  newTag: nightly
-- name: onthertech/optimism.tokamak-message-relayer
-  newTag: nightly

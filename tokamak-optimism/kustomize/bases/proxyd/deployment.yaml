@@ -15,7 +15,7 @@ spec:
           command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
       containers:
         - name: proxyd
-          image: onthertech/optimism.proxyd
+          image: onthertech/titan-proxyd
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

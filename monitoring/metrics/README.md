@@ -2,6 +2,19 @@
 
 ## Prerequisite
 
+### Fargate Profile(AWS)
+
+If you want to deploy to AWS EKS, argocd profile should be created.
+Check `aws cli` before run next command.
+
+```
+eksctl create fargateprofile \
+    --cluster ${cluster_name} \
+    --region ${region} \
+    --name monitoring \
+    --namespace monitoring
+```
+
 ### Helm
 
 * [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)

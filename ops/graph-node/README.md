@@ -9,8 +9,8 @@ Check `aws cli` before run next command.
 eksctl create fargateprofile \
     --cluster ${cluster_name} \
     --region ${region} \
-    --name redis \
-    --namespace redis
+    --name thegraph \
+    --namespace thegraph
 ```
 
 Example:
@@ -19,12 +19,12 @@ Example:
 eksctl create fargateprofile \
     --cluster tokamak-optimism-goerli-nightly \
     --region ap-northeast-2 \
-    --name redis \
-    --namespace redis
+    --name thegraph \
+    --namespace thegraph
 ```
 
 ### Add redis to cluster
 
 ```
-kubectl apply -k kustomize/overlays/aws
+kubectl apply -k kustomize/overlays/aws/mainnet
 ```

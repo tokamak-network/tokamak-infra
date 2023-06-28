@@ -226,7 +226,7 @@ function get_tags() {
 case $ACTION in
   tag|tags)
     if [ -z "$2" ]; then
-      image="onthertech/optimism.l2geth"
+      image="onthertech/titan-l2geth"
       tags=$(get_tags $image)
       for tag in $tags; do
         [[ "$tag" =~ ^release|^nightly$|^latest ]] && echo $tag

@@ -30,7 +30,7 @@ spec:
               mountPath: /script/wait
       containers:
         - name: relayer
-          image: onthertech/optimism.tokamak-message-relayer
+          image: onthertech/titan-message-relayer
           imagePullPolicy: IfNotPresent
           command: ['./relayer.sh']
           resources: {}

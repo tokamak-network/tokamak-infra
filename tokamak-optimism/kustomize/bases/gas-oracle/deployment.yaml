@@ -30,7 +30,7 @@ spec:
               mountPath: /script/wait
       containers:
         - name: gas-oracle
-          image: onthertech/optimism.gas-oracle
+          image: onthertech/titan-gas-oracle
           imagePullPolicy: IfNotPresent
           resources: {}
           envFrom:

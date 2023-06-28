@@ -12,7 +12,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: l1chain
-          image: onthertech/optimism.hardhat-node
+          image: onthertech/titan-hardhat
           imagePullPolicy: IfNotPresent
           command: ['yarn', 'start', '--hostname', '0.0.0.0']
           ports:

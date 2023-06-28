@@ -25,15 +25,15 @@ configMapGenerator:
       - ENV_NAME=local
 
 images:
-- name: onthertech/optimism.batch-submitter-service
+- name: onthertech/titan-batch-submitter-service
   newTag: nightly
-- name: onthertech/optimism.data-transport-layer
+- name: onthertech/titan-data-transport-layer
   newTag: nightly
-- name: onthertech/optimism.l2geth
+- name: onthertech/titan-l2geth
   newTag: nightly
-- name: onthertech/optimism.tokamak-message-relayer
+- name: onthertech/titan-message-relayer
   newTag: nightly
-- name: onthertech/optimism.hardhat-node
+- name: onthertech/titan-hardhat-node
   newTag: nightly
-- name: onthertech/optimism.deployer
+- name: onthertech/titan-deployer
   newTag: nightly

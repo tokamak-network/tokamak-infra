@@ -22,7 +22,7 @@ spec:
                 name: common
       containers:
         - name: data-transport-layer
-          image: onthertech/optimism.data-transport-layer
+          image: onthertech/titan-data-transport-layer
           imagePullPolicy: IfNotPresent
           command: ['./dtl.sh']
           envFrom:

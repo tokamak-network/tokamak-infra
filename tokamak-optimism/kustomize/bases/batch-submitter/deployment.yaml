@@ -39,7 +39,7 @@ spec:
               mountPath: /script/wait
       containers:
         - name: batch-submitter
-          image: onthertech/optimism.batch-submitter-service
+          image: onthertech/titan-batch-submitter-service
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7300

@@ -32,17 +32,3 @@ configMapGenerator:
   - CLUSTER_NAME=goerli-nightly
   - ENV_NAME=aws
   name: chain-config
-
-images:
-- name: onthertech/optimism.batch-submitter-service
-  newTag: nightly-0.1.12
-- name: onthertech/optimism.data-transport-layer
-  newTag: nightly-0.5.47
-- name: onthertech/optimism.gas-oracle
-  newTag: nightly-0.1.12
-- name: onthertech/optimism.l2geth
-  newTag: nightly-0.5.24
-- name: onthertech/optimism.proxyd
-  newTag: nightly-3.10.4
-- name: onthertech/optimism.tokamak-message-relayer
-  newTag: nightly-0.5.10

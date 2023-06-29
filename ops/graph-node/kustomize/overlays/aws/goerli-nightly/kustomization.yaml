@@ -10,7 +10,6 @@ resources:
 - ingress.yaml
 - pv.yaml
 - pvc.yaml
-- ../../../envs/goerli-nightly
 - ../../../bases/ipfs
 - ../../../bases/graph-node
 
@@ -23,6 +22,7 @@ configMapGenerator:
   - CLUSTER_NAME=goerli-nightly
   - ENV_NAME=aws
   name: thegraph-config
+
 images:
 - name: ipfs/go-ipfs
   newTag: v0.10.0

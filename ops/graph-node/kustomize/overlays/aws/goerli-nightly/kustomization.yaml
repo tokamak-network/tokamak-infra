@@ -10,6 +10,7 @@ resources:
 - ingress.yaml
 - pv.yaml
 - pvc.yaml
+- ../../../envs/goerli-nightly
 - ../../../bases/ipfs
 - ../../../bases/graph-node
 

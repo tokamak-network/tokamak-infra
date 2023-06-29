@@ -15,13 +15,13 @@ spec:
     - host: goerli-nightly.thegraph.tokamak.network
       http:
         paths:
-          - path: /deploy
-            pathType: Prefix
-            backend:
-              service:
-                name: graph-node-svc
-                port:
-                  number: 8020
+          # - path: /deploy
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: graph-node-svc
+          #       port:
+          #         number: 8020
           - path: /subgraphs
             pathType: Prefix
             backend:
@@ -59,12 +59,12 @@ metadata:
 spec:
   rules:
     - host: goerli-nightly.ipfs.tokamak.network
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: ipfs-svc
-                port:
-                  number: 5001
+      # http:
+      #   paths:
+      #     - path: /
+      #       pathType: Prefix
+      #       backend:
+      #         service:
+      #           name: ipfs-svc
+      #           port:
+      #             number: 5001

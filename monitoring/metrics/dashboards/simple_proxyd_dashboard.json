@@ -99,7 +99,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.5.3",
       "targets": [
         {
           "datasource": {
@@ -108,7 +108,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (job) (increase(proxyd_rpc_requests_total{job=\"proxyd\"}[1m])) + sum by (job) (increase(proxyd_cache_hits_total[1m]))",
+          "expr": "sum by (job) (increase(proxyd_rpc_requests_total{job=\"proxyd\"}[$__range])) + sum by (job) (increase(proxyd_cache_hits_total[$__range]))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -345,6 +345,7 @@
           "color": {
             "mode": "thresholds"
           },
+          "decimals": 0,
           "mappings": [
             {
               "options": {
@@ -392,7 +393,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.5.3",
       "targets": [
         {
           "datasource": {
@@ -401,7 +402,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (backend_name) (increase(proxyd_rpc_errors_total[1m]))",
+          "expr": "sum by (backend_name) (increase(proxyd_rpc_errors_total[$__range]))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -461,7 +462,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.5.3",
       "targets": [
         {
           "datasource": {
@@ -470,7 +471,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (backend_name,status_code) (increase(proxyd_rpc_backend_http_response_codes_total[1m]))",
+          "expr": "sum by (backend_name,status_code) (increase(proxyd_rpc_backend_http_response_codes_total[$__range]))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -722,7 +723,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.5.3",
       "targets": [
         {
           "datasource": {
@@ -731,7 +732,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum by (method) (increase(proxyd_cache_hits_total[1m]))",
+          "expr": "sum by (method) (increase(proxyd_cache_hits_total[$__range]))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -802,7 +803,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "9.3.1",
+      "pluginVersion": "9.5.3",
       "targets": [
         {
           "datasource": {
@@ -811,7 +812,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "rate(proxyd_http_request_duration_seconds_sum[1m])/rate(proxyd_http_request_duration_seconds_count[1m])",
+          "expr": "increase(proxyd_http_request_duration_seconds_sum[$__range])/increase(proxyd_http_request_duration_seconds_count[$__range])",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -933,7 +934,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 37,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -990,6 +991,6 @@
   "timezone": "",
   "title": "Proxyd Dashboard",
   "uid": "bUki4MF4zz",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }

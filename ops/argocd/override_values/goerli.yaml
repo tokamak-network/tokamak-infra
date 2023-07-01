@@ -30,9 +30,10 @@ server:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
       alb.ingress.kubernetes.io/ssl-redirect: '443'
-      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/8b277f21-22e0-4a07-b2e2-4dd5220280a1
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
     hosts:
       - goerli.argocd.tokamak.network
+      - argocd.titan-goerli.tokamak.network
 applicationSet:
   metrics:
    enabled: true

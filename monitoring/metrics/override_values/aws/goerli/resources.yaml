@@ -40,9 +40,10 @@ grafana:
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
       alb.ingress.kubernetes.io/ssl-redirect: '443'
-      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/ff5fb763-0e0c-4e08-a515-05c84ca288a7
+      alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
     hosts:
       - goerli.grafana.tokamak.network
+      - grafana.titan-goerli.tokamak.network
   resources:
     requests:
       cpu: 250m

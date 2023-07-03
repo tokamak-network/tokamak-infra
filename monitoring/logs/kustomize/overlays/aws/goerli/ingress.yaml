@@ -10,10 +10,20 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/4d331173-ca09-4da5-ba1e-1e9277abdab4
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
 spec:
   rules:
     - host: goerli.es.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: elasticsearch
+                port:
+                  number: 9200
+    - host: es.titan-goerli.tokamak.network
       http:
         paths:
           - path: /
@@ -35,10 +45,20 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/9a7153ed-a907-4518-bbdf-480824d02d34
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
 spec:
   rules:
     - host: goerli.kibana.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: kibana
+                port:
+                  number: 5601
+    - host: kibana.titan-goerli.tokamak.network
       http:
         paths:
           - path: /

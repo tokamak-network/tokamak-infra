@@ -4,6 +4,7 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
+# - ../../../bases/gas-oracle
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
@@ -11,7 +12,6 @@ resources:
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
 - ../../../bases/proxyd
-# - ../../../bases/gas-oracle
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml

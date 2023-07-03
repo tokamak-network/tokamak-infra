@@ -31,6 +31,7 @@ prometheus:
           runAsUser: 0
           runAsGroup: 0
     retention: 1y
+    retentionSize: 1TB
 
 grafana:
   ingress:

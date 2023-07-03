@@ -12,6 +12,7 @@ resources:
 - ../../../bases/batch-submitter
 - ../../../bases/relayer
 - ../../../bases/proxyd
+- ../../../bases/proxyd-l2geth
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml

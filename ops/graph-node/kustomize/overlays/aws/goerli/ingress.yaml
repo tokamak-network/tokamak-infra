@@ -9,10 +9,41 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/d1250244-1996-4abb-8e64-b966e4e96c32
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
 spec:
   rules:
     - host: goerli.thegraph.tokamak.network
+      http:
+        paths:
+          # - path: /deploy
+          #   pathType: Prefix
+          #   backend:
+          #     service:
+          #       name: graph-node-svc
+          #       port:
+          #         number: 8020
+          - path: /subgraphs
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8000
+          - path: /graphql
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8030
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8040
+    - host: thegraph.titan-goerli.tokamak.network
       http:
         paths:
           # - path: /deploy
@@ -55,10 +86,20 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/d1250244-1996-4abb-8e64-b966e4e96c32
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
 spec:
   rules:
     - host: goerli.ipfs.tokamak.network
+      # http:
+      #   paths:
+      #     - path: /
+      #       pathType: Prefix
+      #       backend:
+      #         service:
+      #           name: ipfs-svc
+      #           port:
+      #             number: 5001
+    - host: ipfs.titan-goerli.tokamak.network
       # http:
       #   paths:
       #     - path: /

@@ -40,9 +40,8 @@ data:
     [OUTPUT]
         Name  es
         Match *
-        Host  es.titan.tokamak.network
-        Port  443
-        tls   On
+        Host  es.titan.private.tokamak.network
+        Port  80
         Index titan-mainnet
         Type  log
         HTTP_User   elastic

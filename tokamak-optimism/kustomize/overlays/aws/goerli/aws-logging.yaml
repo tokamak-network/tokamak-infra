@@ -40,9 +40,8 @@ data:
     [OUTPUT]
         Name  es
         Match *
-        Host  goerli.es.tokamak.network
-        Port  443
-        tls   On
+        Host  es.titan-goerli.private.tokamak.network
+        Port  80
         Index titan-goerli
         Type  log
         HTTP_User   elastic

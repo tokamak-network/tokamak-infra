@@ -33,7 +33,7 @@ port = 9761
 response_timeout_seconds = 5
 max_response_size_bytes = 5242880
 max_retries = 1
-out_of_service_seconds = 600
+out_of_service_seconds = 0
 
 [backends]
 [backends.sequencer]

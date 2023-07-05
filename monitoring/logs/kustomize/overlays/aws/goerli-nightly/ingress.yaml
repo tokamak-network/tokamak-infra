@@ -7,13 +7,10 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-    alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/f56090da-7f0a-4cc2-a1dd-8cc68e6a991c
+    alb.ingress.kubernetes.io/scheme: internal
 spec:
   rules:
-    - host: goerli-nightly.es.tokamak.network
+    - host: goerli-nightly.es.private.tokamak.network
       http:
         paths:
           - path: /

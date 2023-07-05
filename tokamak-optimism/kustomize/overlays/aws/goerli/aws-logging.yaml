@@ -40,7 +40,7 @@ data:
     [OUTPUT]
         Name  es
         Match *
-        Host  es.titan-goerli.private.tokamak.network
+        Host  es.private.titan-goerli.tokamak.network
         Port  80
         Index titan-goerli
         Type  log

@@ -10,4 +10,3 @@ resources:
 - service.yaml
 - statefulset.yaml
 - secret-cert.yaml
-- pvc.yaml

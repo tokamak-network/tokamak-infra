@@ -29,3 +29,63 @@ eksctl create fargateprofile \
 kubectl apply -k kustomize/overlays/${cluster environment}
 # example kubectl apply -k kustomize/overlays/aws/goerli-nightly
 ```
+
+### What init process do (difference with common elastic stack)
+
+**elasticsearch**
+
+```
+ulimit -n 65535
+ulimit -u 65535
+```
+
+elasticsearch needs at least 65535 file descriptors. and at least 4096 number of threads. you can see details https://www.elastic.co/guide/en/elasticsearch/reference/8.8/max-number-of-threads.html.
+
+init_password.sh
+
+```
+#!/bin/bash
+until curl -u "elastic:${ELASTIC_PASSWORD}" -s -f -o /dev/null "http://127.0.0.1:9200/_cluster/health?wait_for_status=yellow&timeout=1s"
+do
+    sleep 1
+done
+
+printf 'y\ntokamak!@#\ntokamak!@#\n' | bin/elasticsearch-reset-password -u kibana_system -i
+
+curl  --location --request PUT 'http://127.0.0.1:9200/_settings' \
+        --header 'Content-Type: application/json' \
+        --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
+        --data '{"index": {"number_of_replicas": 0}}'
+```
+
+The `init_password.sh` initializes the password of the built-in user `kibana_system`. and set the base setting `number_of_replicas` of the every index to 0. because the elasticsearch is consist of single, it can't have replicas.
+
+**kibana**
+
+init_dashboard.sh
+
+```
+#!/bin/bash
+
+url="http://localhost:5601/api/status"
+search_string='"savedObjects":{"level":"available",'
+
+until curl -u "elastic:tokamak!@#" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
+    sleep 1
+done
+
+response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+    --header 'kbn-xsrf: true' \
+    --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
+    --form file=@dashboards/dashboard.ndjson \
+    -o /dev/null \
+    -w '%{http_code}')
+
+if [ "$response_code" -eq 200 ]; then
+    echo "success to import dashbaord!"
+else
+    echo "failed to import dashbaord."
+fi
+```
+
+The `init_dashboard.sh` adds `dashboard` and included `search` and `index-pattern` components of kibana.

@@ -10,7 +10,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internal
 spec:
   rules:
-    - host: es.titan-goerli.private.tokamak.network
+    - host: es.private.titan-goerli.tokamak.network
       http:
         paths:
           - path: /

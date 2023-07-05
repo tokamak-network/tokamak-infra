@@ -9,6 +9,7 @@ resources:
 - ../../../bases/elasticsearch
 - ../../../bases/kibana
 - pv.yaml
+- pvc.yaml
 - ingress.yaml
 
 patchesStrategicMerge:

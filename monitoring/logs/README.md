@@ -50,11 +50,11 @@ do
     sleep 1
 done
 
-printf 'y\ntokamak!@#\ntokamak!@#\n' | bin/elasticsearch-reset-password -u kibana_system -i
+printf 'y\n%s\n%s\n' "$ELASTIC_PASSWORD" "$ELASTIC_PASSWORD" | bin/elasticsearch-reset-password -u kibana_system -i
 
 curl  --location --request PUT 'http://127.0.0.1:9200/_settings' \
+        -u "elastic:${ELASTIC_PASSWORD}" \
         --header 'Content-Type: application/json' \
-        --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
         --data '{"index": {"number_of_replicas": 0}}'
 ```
 
@@ -70,13 +70,13 @@ init_dashboard.sh
 url="http://localhost:5601/api/status"
 search_string='"savedObjects":{"level":"available",'
 
-until curl -u "elastic:tokamak!@#" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
+until curl -u "elastic:${ELASTIC_PASSWORD}" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
     sleep 1
 done
 
 response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+    -u "elastic:${ELASTIC_PASSWORD}" \
     --header 'kbn-xsrf: true' \
-    --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
     --form file=@dashboards/dashboard.ndjson \
     -o /dev/null \
     -w '%{http_code}')

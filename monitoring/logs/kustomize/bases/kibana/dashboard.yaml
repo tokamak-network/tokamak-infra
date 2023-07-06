@@ -13,13 +13,13 @@ data:
     url="http://localhost:5601/api/status"
     search_string='"savedObjects":{"level":"available",'
 
-    until curl -u "elastic:tokamak!@#" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
+    until curl -u "elastic:${ELASTIC_PASSWORD}" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
         sleep 1
     done
 
     response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+        -u "elastic:${ELASTIC_PASSWORD}" \
         --header 'kbn-xsrf: true' \
-        --header 'Authorization: Basic ZWxhc3RpYzp0b2thbWFrIUAj' \
         --form file=@dashboards/dashboard.ndjson \
         -o /dev/null \
         -w '%{http_code}')

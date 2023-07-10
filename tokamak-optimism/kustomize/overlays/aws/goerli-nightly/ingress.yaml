@@ -8,22 +8,49 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/44644792-00cb-40e7-aa6f-de1943762563
+    alb.ingress.kubernetes.io/conditions.ws-rule: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+              "httpHeaderName": "Upgrade",
+              "values": ["websocket"]
+          }
+        },
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Connection",
+            "values": ["Upgrade"]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.ws-rule: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [{
+            "serviceName": "proxyd-l2geth-svc",
+            "servicePort": "8546"
+          }]
+        }
+      }
 spec:
   rules:
     - host: goerli-nightly.optimism.tokamak.network
       http:
         paths:
-          - path: /ws
-            pathType: Prefix
-            backend:
-              service:
-                name: l2geth-svc
-                port:
-                  number: 8546
           - path: /
-            pathType: Prefix
+            pathType: Exact
             backend:
               service:
-                name: l2geth-svc
+                name: ws-rule
+                port:
+                  name: use-annotation
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: proxyd-l2geth-svc
                 port:
                   number: 8545

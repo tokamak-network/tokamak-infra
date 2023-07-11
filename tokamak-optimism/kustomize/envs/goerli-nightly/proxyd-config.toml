@@ -18,7 +18,7 @@ timeout_seconds = 300
 # In worst case, all backend total tries * timeouts
 
 [redis]
-url = "redis://redis-svc.redis:6379"
+url = "redis://redis-svc.redis:6379/0"
 
 [cache]
 enabled = true

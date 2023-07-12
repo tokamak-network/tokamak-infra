@@ -33,7 +33,7 @@ port = 9761
 response_timeout_seconds = 30
 max_response_size_bytes = 5242880
 max_retries = 1
-out_of_service_seconds = 600
+out_of_service_seconds = 6000
 
 [backends]
 [backends.infura_business_plan]
@@ -76,7 +76,4 @@ eth_sendRawTransaction = "main"
 eth_maxPriorityFeePerGas = "main"
 
 [rate_limit]
-enable_backend_rate_limiter = false
-
-[sender_rate_limit]
-enabled = false
+enable_backend_rate_limiter = true

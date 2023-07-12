@@ -40,13 +40,13 @@ out_of_service_seconds = 6000
 rpc_url = "https://mainnet.infura.io/v3/2621931d323b42deb391ecdabc5a014c"
 ws_url = "wss://mainnet.infura.io/ws/v3/2621931d323b42deb391ecdabc5a014c"
 max_rps = 1000
-max_ws_conns = 3
+max_ws_conns = 0
 
 [backends.office]
 rpc_url = "https://rpc.tokamak.network"
 ws_url = "ws://rpc.tokamak.network:8546"
 max_rps = 1000
-max_ws_conns = 3
+max_ws_conns = 0
 
 [backend_groups]
 [backend_groups.main]

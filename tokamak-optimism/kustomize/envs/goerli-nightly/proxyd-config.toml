@@ -33,38 +33,38 @@ port = 9761
 response_timeout_seconds = 30
 max_response_size_bytes = 5242880
 max_retries = 1
-out_of_service_seconds = 600
+out_of_service_seconds = 6000
 
 [backends]
 [backends.infura_harry1]
 rpc_url = "https://goerli.infura.io/v3/186eabd9aafb4012a6916de780348a4e"
 ws_url = "wss://goerli.infura.io/ws/v3/186eabd9aafb4012a6916de780348a4e"
 max_rps = 1000
-max_ws_conns = 1
+max_ws_conns = 0
 
 [backends.infura_harry2]
 rpc_url = "https://goerli.infura.io/v3/8485ff6b2da443c28c37faae6d42a06b"
 ws_url = "wss://goerli.infura.io/ws/v3/8485ff6b2da443c28c37faae6d42a06b"
 max_rps = 1000
-max_ws_conns = 1
+max_ws_conns = 0
 
 [backends.infura_harry3]
 rpc_url = "https://goerli.infura.io/v3/a07126fa968a4f918e275164f25a6862"
 ws_url = "wss://goerli.infura.io/ws/v3/a07126fa968a4f918e275164f25a6862"
 max_rps = 1000
-max_ws_conns = 1
+max_ws_conns = 0
 
 [backends.alchemy_harry1]
 rpc_url = "https://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
 ws_url = "wss://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
 max_rps = 1000
-max_ws_conns = 1
+max_ws_conns = 0
 
 [backends.office]
 rpc_url = "https://goerli.rpc.tokamak.network"
 ws_url = "ws://goerli.rpc.tokamak.network:8546"
 max_rps = 1000
-max_ws_conns = 1
+max_ws_conns = 0
 
 [backend_groups]
 [backend_groups.main]
@@ -100,7 +100,4 @@ eth_sendRawTransaction = "main"
 eth_maxPriorityFeePerGas = "main"
 
 [rate_limit]
-enable_backend_rate_limiter = false
-
-[sender_rate_limit]
-enabled = false
+enable_backend_rate_limiter = true

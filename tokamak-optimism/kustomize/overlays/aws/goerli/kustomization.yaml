@@ -4,6 +4,7 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
+# - ../../../bases/gas-oracle
 resources:
 - ../../../bases/data-transport-layer
 - ../../../bases/l2geth
@@ -12,7 +13,6 @@ resources:
 - ../../../bases/relayer
 - ../../../bases/proxyd
 - ../../../bases/proxyd-l2geth
-# - ../../../bases/gas-oracle
 - ../../../bases/roles
 - ingress.yaml
 - sc.yaml
@@ -35,14 +35,14 @@ configMapGenerator:
   name: chain-config
 images:
 - name: onthertech/titan-batch-submitter-service
-  newTag: release-0.1.9
+  newTag: release-0.1.10
 - name: onthertech/titan-data-transport-layer
-  newTag: release-0.1.9
+  newTag: release-0.1.10
 - name: onthertech/titan-gas-oracle
-  newTag: release-0.1.9
+  newTag: release-0.1.10
 - name: onthertech/titan-l2geth
-  newTag: release-0.1.9
+  newTag: release-0.1.10
 - name: onthertech/titan-message-relayer
-  newTag: release-0.1.9
+  newTag: release-0.1.10
 - name: onthertech/titan-proxyd
-  newTag: release-0.1.9
+  newTag: release-0.1.10

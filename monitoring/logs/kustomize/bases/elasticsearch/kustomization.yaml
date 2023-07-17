@@ -6,7 +6,6 @@ generatorOptions:
 
 resources:
 - configmap.yaml
-- secret.yaml
 - service.yaml
 - statefulset.yaml
 - secret-cert.yaml

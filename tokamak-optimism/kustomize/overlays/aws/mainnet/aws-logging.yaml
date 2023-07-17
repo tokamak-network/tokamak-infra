@@ -44,8 +44,8 @@ data:
         Port  80
         Index titan-mainnet
         Type  log
-        HTTP_User   elastic
-        HTTP_Passwd tokamak!@#
+        HTTP_User   log_bulk
+        HTTP_Passwd elastic
         Suppress_Type_Name On
   parsers.conf: |
     [PARSER]

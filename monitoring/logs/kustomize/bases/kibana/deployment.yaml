@@ -47,10 +47,7 @@ spec:
           - name: NODE_OPTIONS
             value: --max-old-space-size=1800
           - name: ELASTIC_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: elasticsearch-credentials
-                key: password
+            value: "elastic"
         command:
         - bash
         - -c

@@ -26,9 +26,9 @@ spec:
         - name: kibanaconfig
           configMap:
             name: kibana-config
-        - name: kibanadashboard
+        - name: kibanascripts
           configMap:
-            name: kibana-dashboard
+            name: kibana-scripts
             defaultMode: 0755
       initContainers:
       containers:
@@ -52,7 +52,7 @@ spec:
         - bash
         - -c
         - |
-          dashboards/init_dashboard.sh &
+          scripts/init.sh &
           /bin/tini -- /usr/local/bin/kibana-docker
         readinessProbe:
           failureThreshold: 3
@@ -94,5 +94,5 @@ spec:
         volumeMounts:
           - name: kibanaconfig
             mountPath: /usr/share/kibana/config
-          - name: kibanadashboard
-            mountPath: /usr/share/kibana/dashboards
+          - name: kibanascripts
+            mountPath: /usr/share/kibana/scripts

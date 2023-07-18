@@ -62,7 +62,7 @@ The `init_password.sh` initializes the password of the built-in user `kibana_sys
 
 **kibana**
 
-init_dashboard.sh
+init.sh
 
 ```
 #!/bin/bash
@@ -74,18 +74,36 @@ until curl -u "elastic:${ELASTIC_PASSWORD}" -sb -H "Accept: application/json" "$
     sleep 1
 done
 
-response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+dashbaord_response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
     -u "elastic:${ELASTIC_PASSWORD}" \
     --header 'kbn-xsrf: true' \
-    --form file=@dashboards/dashboard.ndjson \
+    --form file=@scripts/dashboard.ndjson \
     -o /dev/null \
     -w '%{http_code}')
 
-if [ "$response_code" -eq 200 ]; then
+if [ "$dashbaord_response_code" -eq 200 ]; then
     echo "success to import dashbaord!"
 else
     echo "failed to import dashbaord."
 fi
+
+config_response_code=$(curl -s -X PUT 'http://localhost:5601/api/saved_objects/config/8.8.0' \
+    -u "elastic:${ELASTIC_PASSWORD}" \
+    --header 'kbn-xsrf: true;' \
+    --header 'Content-Type: application/json' \
+    --data '{
+        "attributes": {
+            "discover:sampleSize": "5000"
+        }
+    }' \
+    -o /dev/null \
+    -w '%{http_code}')
+
+if [ "$config_response_code" -eq 200 ]; then
+    echo "success to set discover:sampleSize!"
+else
+    echo "failed to set discover:sampleSize."
+fi
 ```
 
-The `init_dashboard.sh` adds `dashboard` and included `search` and `index-pattern` components of kibana.
+The `init.sh` adds `dashboard` included `search` and `index-pattern` components of kibana and sets the config `discover:sampleSize`.

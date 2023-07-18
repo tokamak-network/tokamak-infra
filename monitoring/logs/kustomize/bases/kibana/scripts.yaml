@@ -2,12 +2,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: kibana-dashboard
+  name: kibana-scripts
   namespace: log-monitoring
   labels:
     app: kibana
 data:
-  init_dashboard.sh: |-
+  init.sh: |-
     #!/bin/bash
 
     url="http://localhost:5601/api/status"
@@ -17,17 +17,35 @@ data:
         sleep 1
     done
 
-    response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
-        -u "elastic:${ELASTIC_PASSWORD}" \
-        --header 'kbn-xsrf: true' \
-        --form file=@dashboards/dashboard.ndjson \
-        -o /dev/null \
-        -w '%{http_code}')
+    dashbaord_response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
+      -u "elastic:${ELASTIC_PASSWORD}" \
+      --header 'kbn-xsrf: true' \
+      --form file=@scripts/dashboard.ndjson \
+      -o /dev/null \
+      -w '%{http_code}')
 
-    if [ "$response_code" -eq 200 ]; then
+    if [ "$dashbaord_response_code" -eq 200 ]; then
         echo "success to import dashbaord!"
     else
         echo "failed to import dashbaord."
+    fi
+
+    config_response_code=$(curl -s -X PUT 'http://localhost:5601/api/saved_objects/config/8.8.0' \
+      -u "elastic:${ELASTIC_PASSWORD}" \
+      --header 'kbn-xsrf: true;' \
+      --header 'Content-Type: application/json' \
+      --data '{
+          "attributes": {
+              "discover:sampleSize": "5000"
+          }
+      }' \
+      -o /dev/null \
+      -w '%{http_code}')
+
+    if [ "$config_response_code" -eq 200 ]; then
+        echo "success to set discover:sampleSize!"
+    else
+        echo "failed to set discover:sampleSize."
     fi
 
   dashboard.ndjson: |-

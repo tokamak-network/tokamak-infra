@@ -26,4 +26,4 @@ configMapGenerator:
   name: app-blockscout-config
 images:
 - name: onthertech/titan-explorer
-  newTag: nightly-1.2.3
+  newTag: nightly-1.2.4

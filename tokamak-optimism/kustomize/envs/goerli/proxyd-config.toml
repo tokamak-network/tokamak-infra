@@ -36,27 +36,27 @@ max_retries = 1
 out_of_service_seconds = 60
 
 [backends]
-[backends.infura_harry1]
-rpc_url = "https://goerli.infura.io/v3/186eabd9aafb4012a6916de780348a4e"
-ws_url = "wss://goerli.infura.io/ws/v3/186eabd9aafb4012a6916de780348a4e"
+[backends.infura_steven1]
+rpc_url = "https://goerli.infura.io/v3/98934cc6fa14459f8e5ee0cdfe1eed0a"
+ws_url = "wss://goerli.infura.io/ws/v3/98934cc6fa14459f8e5ee0cdfe1eed0a"
 max_rps = 1000
 max_ws_conns = 0
 
-[backends.infura_harry2]
-rpc_url = "https://goerli.infura.io/v3/8485ff6b2da443c28c37faae6d42a06b"
-ws_url = "wss://goerli.infura.io/ws/v3/8485ff6b2da443c28c37faae6d42a06b"
+[backends.infura_steven2]
+rpc_url = "https://goerli.infura.io/v3/274dc9c47885483ca708968ee0e75d06"
+ws_url = "wss://goerli.infura.io/ws/v3/274dc9c47885483ca708968ee0e75d06"
 max_rps = 1000
 max_ws_conns = 0
 
-[backends.infura_harry3]
-rpc_url = "https://goerli.infura.io/v3/a07126fa968a4f918e275164f25a6862"
-ws_url = "wss://goerli.infura.io/ws/v3/a07126fa968a4f918e275164f25a6862"
+[backends.infura_theo1]
+rpc_url = "https://goerli.infura.io/v3/053e5d95616744d4b30a80fb885bacb8"
+ws_url = "wss://goerli.infura.io/ws/v3/053e5d95616744d4b30a80fb885bacb8"
 max_rps = 1000
 max_ws_conns = 0
 
-[backends.alchemy_harry1]
-rpc_url = "https://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
-ws_url = "wss://eth-goerli.g.alchemy.com/v2/z6Qfnx7YwupKVilzZJTHfgc8nVOynOr1"
+[backends.infura_theo2]
+rpc_url = "https://goerli.infura.io/v3/adbdb3ac93674147934afa48bdccacef"
+ws_url = "wss://goerli.infura.io/ws/v3/adbdb3ac93674147934afa48bdccacef"
 max_rps = 1000
 max_ws_conns = 0
 
@@ -68,16 +68,13 @@ max_ws_conns = 0
 
 [backend_groups]
 [backend_groups.main]
-backends = ["office", "infura_harry1", "infura_harry2", "infura_harry3", "alchemy_harry1"]
-
-[backend_groups.alchemy]
-backends = ["alchemy_harry1"]
+backends = ["office", "infura_steven1", "infura_steven2", "infura_theo1", "infura_theo2"]
 
 [backend_groups.infura]
-backends = ["infura_harry1", "infura_harry2", "infura_harry3"]
+backends = ["infura_steven1", "infura_steven2", "infura_theo1", "infura_theo2"]
 
 [backend_groups.heavy_request]
-backends = ["infura_harry3", "infura_harry2", "infura_harry1", "alchemy_harry1", "office"]
+backends = ["infura_theo2", "infura_theo1", "infura_steven2", "infura_steven1", "office"]
 
 [rpc_method_mappings]
 net_version = "main"

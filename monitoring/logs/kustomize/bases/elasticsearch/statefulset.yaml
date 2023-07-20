@@ -91,7 +91,7 @@ spec:
         - |
           ulimit -n 65535
           ulimit -u 65535
-          scripts/init_password.sh &
+          scripts/elasticsearch_init.sh &
           /bin/tini -- /usr/local/bin/docker-entrypoint.sh
         ports:
         - name: http

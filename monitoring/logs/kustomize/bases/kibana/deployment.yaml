@@ -26,6 +26,9 @@ spec:
         - name: kibanaconfig
           configMap:
             name: kibana-config
+        - name: kibanadashboards
+          configMap:
+            name: kibana-dashboards
         - name: kibanascripts
           configMap:
             name: kibana-scripts
@@ -52,7 +55,7 @@ spec:
         - bash
         - -c
         - |
-          scripts/init.sh &
+          scripts/kibana_init.sh &
           /bin/tini -- /usr/local/bin/kibana-docker
         readinessProbe:
           failureThreshold: 3
@@ -94,5 +97,7 @@ spec:
         volumeMounts:
           - name: kibanaconfig
             mountPath: /usr/share/kibana/config
+          - name: kibanadashboards
+            mountPath: /usr/share/kibana/dashboards
           - name: kibanascripts
             mountPath: /usr/share/kibana/scripts

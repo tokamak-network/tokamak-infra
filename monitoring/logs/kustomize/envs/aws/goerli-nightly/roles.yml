@@ -1,0 +1,23 @@
+init_scripts:
+  run_as:
+    - init_scripts
+  cluster:
+    - monitor
+  applications:
+    - application: kibana-.kibana
+      privileges:
+        - feature_savedObjectsManagement.all
+      resources:
+        - "*"
+  indices:
+    - names:
+        - "*"
+      privileges:
+        - manage
+
+log_bulk:
+  indices:
+    - names:
+        - "*"
+      privileges:
+        - all

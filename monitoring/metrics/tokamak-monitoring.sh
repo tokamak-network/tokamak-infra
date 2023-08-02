@@ -23,6 +23,7 @@ VOLUME_PATH=$MYPATH/volume
 ACTION=$1
 ENV_LIST=$(ls -d $MYPATH/override_values/*/ | rev | cut -f2 -d'/' | rev)
 HELM_NAMESPACE=monitoring
+KUBECTL="kubectl"
 
 if [ -z "$ACTION" ]; then
   print_help
@@ -54,7 +55,13 @@ function print_create_list() {
 }
 
 function ask_going() {
-  local current_context=$(kubectl config current-context)
+  local current_context=$($KUBECTL config current-context)
+
+  if [[ -z $current_context ]]; then
+    echo "confirm your KUBECONFIG value. got the '$KUBECONFIG'"
+    exit 1
+  fi
+
   local message="Current context is \"${current_context}\"."$'\n'
   message+="going to \"${ACTION}\"?"
   local res=1
@@ -76,6 +83,11 @@ create | install | upgrade | update)
   env_name=$3
 
   CLUSTER_LIST=$(ls -d $MYPATH/override_values/${env_name}/*/ | rev | cut -f2 -d'/' | rev)
+
+  if [[ ! -z "$KUBECONFIG" ]]; then
+    KUBECTL="$KUBECTL --kubeconfig $KUBECONFIG"
+    echo "KUBECONFIG applied"
+  fi
 
   if !(check_cluster $cluster_name); then
     print_help
@@ -104,14 +116,14 @@ create | install | upgrade | update)
     exit 1
   fi
 
-  kubectl create namespace $HELM_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+  $KUBECTL create namespace $HELM_NAMESPACE --dry-run=client -o yaml | $KUBECTL apply -f -
 
-  execcmd="kubectl apply -k dashboards"
+  execcmd="$KUBECTL apply -k dashboards"
   echo $execcmd
   eval $execcmd
 
   if [ -f "${env_path}/pv.yaml" ]; then
-    execcmd="kubectl apply -f ${env_path}/pv.yaml"
+    execcmd="$KUBECTL apply -f ${env_path}/pv.yaml"
     echo $execcmd
     eval $execcmd
   fi
@@ -147,12 +159,12 @@ delete | remove | uninstall)
   echo $execcmd
   eval $execcmd
 
-  execcmd="kubectl delete -k dashboards"
+  execcmd="$KUBECTL delete -k dashboards"
   echo $execcmd
   eval $execcmd
 
   if [ -f "${env_path}/pv.yaml" ]; then
-    execcmd="kubectl delete -f ${env_path}/pv.yaml"
+    execcmd="$KUBECTL delete -f ${env_path}/pv.yaml"
     echo $execcmd
     eval $execcmd
   fi

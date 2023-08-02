@@ -11,14 +11,14 @@ alertmanager:
         - matchers:
             - group = tokamak
             - severity_resolved = info
-          receiver: slack-notifications-resolve
+          receiver: no-alert
           group_by: ['alertname']
           group_wait: 0s
           group_interval: 10s
           repeat_interval: 1h
         - matchers:
             - group = tokamak
-          receiver: slack-notifications
+          receiver: no-alert
           group_by: ['alertname']
           group_wait: 0s
           group_interval: 10s

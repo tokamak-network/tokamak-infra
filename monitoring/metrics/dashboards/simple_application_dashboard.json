@@ -26,7 +26,6 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 14053,
   "graphTooltip": 0,
-  "id": 29,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -89,7 +88,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -287,7 +286,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -370,7 +369,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -453,7 +452,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -531,7 +530,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -617,7 +616,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -700,7 +699,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -783,7 +782,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -861,7 +860,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -947,7 +946,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1030,7 +1029,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1097,7 +1096,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1162,7 +1161,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1228,7 +1227,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1296,7 +1295,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1367,7 +1366,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1439,7 +1438,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1510,7 +1509,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1576,7 +1575,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1645,7 +1644,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -1723,7 +1722,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -2083,7 +2082,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -2150,7 +2149,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -2300,6 +2299,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -2531,7 +2531,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-reds"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -2577,14 +2577,14 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": false
+          "values": true
         },
         "text": {
           "valueSize": 25
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -2608,10 +2608,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
+          "exemplar": false,
           "expr": "chain_head_block{job=~\"l1geth\"}",
           "hide": false,
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
@@ -2691,7 +2693,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
         {
           "datasource": {
@@ -2957,6 +2959,7 @@
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
+            "axisSoftMin": 0,
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
@@ -3078,7 +3081,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "continuous-reds"
+            "mode": "thresholds"
           },
           "mappings": [
             {
@@ -3124,15 +3127,30 @@
             "lastNotNull"
           ],
           "fields": "",
-          "values": false
+          "values": true
         },
         "text": {
           "valueSize": 25
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.5.3",
+      "pluginVersion": "10.0.2",
       "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(message_relayer_highest_checked_l2_tx{job=\"relayer\"} - 1 < bool 0 and message_relayer_highest_checked_l2_tx{job=\"relayer\"}) + message_relayer_highest_checked_l2_tx{job=\"relayer\"} - 1",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "B"
+        },
         {
           "datasource": {
             "type": "prometheus",
@@ -3148,18 +3166,6 @@
           "legendFormat": "",
           "range": false,
           "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "message_relayer_highest_checked_l2_tx{job=\"relayer\"} - 1 ",
-          "hide": false,
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "B"
         }
       ],
       "title": "No Checked Blocks",
@@ -3238,6 +3244,6 @@
   "timezone": "",
   "title": "Application DashBoard",
   "uid": "bUki4MF4z",
-  "version": 5914,
+  "version": 2,
   "weekStart": ""
 }

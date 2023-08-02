@@ -3,12 +3,12 @@
 url="http://localhost:5601/api/status"
 search_string='"savedObjects":{"level":"available",'
 
-until curl -u "elastic:${ELASTIC_PASSWORD}" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
+until curl -u "init_scripts:${ELASTIC_PASSWORD}" -sb -H "Accept: application/json" "$url" | grep -q "$search_string"; do
     sleep 1
 done
 
 dashboard_response_code=$(curl -s -X POST "http://localhost:5601/api/saved_objects/_import?overwrite=true" \
-    -u "elastic:${ELASTIC_PASSWORD}" \
+    -u "init_scripts:${ELASTIC_PASSWORD}" \
     --header 'kbn-xsrf: true' \
     --form file=@dashboards/savedObjects.ndjson \
     -o /dev/null \
@@ -21,7 +21,7 @@ else
 fi
 
 config_response_code=$(curl -s -X PUT 'http://localhost:5601/api/saved_objects/config/8.8.0' \
-    -u "elastic:${ELASTIC_PASSWORD}" \
+    -u "init_scripts:${ELASTIC_PASSWORD}" \
     --header 'kbn-xsrf: true;' \
     --header 'Content-Type: application/json' \
     --data '{

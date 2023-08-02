@@ -7,6 +7,9 @@ configMapGenerator:
   - name: elasticsearch-config
     files:
       - elasticsearch.yml
+      - users
+      - users_roles
+      - roles.yml
   - name: kibana-config
     files:
       - kibana.yml

@@ -8,6 +8,10 @@ controller:
       enabled: true
       additionalLabels:
         release: tokamak-optimism-monitoring
+  resources:
+    requests:
+      cpu: 500m
+      memory: 0.75Gi
 repoServer:
   metrics:
     enabled: true
@@ -35,8 +39,8 @@ server:
       - goerli-nightly.argocd.tokamak.network
 applicationSet:
   metrics:
-   enabled: true
-   serviceMonitor:
+    enabled: true
+    serviceMonitor:
       enabled: true
       additionalLabels:
         release: tokamak-optimism-monitoring

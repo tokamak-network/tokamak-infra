@@ -34,14 +34,14 @@ configMapGenerator:
   name: chain-config
 images:
 - name: onthertech/titan-batch-submitter-service
-  newTag: release-0.1.11
+  newTag: release-0.1.12
 - name: onthertech/titan-data-transport-layer
-  newTag: release-0.1.11
+  newTag: release-0.1.12
 - name: onthertech/titan-gas-oracle
-  newTag: release-0.1.11
+  newTag: release-0.1.12
 - name: onthertech/titan-l2geth
-  newTag: release-0.1.11
+  newTag: release-0.1.12
 - name: onthertech/titan-message-relayer
-  newTag: release-0.1.11
+  newTag: release-0.1.12
 - name: onthertech/titan-proxyd
-  newTag: release-0.1.11
+  newTag: release-0.1.12

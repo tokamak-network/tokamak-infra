@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tokamak-optimism
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    path: tokamak-optimism/kustomize/overlays/aws/goerli
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

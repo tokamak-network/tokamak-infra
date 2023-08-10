@@ -1,0 +1,45 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tokamak-optimism-monitoring
+spec:
+  project: default
+  sources:
+    # kube-prometheus-stack
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      chart: kube-prometheus-stack
+      targetRevision: '*-0'
+      helm:
+        valueFiles:
+          - $repo/monitoring/metrics/override_values/aws/goerli-nightly/alert-rules.yaml
+          - $repo/monitoring/metrics/override_values/aws/goerli-nightly/base.yaml
+          - $repo/monitoring/metrics/override_values/aws/goerli-nightly/resources.yaml
+    # prometheus-blackbox-exporter
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      chart: prometheus-blackbox-exporter
+      targetRevision: '*-0'
+      helm:
+        valueFiles:
+          - $repo/monitoring/metrics/override_values/aws/goerli-nightly/blackbox.yaml
+    # prometheus pv
+    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+      path: monitoring/metrics/override_values/aws/goerli-nightly
+      directory:
+        include: 'pv.yaml'
+      targetRevision: main
+    # grafana dashboards
+    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+      path: monitoring/metrics/dashboards
+      targetRevision: main
+    # repoURL
+    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+      targetRevision: main
+      ref: repo
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true

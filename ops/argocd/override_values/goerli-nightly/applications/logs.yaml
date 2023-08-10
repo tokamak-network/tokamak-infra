@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: logs
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    path: monitoring/logs/kustomize/overlays/aws/goerli-nightly
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: log-monitoring
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

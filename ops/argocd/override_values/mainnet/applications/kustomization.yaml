@@ -12,4 +12,3 @@ resources:
   - redis.yaml
   - metrics.yaml
   - logs.yaml
-  - gateway.yaml

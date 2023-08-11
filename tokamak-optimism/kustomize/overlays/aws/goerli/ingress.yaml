@@ -6,6 +6,7 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: l2geth
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
     alb.ingress.kubernetes.io/conditions.ws-rule: >
@@ -85,3 +86,45 @@ spec:
                 name: proxyd-l2geth-svc
                 port:
                   number: 8545
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: l2geth-ingress-alb-bad-request
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/group.name: l2geth
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/actions.http-badrequest: >
+      {
+        "type": "fixed-response",
+        "fixedResponseConfig": {
+          "contentType": "application/json",
+          "statusCode": "400",
+          "messageBody": "{\"jsonrpc\": \"2.0\",\"error\": {\"code\": -32600,\"message\": \"HTTPS is required\"}}"
+        }
+      }
+spec:
+  rules:
+    - host: goerli.optimism.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: http-badrequest
+                port:
+                  name: use-annotation
+    - host: rpc.titan-goerli.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Exact
+            backend:
+              service:
+                name: http-badrequest
+                port:
+                  name: use-annotation

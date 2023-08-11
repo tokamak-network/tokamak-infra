@@ -1,4 +1,4 @@
-# Postgresql
+# Postgresql (Deprecated)
 
 ## Warning: It is no longer required on AWS.
 

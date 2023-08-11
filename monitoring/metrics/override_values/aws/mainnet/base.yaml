@@ -19,12 +19,12 @@ prometheus:
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-               - l2geth-svc.default:6060
+              - l2geth-svc.default:6060
       - job_name: l2geth-replica
         metrics_path: /debug/metrics/prometheus
         static_configs:
-        - targets:
-            - l2geth-replica-svc.default:6060
+          - targets:
+              - l2geth-replica-svc.default:6060
       - job_name: proxyd
         static_configs:
           - targets:
@@ -44,62 +44,65 @@ prometheus:
           module: [http_2xx]
         static_configs:
           - targets:
-            - http://blockscout-svc.app-blockscout
+              - http://blockscout-svc.app-blockscout
         relabel_configs:
-        - source_labels: [__address__]
-          target_label: __param_target
-        - source_labels: [__param_target]
-          target_label: target
-        - target_label: __address__
-          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: target
+          - target_label: __address__
+            replacement: tokamak-optimism-monitoring-prometheus-blackbox-exporter:9115
       - job_name: blackbox-eth-node-synced
         metrics_path: /probe
         params:
           module: [http_post_eth_node_synced_2xx]
         static_configs:
           - targets:
-            - https://rpc.tokamak.network
+              - https://rpc.tokamak.network
         relabel_configs:
-        - source_labels: [module]
-          target_label: __param_module
-        - source_labels: [__address__]
-          target_label: __param_target
-        - source_labels: [__param_target]
-          target_label: target
-        - target_label: __address__
-          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+          - source_labels: [module]
+            target_label: __param_module
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: target
+          - target_label: __address__
+            replacement: tokamak-optimism-monitoring-prometheus-blackbox-exporter:9115
       - job_name: blackbox-eth-block-number
         metrics_path: /probe
         params:
           module: [http_post_eth_block_number_2xx]
         static_configs:
           - targets:
-            - http://proxyd-svc.default:8545
-            - https://rpc.tokamak.network
+              - http://proxyd-svc.default:8545
+              - https://rpc.tokamak.network
         relabel_configs:
-        - source_labels: [module]
-          target_label: __param_module
-        - source_labels: [__address__]
-          target_label: __param_target
-        - source_labels: [__param_target]
-          target_label: target
-        - target_label: __address__
-          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+          - source_labels: [module]
+            target_label: __param_module
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: target
+          - target_label: __address__
+            replacement: tokamak-optimism-monitoring-prometheus-blackbox-exporter:9115
       - job_name: tcp-health-check
         metrics_path: /probe
         params:
           module: [tcp_connect]
         static_configs:
           - targets:
-            - redis-svc.redis:6379
+              - redis-svc.redis:6379
         relabel_configs:
-        - source_labels: [module]
-          target_label: __param_module
-        - source_labels: [__address__]
-          target_label: __param_target
-        - source_labels: [__param_target]
-          target_label: target
-        - target_label: __address__
-          replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring:9115
+          - source_labels: [module]
+            target_label: __param_module
+          - source_labels: [__address__]
+            target_label: __param_target
+          - source_labels: [__param_target]
+            target_label: target
+          - target_label: __address__
+            replacement: tokamak-optimism-monitoring-prometheus-blackbox-exporter:9115
+
 grafana:
+  image:
+    tag: latest
   adminPassword: admin

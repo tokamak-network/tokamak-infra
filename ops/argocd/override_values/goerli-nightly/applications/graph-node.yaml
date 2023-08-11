@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: graph-node
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    path: ops/graph-node/kustomize/overlays/aws/goerli-nightly
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: thegraph
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

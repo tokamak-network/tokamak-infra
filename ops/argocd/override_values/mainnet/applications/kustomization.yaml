@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: argocd
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - tokamak-optimism.yaml
+  - blockscout.yaml
+  - graph-node.yaml
+  - redis.yaml
+  - metrics.yaml
+  - logs.yaml

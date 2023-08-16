@@ -136,7 +136,7 @@ create | install | upgrade | update)
 
   helm_file_list="-f $env_path/blackbox.yaml"
 
-  execcmd="helm $cmd -n $HELM_NAMESPACE $helm_file_list blackbox-exporter prometheus-community/prometheus-blackbox-exporter"
+  execcmd="helm template -n $HELM_NAMESPACE $helm_file_list tokamak-optimism-monitoring prometheus-community/prometheus-blackbox-exporter | $KUBECTL apply -f -"
   echo $execcmd
   eval $execcmd
   ;;
@@ -155,7 +155,7 @@ delete | remove | uninstall)
   echo $execcmd
   eval $execcmd
 
-  execcmd="helm delete -n $HELM_NAMESPACE blackbox-exporter"
+  execcmd="helm template -n $HELM_NAMESPACE $helm_file_list tokamak-optimism-monitoring prometheus-community/prometheus-blackbox-exporter | $KUBECTL delete -f -"
   echo $execcmd
   eval $execcmd
 

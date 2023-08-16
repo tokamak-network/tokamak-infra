@@ -28,12 +28,12 @@ alertmanager:
       - name: no-alert
       - name: slack-notifications
         slack_configs:
-          - channel: "#optimism-alarm-logs"
+          - channel: '#optimism-alarm-logs'
             title: "{{ range .Alerts }}[tokamak-optimism-goerli] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
       - name: slack-notifications-resolve
         slack_configs:
-          - channel: "#optimism-alarm-logs"
+          - channel: '#optimism-alarm-logs'
             send_resolved: true
             title: "{{ range .Alerts }}[tokamak-optimism-goerli] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
@@ -194,3 +194,13 @@ additionalPrometheusRulesMap:
             expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() (batch_submitter_proposer_balance_eth < 0.5 and batch_submitter_proposer_balance_eth != 0)'
             annotations:
               message: 'proposer balance is lower than 0.5 ether'
+      - name: 'relayer balance'
+        rules:
+          - alert: 'relayer balance'
+            labels:
+              group: tokamak
+              app: relayer
+              severity: critical
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() (message_relayer_balance_eth < 0.3 and message_relayer_balance_eth != 0)'
+            annotations:
+              message: 'relayer balance is lower than 0.3 ether'

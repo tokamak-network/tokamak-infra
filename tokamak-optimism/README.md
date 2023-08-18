@@ -14,7 +14,7 @@ kustomize
 
 ## on Minikube
 
-**Note: You must run local example on linux/arm64-based platforms (Now we support docker images in linux/arm64)**
+**Note: You must run local example on linux/amd64-based platforms (Now we support docker images in linux/amd64)**
 
 ### Prerequisites
 

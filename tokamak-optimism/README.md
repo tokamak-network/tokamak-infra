@@ -1,6 +1,6 @@
 # Kubernetes
 
-Resources for running the tokamak network based on kubernetes
+Resources for running the Tokamak Network based on kubernetes.
 
 ## Directory Strcture
 
@@ -13,6 +13,8 @@ kustomize
 ```
 
 ## on Minikube
+
+**Note: You must run local example on linux/amd64-based platforms (Now we support docker images in linux/amd64)**
 
 ### Prerequisites
 
@@ -36,26 +38,43 @@ This is an example of `local`.
 
 ```
 minikube start --cpus 4 --memory 16384
-# customize the cps and the memory for your system
+# customize the cpus and the memory for your system
 ```
 
 #### deploy local resource
 
 ```
-./tokamak-optimism.sh create local/hardhat
+./tokamak-optimism.sh create hardhat local
+```
 
-minikube tunnel # (keep terminal session)
+#### add redis to cluster for proxyd
+
+```
+kubectl apply -k ../ops/redis/kustomize/overlays/local
 ```
 
 #### monitoring
 
 ```
+# get all pods
 kubectl get pods
+
+# get pod status
+kubectl describe pods/$NAME
+
+# get log
+kubectl logs $NAME
 ```
 
 If you can see all `Running` in the status, then everyting was successful!
 
 This may take some time.(about 5m)
+
+#### Use port forwarding
+```
+minikube tunnel 
+# keep terminal session
+```
 
 #### endpoint
 
@@ -78,9 +97,13 @@ kubectl get svc
 
 Notice that minkube is accessible from only local system.
 
-### Delete cluster
+### Delete pods & cluster
 
 ```
+# delete pods
+./tokamak-optimism.sh delete
+
+# delete cluster
 minikube delete
 ```
 

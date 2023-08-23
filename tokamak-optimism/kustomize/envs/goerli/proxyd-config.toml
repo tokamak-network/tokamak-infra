@@ -2,7 +2,7 @@ ws_method_whitelist = [
   "eth_subscribe",
   "eth_call",
   "eth_chainId",
-  "net_version"
+  "net_version",
 ]
 ws_backend_group = "main"
 
@@ -33,7 +33,7 @@ port = 9761
 response_timeout_seconds = 30
 max_response_size_bytes = 5242880
 max_retries = 1
-out_of_service_seconds = 60
+out_of_service_seconds = 20
 
 [backends]
 [backends.infura_steven1]
@@ -68,13 +68,16 @@ max_ws_conns = 0
 
 [backend_groups]
 [backend_groups.main]
-backends = ["office", "infura_steven1", "infura_steven2", "infura_theo1", "infura_theo2"]
-
-[backend_groups.infura]
-backends = ["infura_steven1", "infura_steven2", "infura_theo1", "infura_theo2"]
+backends = [
+  "office",
+  "infura_steven1",
+  "infura_steven2",
+  "infura_theo1",
+  "infura_theo2",
+]
 
 [backend_groups.heavy_request]
-backends = ["infura_theo2", "infura_theo1", "infura_steven2", "infura_steven1", "office"]
+backends = ["infura_theo2", "infura_theo1", "infura_steven2", "infura_steven1"]
 
 [rpc_method_mappings]
 net_version = "main"

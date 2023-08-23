@@ -2,7 +2,7 @@ ws_method_whitelist = [
   "eth_subscribe",
   "eth_call",
   "eth_chainId",
-  "net_version"
+  "net_version",
 ]
 ws_backend_group = "main"
 
@@ -33,7 +33,7 @@ port = 9761
 response_timeout_seconds = 30
 max_response_size_bytes = 5242880
 max_retries = 1
-out_of_service_seconds = 60
+out_of_service_seconds = 20
 
 [backends]
 [backends.infura_business_plan]

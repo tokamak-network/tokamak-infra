@@ -9,6 +9,9 @@ resources:
 - ../../bases
 - namespace.yaml
 
+patchesStrategicMerge:
+- resource_override.yaml
+
 configMapGenerator:
 - literals:
   - APP_NAME=redis

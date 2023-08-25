@@ -11,24 +11,14 @@ spec:
       containers:
       - name: redis
         image: redis:alpine
-        command: ['redis-server', '/redis-conf/redis.conf']
+        command: ['redis-server']
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 6379
           protocol: TCP
         resources: {}
-        volumeMounts:
-        - mountPath: /redis-conf
-          name: redis-volume-config
         env:
         - name: NAMESPACE
           valueFrom:
             fieldRef:
               fieldPath: metadata.namespace
-      volumes:
-      - name: redis-volume-config
-        configMap:
-          name: redis-service-config
-          items:
-          - key: redis-config-params
-            path: redis.conf

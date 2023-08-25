@@ -6,14 +6,16 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- ../../bases
 - namespace.yaml
+- redis-service-config.yaml
+- ../../bases
+
 
 patchesStrategicMerge:
 - resource_override.yaml
 
 configMapGenerator:
-- literals:
-  - APP_NAME=redis
-  - ENV_NAME=local
-  name: redis-config
+  - name: redis-config
+    literals:
+      - APP_NAME=redis
+      - ENV_NAME=local

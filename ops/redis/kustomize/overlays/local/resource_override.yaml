@@ -8,7 +8,6 @@ spec:
     spec:
       containers:
       - name: redis
-        command: ['redis-server', '/redis-conf/redis.conf']
         resources:
           requests:
             cpu: 0.5
@@ -16,17 +15,6 @@ spec:
           limits:
             cpu: 0.5
             memory: 0.75Gi
-        volumeMounts:
-        - mountPath: /redis-conf
-          name: redis-volume-config
-      volumes:
-      - name: redis-volume-config
-        configMap:
-          name: redis-service-config
-          items:
-          - key: redis-config-params
-            path: redis.conf
-
 ---
 apiVersion: v1
 kind: Service

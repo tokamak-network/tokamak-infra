@@ -16,7 +16,7 @@ spec:
         ports:
         - containerPort: 6379
           protocol: TCP
-        resources: {}
+        resources:
         env:
         - name: NAMESPACE
           valueFrom:
@@ -32,4 +32,3 @@ spec:
           items:
           - key: redis-config-params
             path: redis.conf
-        

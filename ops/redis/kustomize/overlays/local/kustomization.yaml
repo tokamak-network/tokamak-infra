@@ -9,12 +9,11 @@ resources:
 - namespace.yaml
 - ../../bases
 
-
 patchesStrategicMerge:
 - resource_override.yaml
 
 configMapGenerator:
-  - name: redis-config
-    literals:
-      - APP_NAME=redis
-      - ENV_NAME=local
+- name: redis-config
+  literals:
+  - APP_NAME=redis
+  - ENV_NAME=local

@@ -1,0 +1,11 @@
+profile         = "dev" # you must change it in your local file ~/.aws/config
+region          = "ap-northeast-2"
+azs             = ["ap-northeast-2a", "ap-northeast-2b"]
+network_name    = "goerli-nightly"
+cluster_name    = "titan-goerli-nightly"
+cluster_version = 1.27
+vpc_cidr        = "192.168.0.0/16"
+vpc_name        = "titan-goerli-nightly/VPC"
+efs_name        = "titan-goerli-nightly"
+parent_domain   = "titan-goerli-nightly.tokamak.network"
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana", "gateway"]

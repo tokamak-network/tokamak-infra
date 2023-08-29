@@ -1,0 +1,11 @@
+profile         = "prod" # you must change it in your local file ~/.aws/config
+region          = "ap-northeast-2"
+azs             = ["ap-northeast-2a", "ap-northeast-2b"]
+network_name    = "goerli"
+cluster_name    = "titan-goerli"
+cluster_version = 1.27
+vpc_cidr        = "192.168.0.0/16"
+vpc_name        = "titan-goerli/VPC"
+efs_name        = "titan-goerli"
+parent_domain   = "titan-goerli.tokamak.network"
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana", "gateway"]

@@ -41,13 +41,6 @@ spec:
     - host: rpc.titan.tokamak.network
       http:
         paths:
-          - path: /ws
-            pathType: Exact
-            backend:
-              service:
-                name: l2geth-svc
-                port:
-                  number: 8546
           - path: /
             pathType: Exact
             backend:

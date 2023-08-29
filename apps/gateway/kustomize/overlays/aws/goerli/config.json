@@ -13,10 +13,10 @@
       "name": "Tokamak Goerli",
       "type": "L2",
       "chainId": 5050,
-      "endpoint": "https://goerli.optimism.tokamak.network",
+      "endpoint": "https://rpc.titan-goerli.tokamak.network",
       "oppositeChainId": 5,
       "iconURL": "/logos/tokamak-symbol.svg",
-      "explorer": "https://goerli.explorer.tokamak.network/"
+      "explorer": "https://explorer.titan-goerli.tokamak.network/"
     }
   ],
   "SUPPORTED_TOKENS": [

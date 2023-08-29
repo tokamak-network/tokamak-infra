@@ -17,8 +17,8 @@ eksctl create fargateprofile \
 
 ### Helm
 
-* [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)
-* add helm chart repository
+- [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)
+- add helm chart repository
 
 ```
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -44,7 +44,7 @@ helm repo update
 ### for AWS
 
 - prometheus: use `Port Forwarding`
-- grafana: https://goerli-nightly.grafana.tokamak.network or https://goerli.grafana.tokamak.network
+- grafana: https://grafana.titan-goerli-nightly.tokamak.network or https://grafana.titan-goerli.tokamak.network
 
 ## Upgrade Promethes Stack
 

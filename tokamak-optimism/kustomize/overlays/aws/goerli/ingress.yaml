@@ -38,40 +38,9 @@ metadata:
       }
 spec:
   rules:
-    - host: goerli.optimism.tokamak.network
-      http:
-        paths:
-          - path: /ws
-            pathType: Exact
-            backend:
-              service:
-                name: l2geth-svc
-                port:
-                  number: 8546
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: ws-rule
-                port:
-                  name: use-annotation
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: proxyd-l2geth-svc
-                port:
-                  number: 8545
     - host: rpc.titan-goerli.tokamak.network
       http:
         paths:
-          - path: /ws
-            pathType: Exact
-            backend:
-              service:
-                name: l2geth-svc
-                port:
-                  number: 8546
           - path: /
             pathType: Exact
             backend:
@@ -108,16 +77,6 @@ metadata:
       }
 spec:
   rules:
-    - host: goerli.optimism.tokamak.network
-      http:
-        paths:
-          - path: /
-            pathType: Exact
-            backend:
-              service:
-                name: http-badrequest
-                port:
-                  name: use-annotation
     - host: rpc.titan-goerli.tokamak.network
       http:
         paths:

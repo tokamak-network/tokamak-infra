@@ -19,13 +19,13 @@ prometheus:
             matchLabels:
               app: prometheus
     initContainers:
-      - command: ["chown","-R","1000:2000","/prometheus"]
+      - command: ['chown', '-R', '1000:2000', '/prometheus']
         image: busybox
         name: prometheus-data-permission-fix
         volumeMounts:
-        - mountPath: /prometheus
-          name: prometheus-pvc
-          subPath: prometheus-db
+          - mountPath: /prometheus
+            name: prometheus-pvc
+            subPath: prometheus-db
         securityContext:
           runAsNonRoot: false
           runAsUser: 0
@@ -44,7 +44,6 @@ grafana:
       alb.ingress.kubernetes.io/ssl-redirect: '443'
       alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/c49d3b9b-6795-4cf3-820a-515f80d12ce2
     hosts:
-      - goerli.grafana.tokamak.network
       - grafana.titan-goerli.tokamak.network
   resources:
     requests:

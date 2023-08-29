@@ -118,6 +118,19 @@ resource "helm_release" "aws-load-balancer-controller" {
   depends_on = [null_resource.kubectl, module.lb_controller_role, aws_iam_role_policy.controller]
 }
 
+module "external_dns" {
+  source  = "DNXLabs/eks-external-dns/aws"
+  version = "0.2.0"
+
+  cluster_name                     = var.cluster_name
+  cluster_identity_oidc_issuer     = var.cluster_oidc_issuer_url
+  cluster_identity_oidc_issuer_arn = var.oidc_provider_arn
+  helm_repo_url                    = "https://kubernetes-sigs.github.io/external-dns"
+  helm_chart_version               = ""
+
+  depends_on = [null_resource.kubectl, helm_release.aws-load-balancer-controller, var.aws_acm_certificate_validation]
+}
+
 resource "kubernetes_storage_class" "efs-sc" {
   metadata {
     name = "efs-sc"
@@ -156,7 +169,7 @@ resource "helm_release" "argocd" {
     file("../ops/argocd/override_values/${var.network_name}/values.yaml")
   ]
 
-  depends_on = [null_resource.kubectl, helm_release.aws-load-balancer-controller]
+  depends_on = [null_resource.kubectl, helm_release.aws-load-balancer-controller, module.external_dns]
 }
 
 data "kustomization_build" "argocd_applications" {

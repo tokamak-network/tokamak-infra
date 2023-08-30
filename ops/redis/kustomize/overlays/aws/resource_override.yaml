@@ -6,8 +6,8 @@ spec:
   template:
     spec:
       containers:
-      - name: redis
-        resources:
-          requests:
-            cpu: 0.5
-            memory: 0.75Gi
+        - name: redis
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 0.75Gi

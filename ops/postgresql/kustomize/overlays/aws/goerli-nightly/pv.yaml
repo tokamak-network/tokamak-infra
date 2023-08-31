@@ -9,9 +9,9 @@ spec:
     storage: 100Gi
   volumeMode: Filesystem
   accessModes:
-  - ReadWriteMany
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
   storageClassName: efs-sc
   csi:
     driver: efs.csi.aws.com
-    volumeHandle: fs-04cae73a29e77a73f
+    volumeHandle: fs-08b35f2bb5ab229d9

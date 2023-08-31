@@ -1,0 +1,11 @@
+profile         = "prod" # you must change it in your local file ~/.aws/config
+region          = "ap-northeast-2"
+azs             = ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
+network_name    = "mainnet"
+cluster_name    = "titan"
+cluster_version = 1.27
+vpc_cidr        = "192.168.0.0/16"
+vpc_name        = "titan/VPC"
+efs_name        = "titan"
+parent_domain   = "titan.tokamak.network"
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana"]

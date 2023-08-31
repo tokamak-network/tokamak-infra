@@ -1,0 +1,10 @@
+profile         = "dev"
+region          = "ap-northeast-3"
+azs             = ["ap-northeast-3a", "ap-northeast-3b"]
+cluster_name    = "terraform-test"
+cluster_version = 1.27
+vpc_cidr        = "192.168.0.0/16"
+vpc_name        = "terraform-test/VPC"
+efs_name        = "terraform-test"
+parent_domain   = "terraform-test.tokamak.network"
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana", "gateway"]

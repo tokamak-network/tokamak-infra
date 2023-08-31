@@ -44,8 +44,8 @@ grafana:
       alb.ingress.kubernetes.io/ssl-redirect: '443'
       external-dns.alpha.kubernetes.io/hostname: grafana.titan-goerli-nightly.tokamak.network
     tls:
-      hosts:
-        - grafana.titan-goerli-nightly.tokamak.network
+      - hosts:
+          - grafana.titan-goerli-nightly.tokamak.network
     hosts:
       - grafana.titan-goerli-nightly.tokamak.network
   resources:

@@ -9,10 +9,13 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/9e188da9-426c-4ea7-9d04-659fc7c505c6
+    external-dns.alpha.kubernetes.io/hostname: thegraph.titan-goerli-nightly.tokamak.network
 spec:
+  tls:
+    - hosts:
+        - thegraph.titan-goerli-nightly.tokamak.network
   rules:
-    - host: goerli-nightly.thegraph.tokamak.network
+    - host: thegraph.titan-goerli-nightly.tokamak.network
       http:
         paths:
           # - path: /deploy
@@ -55,10 +58,13 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/9e188da9-426c-4ea7-9d04-659fc7c505c6
+    external-dns.alpha.kubernetes.io/hostname: ipfs.titan-goerli-nightly.tokamak.network
 spec:
+  tls:
+    - hosts:
+        - ipfs.titan-goerli-nightly.tokamak.network
   rules:
-    - host: goerli-nightly.ipfs.tokamak.network
+    - host: ipfs.titan-goerli-nightly.tokamak.network
       # http:
       #   paths:
       #     - path: /

@@ -12,7 +12,7 @@ metadata:
   name: aws-logging
   namespace: aws-observability
 data:
-  flb_log_cw: "true"
+  flb_log_cw: 'true'
   filters.conf: |
     [FILTER]
         Name parser
@@ -40,7 +40,7 @@ data:
     [OUTPUT]
         Name  es
         Match *
-        Host  goerli-nightly.es.private.tokamak.network
+        Host  es.private.titan-goerli-nightly.tokamak.network
         Port  80
         Index titan-goerli-nightly
         Type  log

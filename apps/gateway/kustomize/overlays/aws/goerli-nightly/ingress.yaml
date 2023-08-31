@@ -8,10 +8,13 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/654905f5-6737-4650-861a-816ced2d81e4
+    external-dns.alpha.kubernetes.io/hostname: gateway.titan-goerli-nightly.tokamak.network
 spec:
+  tls:
+    - hosts:
+        - gateway.titan-goerli-nightly.tokamak.network
   rules:
-    - host: goerli-nightly.gateway.tokamak.network
+    - host: gateway.titan-goerli-nightly.tokamak.network
       http:
         paths:
           - path: /

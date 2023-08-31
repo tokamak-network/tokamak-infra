@@ -1,6 +1,6 @@
 profile         = "prod" # you must change it in your local file ~/.aws/config
 region          = "ap-northeast-2"
-azs             = ["ap-northeast-2a", "ap-northeast-2b"]
+azs             = ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
 network_name    = "goerli"
 cluster_name    = "titan-goerli"
 cluster_version = 1.27

@@ -10,6 +10,28 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     external-dns.alpha.kubernetes.io/hostname: thegraph.titan-goerli-nightly.tokamak.network
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "graph-node-svc",
+              "servicePort": "8020"
+            }
+          ]
+        }
+      }
 spec:
   tls:
     - hosts:
@@ -18,13 +40,13 @@ spec:
     - host: thegraph.titan-goerli-nightly.tokamak.network
       http:
         paths:
-          # - path: /deploy
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: graph-node-svc
-          #       port:
-          #         number: 8020
+          - path: /deploy
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation
           - path: /subgraphs
             pathType: Prefix
             backend:
@@ -59,18 +81,40 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     external-dns.alpha.kubernetes.io/hostname: ipfs.titan-goerli-nightly.tokamak.network
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "ipfs-svc",
+              "servicePort": "5001"
+            }
+          ]
+        }
+      }
 spec:
   tls:
     - hosts:
         - ipfs.titan-goerli-nightly.tokamak.network
   rules:
     - host: ipfs.titan-goerli-nightly.tokamak.network
-      # http:
-      #   paths:
-      #     - path: /
-      #       pathType: Prefix
-      #       backend:
-      #         service:
-      #           name: ipfs-svc
-      #           port:
-      #             number: 5001
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation

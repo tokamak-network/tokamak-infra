@@ -10,18 +10,43 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/f58d87ca-6a31-4f49-a95f-56111ef81a6b
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "graph-node-svc",
+              "servicePort": "8020"
+            }
+          ]
+        }
+      }
 spec:
+  tls:
+    - hosts:
+        - thegraph.titan.tokamak.network
   rules:
     - host: thegraph.titan.tokamak.network
       http:
         paths:
-          # - path: /deploy
-          #   pathType: Prefix
-          #   backend:
-          #     service:
-          #       name: graph-node-svc
-          #       port:
-          #         number: 8020
+          - path: /deploy
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation
           - path: /subgraphs
             pathType: Prefix
             backend:
@@ -56,15 +81,40 @@ metadata:
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/f58d87ca-6a31-4f49-a95f-56111ef81a6b
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "ipfs-svc",
+              "servicePort": "5001"
+            }
+          ]
+        }
+      }
 spec:
+  tls:
+    - hosts:
+        - ipfs.titan.tokamak.network
   rules:
     - host: ipfs.titan.tokamak.network
-      # http:
-      #   paths:
-      #     - path: /
-      #       pathType: Prefix
-      #       backend:
-      #         service:
-      #           name: ipfs-svc
-      #           port:
-      #             number: 5001
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation

@@ -16,7 +16,7 @@
       "endpoint": "http://localhost:8545",
       "oppositeChainId": 5,
       "iconURL": "/logos/tokamak-symbol.svg",
-      "explorer": "https://goerli-nightly.explorer.tokamak.network/tx/"
+      "explorer": "https://explorer.titan-goerli-nightly.tokamak.network/tx/"
     }
   ],
   "SUPPORTED_TOKENS": [

@@ -13,10 +13,10 @@
       "name": "Tokamak Goerli Nightly",
       "type": "L2",
       "chainId": 5051,
-      "endpoint": "https://goerli-nightly.optimism.tokamak.network",
+      "endpoint": "https://rpc.titan-goerli-nightly.tokamak.network",
       "oppositeChainId": 5,
       "iconURL": "/logos/tokamak-symbol.svg",
-      "explorer": "https://goerli-nightly.explorer.tokamak.network/"
+      "explorer": "https://explorer.titan-goerli-nightly.tokamak.network/"
     }
   ],
   "SUPPORTED_TOKENS": [

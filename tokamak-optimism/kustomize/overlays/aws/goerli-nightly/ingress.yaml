@@ -8,7 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/group.name: l2geth
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:156512274928:certificate/44644792-00cb-40e7-aa6f-de1943762563
+    external-dns.alpha.kubernetes.io/hostname: rpc.titan-goerli-nightly.tokamak.network
     alb.ingress.kubernetes.io/conditions.ws-rule: >
       [
         {
@@ -37,8 +37,11 @@ metadata:
         }
       }
 spec:
+  tls:
+    - hosts:
+        - rpc.titan-goerli-nightly.tokamak.network
   rules:
-    - host: goerli-nightly.optimism.tokamak.network
+    - host: rpc.titan-goerli-nightly.tokamak.network
       http:
         paths:
           - path: /
@@ -77,7 +80,7 @@ metadata:
       }
 spec:
   rules:
-    - host: goerli-nightly.optimism.tokamak.network
+    - host: rpc.titan-goerli-nightly.tokamak.network
       http:
         paths:
           - path: /

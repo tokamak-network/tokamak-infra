@@ -8,4 +8,4 @@ vpc_cidr        = "192.168.0.0/16"
 vpc_name        = "titan/VPC"
 efs_name        = "titan"
 parent_domain   = "titan.tokamak.network"
-service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana"]
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "ipfs", "grafana", "kibana"]

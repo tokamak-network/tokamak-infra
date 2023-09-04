@@ -8,4 +8,4 @@ vpc_cidr        = "192.168.0.0/16"
 vpc_name        = "titan-goerli/VPC"
 efs_name        = "titan-goerli"
 parent_domain   = "titan-goerli.tokamak.network"
-service_names   = ["argocd", "rpc", "explorer", "thegraph", "grafana", "kibana", "gateway"]
+service_names   = ["argocd", "rpc", "explorer", "thegraph", "ipfs", "grafana", "kibana", "gateway"]

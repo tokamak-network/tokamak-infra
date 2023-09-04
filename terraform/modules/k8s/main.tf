@@ -139,8 +139,7 @@ resource "kubernetes_storage_class" "efs-sc" {
 }
 
 module "eks-external-secrets" {
-  source  = "DNXLabs/eks-external-secrets/aws"
-  version = "2.1.0"
+  source = "github.com/rlgns98kr/terraform-aws-eks-external-secrets"
 
   enabled = true
 
@@ -148,6 +147,8 @@ module "eks-external-secrets" {
   cluster_identity_oidc_issuer     = var.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = var.oidc_provider_arn
   helm_chart_version               = ""
+  namespace                        = "default"
+  create_namespace                 = false
 
   settings = {
     "webhook" : {

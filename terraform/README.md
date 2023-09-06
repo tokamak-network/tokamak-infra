@@ -6,6 +6,7 @@ You can create, modify, delete them. And you can create the other environment.
 ### Prerequisite
 
 - Terraform ([install doc](https://developer.hashicorp.com/terraform/downloads))
+- AWS Route53 resource for `parents_domain` in `*.tfvars`
 
 ### Operate exist network environment
 

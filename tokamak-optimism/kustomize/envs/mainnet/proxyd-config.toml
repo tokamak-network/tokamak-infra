@@ -53,7 +53,7 @@ max_ws_conns = 0
 backends = ["office", "infura_business_plan"]
 
 [backend_groups.heavy_request]
-backends = ["infura_business_plan", "office"]
+backends = ["infura_business_plan"]
 
 [rpc_method_mappings]
 net_version = "main"

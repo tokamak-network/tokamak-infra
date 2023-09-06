@@ -14,9 +14,6 @@ configMapGenerator:
   - name: batch-submitter
     envs:
       - ./batch-submitter.env
-  - name: relayer
-    envs:
-      - ./relayer.env
   - name: common
     envs:
       - ./common.env

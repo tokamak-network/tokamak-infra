@@ -41,7 +41,7 @@ images:
 - name: onthertech/titan-gas-oracle
   newTag: nightly-0.1.12
 - name: onthertech/titan-l2geth
-  newTag: nightly-0.5.24
+  newTag: nightly-0.5.25
 - name: onthertech/titan-message-relayer
   newTag: nightly-0.5.13
 - name: onthertech/titan-proxyd

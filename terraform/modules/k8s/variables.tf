@@ -50,7 +50,7 @@ variable "oidc_provider_arn" {
 
 variable "aws_acm_certificate_validation" {
   description = "AWS ACM Certificatie Validation"
-  type = any
+  type        = any
 }
 
 variable "efs_id" {

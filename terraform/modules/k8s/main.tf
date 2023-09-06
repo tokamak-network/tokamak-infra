@@ -10,7 +10,7 @@ terraform {
 }
 
 locals {
-  lb_controller_iam_role_name        = "aws-load-balancer-controller-role"
+  lb_controller_iam_role_name        = "aws-load-balancer-controller-role-${var.cluster_name}"
   lb_controller_service_account_name = "aws-load-balancer-controller"
 }
 
@@ -28,12 +28,8 @@ provider "helm" {
 
 provider "kubernetes" {
   host                   = var.cluster_endpoint
+  token                  = data.aws_eks_cluster_auth.this.token
   cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    args        = ["eks", "get-token", "--cluster-name", var.cluster_name]
-    command     = "aws"
-  }
 }
 
 provider "kustomization" {
@@ -42,22 +38,26 @@ provider "kustomization" {
     endpoint                        = var.cluster_endpoint
     cluster_auth_base64             = var.cluster_certificate_authority_data
     aws_authenticator_command       = "aws"
-    aws_authenticator_command_args  = ["eks", "get-token", "--region", "${var.region}", "--cluster-name", "${var.cluster_name}", "--output", "json"]
+    aws_authenticator_command_args  = ["eks", "get-token", "--profile", "${var.profile}", "--region", "${var.region}", "--cluster-name", "${var.cluster_name}", "--output", "json"]
     aws_authenticator_env_variables = []
   })
 }
 
 resource "null_resource" "kubectl" {
   provisioner "local-exec" {
-    command = "aws eks --profile ${var.profile} --region ${var.region} update-kubeconfig --name ${var.cluster_name}"
+    command = "aws eks --profile ${var.profile} --region ${var.region} update-kubeconfig --name ${var.cluster_name} --kubeconfig ~/.kube/config_temp"
   }
 
   provisioner "local-exec" {
-    command = "kubectl patch deployment coredns -n kube-system --type json -p='[{\"op\": \"remove\", \"path\": \"/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type\"}]'"
+    command = "kubectl --kubeconfig ~/.kube/config_temp patch deployment coredns -n kube-system --type json -p='[{\"op\": \"remove\", \"path\": \"/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type\"}]'"
   }
 
   provisioner "local-exec" {
-    command = "kubectl rollout status deployment coredns -n kube-system"
+    command = "kubectl --kubeconfig ~/.kube/config_temp rollout status deployment coredns -n kube-system"
+  }
+
+  provisioner "local-exec" {
+    command = "rm -rf ~/.kube/config_temp"
   }
 
   depends_on = [var.fargate_profiles]

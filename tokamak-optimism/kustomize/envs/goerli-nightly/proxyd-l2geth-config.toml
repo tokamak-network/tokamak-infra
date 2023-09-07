@@ -34,6 +34,7 @@ ws_method_whitelist = [
   "debug_traceBlockByNumber",
   "debug_traceBlockByHash",
   "debug_traceBlockFromFile",
+  "debug_traceCall",
   "debug_traceTransaction",
   "debug_verbosity",
   "debug_vmodule",
@@ -185,6 +186,7 @@ debug_traceBlock = "l2geth"
 debug_traceBlockByNumber = "l2geth"
 debug_traceBlockByHash = "l2geth"
 debug_traceBlockFromFile = "l2geth"
+debug_traceCall = "l2geth"
 debug_traceTransaction = "l2geth"
 debug_verbosity = "l2geth"
 debug_vmodule = "l2geth"

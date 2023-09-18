@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-notif-config
+data:
+  l1-ws-url: 'wss://goerli.infura.io/ws/v3/053e5d95616744d4b30a80fb885bacb8'
+  l2-ws-url: 'wss://rpc.titan-goerli-nightly.tokamak.network'
+  slack-url: 'http://192.168.33.169:9090/slack'
+  l1-standard-bridge: '0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4'
+  l2-standard-bridge: '0x4200000000000000000000000000000000000010'
+  platform: 'GOERLI-NIGHTLY'

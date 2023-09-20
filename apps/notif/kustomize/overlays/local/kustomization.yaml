@@ -8,3 +8,6 @@ resources:
   - namespace.yaml
   - ../../bases
   - ../../envs/local
+
+patchesStrategicMerge:
+  - resource_override.yaml

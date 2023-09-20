@@ -8,4 +8,6 @@ data:
   slack-url: 'https://hooks.slack.com/services/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'
   l1-standard-bridge: '0xDE267f4A3812685dfEC5acD4e6e2E06b9e43F9A4'
   l2-standard-bridge: '0x4200000000000000000000000000000000000010'
+  l1-explorer: 'https://goerli.etherscan.io/tx'
+  l2-explorer: 'https://explorer.titan-goerli-nightly.tokamak.network/tx'
   platform: 'GOERLI-NIGHTLY'

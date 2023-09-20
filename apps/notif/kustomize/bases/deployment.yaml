@@ -13,47 +13,9 @@ spec:
         - name: app-notif
           image: onthertech/titan-events-listener:nightly
           imagePullPolicy: Always
-          env:
-            - name: L1_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l1-ws-url
-            - name: L2_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l2-ws-url
-            - name: SLACK_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: slack-url
-            - name: L1_STANDARD_BRIDGE
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l1-standard-bridge
-            - name: L2_STANDARD_BRIDGE
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l2-standard-bridge
-            - name: PLATFORM
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: platform
-            - name: L1_EXPLORER_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l1-explorer
-            - name: L2_EXPLORER_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: app-notif-config
-                  key: l2-explorer
+          envFrom:
+            - configMapRef:
+                name: notif-app-config
           resources:
             limits:
               cpu: 0.5

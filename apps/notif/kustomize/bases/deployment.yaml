@@ -11,7 +11,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: app-notif
-          image: onthertech/titan-events-listener
+          image: onthertech/tokamak-titan-events-listener:nightly
           imagePullPolicy: Always
           env:
             - name: L1_URL

@@ -11,8 +11,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: app-notif
-          image: notif-image
-          imagePullPolicy: IfNotPresent
+          image: onthertech/titan-events-listener
+          imagePullPolicy: Always
           env:
             - name: L1_URL
               valueFrom:
@@ -44,6 +44,16 @@ spec:
                 configMapKeyRef:
                   name: app-notif-config
                   key: platform
+            - name: L1_EXPLORER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-notif-config
+                  key: l1-explorer
+            - name: L2_EXPLORER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: app-notif-config
+                  key: l2-explorer
           resources:
             limits:
               cpu: 0.5

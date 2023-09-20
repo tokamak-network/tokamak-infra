@@ -8,7 +8,6 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internal
-    external-dns.alpha.kubernetes.io/hostname: es.private.titan-goerli-nightly.tokamak.network
 spec:
   rules:
     - host: es.private.titan-goerli-nightly.tokamak.network
@@ -33,7 +32,6 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    external-dns.alpha.kubernetes.io/hostname: kibana.titan-goerli-nightly.tokamak.network
 spec:
   tls:
     - hosts:

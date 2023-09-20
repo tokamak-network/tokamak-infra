@@ -8,7 +8,6 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/group.name: l2geth
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
-    external-dns.alpha.kubernetes.io/hostname: rpc.titan-goerli-nightly.tokamak.network
     alb.ingress.kubernetes.io/conditions.ws-rule: >
       [
         {

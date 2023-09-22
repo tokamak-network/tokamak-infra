@@ -34,18 +34,13 @@ function print_help() {
   echo
 }
 
-MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-ACTION=$1
-APP_NAME=$2
-APP_LIST=$(ls -d $MYPATH/*/ | rev | cut -f2 -d'/' | rev)
-
 while [[ $# -gt 0 ]]
 do
   option="$1"
   case $option in
     -n)
       NAMESPACE="$2"
-      shift
+      shift 2
       ;;
     *)
       POSITIONAL+=("$1")
@@ -54,6 +49,11 @@ do
   esac
 done
 set -- "${POSITIONAL[@]}"
+
+MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)"
+ACTION=$1
+APP_NAME=$2
+APP_LIST=$(ls -d $MYPATH/*/ | rev | cut -f2 -d'/' | rev)
 
 NAMESPACE_STR="-n app-${APP_NAME}"
 [[ $NAMESPACE ]] && NAMESPACE_STR="-n $NAMESPACE"
@@ -268,198 +268,198 @@ function get_tags() {
 }
 
 case $ACTION in
-  tag|tags)
-    image=$(get_resource_image $APP_NAME)
+tag | tags)
+  image=$(get_resource_image $APP_NAME)
 
-    if [ -z "$image" ]; then
-      echo "Error: could not find $APP_NAME image."
-      echo "$APP_NAME should be already created."
-      exit 1
-    fi
+  if [ -z "$image" ]; then
+    echo "Error: could not find $APP_NAME image."
+    echo "$APP_NAME should be already created."
+    exit 1
+  fi
 
-    tags=$(get_tags $image)
-    for tag in $tags; do
-      echo $tag
-      # [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
-    done
-    ;;
+  tags=$(get_tags $image)
+  for tag in $tags; do
+    echo $tag
+    # [[ "$tag" =~ ^release|^nightly|^latest ]] && echo $tag
+  done
+  ;;
 
-  create)
-    if [ "$2" == "list" ]; then
-      print_create_list
-      exit 0
-    fi
+create)
+  if [ "$2" == "list" ]; then
+    print_create_list
+    exit 0
+  fi
 
-    env_name=$3
-    cluster_name=$4
-    app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${env_name}
-    ENV_LIST=$(ls -d ${app_path}/../*/ | rev | cut -f2 -d'/' | rev)
-    CLUSTER_LIST=$(ls -d ${app_path}/*/ | rev | cut -f2 -d'/' | rev)
-    cluster_path=$app_path/${cluster_name}
+  env_name=$3
+  cluster_name=$4
+  app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${env_name}
+  ENV_LIST=$(ls -d ${app_path}/../*/ | rev | cut -f2 -d'/' | rev)
+  CLUSTER_LIST=$(ls -d ${app_path}/*/ | rev | cut -f2 -d'/' | rev)
+  cluster_path=$app_path/${cluster_name}
 
-    if !(check_app $APP_NAME); then
-      print_help
-      print_create_list
-      exit 1
-    fi
+  if !(check_app $APP_NAME); then
+    print_help
+    print_create_list
+    exit 1
+  fi
 
-    if !(check_cluster $cluster_name); then
-      print_help
-      print_create_list
-      exit 1
-    fi
+  if !(check_cluster $cluster_name); then
+    print_help
+    print_create_list
+    exit 1
+  fi
 
-    if !(check_env $env_name); then
-      print_help
-      print_create_list
-      exit 1
-    fi
+  if !(check_env $env_name); then
+    print_help
+    print_create_list
+    exit 1
+  fi
 
+  if !(ask_going); then
+    echo "aborted."
+    exit 0
+  fi
+
+  kubectl apply -k $cluster_path
+  ;;
+
+delete)
+  if [ "$2" == "list" ]; then
+    print_running_list
+    exit 0
+  fi
+
+  if !(check_running_pod $APP_NAME); then
+    echo "Error: could not find app ($APP_NAME)"
+    print_running_list
+    exit 1
+  fi
+
+  if !(ask_going); then
+    echo "aborted."
+    exit 0
+  fi
+
+  get_configmap
+
+  delete_app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
+
+  kubectl delete -k $delete_app_path
+  ;;
+
+update | upgrade)
+  if [ "$2" == "list" ]; then
+    print_running_list
+    exit 0
+  fi
+
+  if !(check_running_pod $APP_NAME); then
+    echo "Error: could not find app ($APP_NAME)"
+    print_running_list
+    exit 1
+  fi
+
+  if [ -z "$3" ]; then
+    echo "Error: write tag version you want to update or write 'config'"
+    exit 1
+  fi
+
+  if [[ "$3" =~ ^config$|^configmap$ ]]; then
     if !(ask_going); then
       echo "aborted."
       exit 0
     fi
-
-    kubectl apply -k $cluster_path
-    ;;
-
-  delete)
-    if [ "$2" == "list" ]; then
-      print_running_list
-      exit 0
-    fi
-
-    if !(check_running_pod $APP_NAME); then
-      echo "Error: could not find app ($APP_NAME)"
-      print_running_list
-      exit 1
-    fi
-
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
     get_configmap
+    update_configmap
+  else
+    image=$(get_resource_image $APP_NAME)
+    tagname=$3
 
-    delete_app_path=$MYPATH/${APP_NAME}/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
-
-    kubectl delete -k $delete_app_path
-    ;;
-
-  update|upgrade)
-    if [ "$2" == "list" ]; then
-      print_running_list
+    if [ "$tagname" == "list" ]; then
+      tags=$(get_tags $image)
+      for tag in $tags; do
+        echo $tag
+      done
       exit 0
-    fi
-
-    if !(check_running_pod $APP_NAME); then
-      echo "Error: could not find app ($APP_NAME)"
-      print_running_list
-      exit 1
-    fi
-
-    if [ -z "$3" ]; then
-      echo "Error: write tag version you want to update or write 'config'"
-      exit 1
-    fi
-
-    if [[ "$3" =~ ^config$|^configmap$ ]]; then
+    else
       if !(ask_going); then
         echo "aborted."
         exit 0
       fi
-      get_configmap
-      update_configmap
-    else
-      image=$(get_resource_image $APP_NAME)
-      tagname=$3
-
-      if [ "$tagname" == "list" ]; then
-        tags=$(get_tags $image)
-        for tag in $tags; do
-          echo $tag
-        done
-        exit 0
-      else
-        if !(ask_going); then
-          echo "aborted."
-          exit 0
-        fi
-        deployment_list=$(get_resource_list deployments)
-        statefulset_list=$(get_resource_list statefulsets)
-        res=0
-        for name in $deployment_list; do
-          if [ "app-$APP_NAME" == $name ]; then
-            update_image deployment $name $tagname
-            res=1
-          fi
-        done
-
-        for name in $statefulset_list; do
-          if [ "app-$APP_NAME" == $name ]; then
-            update_image statefulset $name $tagname
-            res=1
-          fi
-        done
-
-        if [ $res == 0 ]; then
-          echo "Error: could not find resource ($APP_NAME)"
-          print_running_list
-          exit 1
-        fi
-      fi
-    fi
-    ;;
-
-  reload|restart)
-    if [ "$2" == "list" ]; then
-      print_running_list
-      exit 0
-    fi
-
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
-    res=0
-    deployment_list=$(get_resource_list deployments)
-    statefulset_list=$(get_resource_list statefulsets)
-
-    if [[ "$APP_NAME" == "all" ]];then
-      for name in $deployment_list; do
-        rollout_restart deployment $name
-      done
-
-      for name in $statefulset_list; do
-        rollout_restart statefulset $name
-      done
-    else
+      deployment_list=$(get_resource_list deployments)
+      statefulset_list=$(get_resource_list statefulsets)
+      res=0
       for name in $deployment_list; do
         if [ "app-$APP_NAME" == $name ]; then
-          rollout_restart deployment $name
+          update_image deployment $name $tagname
           res=1
         fi
       done
 
       for name in $statefulset_list; do
         if [ "app-$APP_NAME" == $name ]; then
-          rollout_restart statefulset $name
+          update_image statefulset $name $tagname
           res=1
         fi
       done
 
       if [ $res == 0 ]; then
-        echo "Error: could not find app ($APP_NAME)"
+        echo "Error: could not find resource ($APP_NAME)"
         print_running_list
         exit 1
       fi
     fi
-    ;;
+  fi
+  ;;
 
-  *)
-    print_help
-    exit 1
-    ;;
+reload | restart)
+  if [ "$2" == "list" ]; then
+    print_running_list
+    exit 0
+  fi
+
+  if !(ask_going); then
+    echo "aborted."
+    exit 0
+  fi
+
+  res=0
+  deployment_list=$(get_resource_list deployments)
+  statefulset_list=$(get_resource_list statefulsets)
+
+  if [[ "$APP_NAME" == "all" ]]; then
+    for name in $deployment_list; do
+      rollout_restart deployment $name
+    done
+
+    for name in $statefulset_list; do
+      rollout_restart statefulset $name
+    done
+  else
+    for name in $deployment_list; do
+      if [ "app-$APP_NAME" == $name ]; then
+        rollout_restart deployment $name
+        res=1
+      fi
+    done
+
+    for name in $statefulset_list; do
+      if [ "app-$APP_NAME" == $name ]; then
+        rollout_restart statefulset $name
+        res=1
+      fi
+    done
+
+    if [ $res == 0 ]; then
+      echo "Error: could not find app ($APP_NAME)"
+      print_running_list
+      exit 1
+    fi
+  fi
+  ;;
+
+*)
+  print_help
+  exit 1
+  ;;
 esac

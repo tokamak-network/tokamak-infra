@@ -34,18 +34,13 @@ function print_help() {
   echo
 }
 
-MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-ACTION=$1
-APP_NAME=$2
-APP_LIST=$(ls -d $MYPATH/*/ | rev | cut -f2 -d'/' | rev)
-
 while [[ $# -gt 0 ]]
 do
   option="$1"
   case $option in
     -n)
       NAMESPACE="$2"
-      shift
+      shift 2
       ;;
     *)
       POSITIONAL+=("$1")
@@ -54,6 +49,11 @@ do
   esac
 done
 set -- "${POSITIONAL[@]}"
+
+MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+ACTION=$1
+APP_NAME=$2
+APP_LIST=$(ls -d $MYPATH/*/ | rev | cut -f2 -d'/' | rev)
 
 NAMESPACE_STR="-n app-${APP_NAME}"
 [[ $NAMESPACE ]] && NAMESPACE_STR="-n $NAMESPACE"

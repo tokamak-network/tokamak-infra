@@ -139,7 +139,8 @@ resource "kubernetes_storage_class" "efs-sc" {
 }
 
 module "eks-external-secrets" {
-  source = "github.com/rlgns98kr/terraform-aws-eks-external-secrets"
+  source  = "DNXLabs/eks-external-secrets/aws"
+  version = "2.2.0"
 
   enabled = true
 

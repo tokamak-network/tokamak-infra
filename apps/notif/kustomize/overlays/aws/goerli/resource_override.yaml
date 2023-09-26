@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-notif
+spec:
+  template:
+    spec:
+      containers:
+        - name: app-notif
+          image: onthertech/titan-events-listener:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 0.5
+              memory: 0.75Gi
+          envFrom:
+            - configMapRef:
+                name: notif-app-config

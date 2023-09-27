@@ -1,19 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: app-notif
+  name: notif
 spec:
   project: default
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
     path: apps/notif/kustomize/overlays/aws/goerli-nightly
-    targetRevision: OR-1000-tokamak-titan-infra-add-some-code-for-tokamak-titan-event-listener
+    targetRevision: main
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: app-notif
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-    automated:
-      selfHeal: true
-      prune: true

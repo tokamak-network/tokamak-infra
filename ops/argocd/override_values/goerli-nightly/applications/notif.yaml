@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    repoURL: 'git@github.com:tokamak-network/tokamak-titan-infra.git'
     path: apps/notif/kustomize/overlays/aws/goerli-nightly
     targetRevision: OR-1000-tokamak-titan-infra-add-some-code-for-tokamak-titan-event-listener
   destination:

@@ -13,3 +13,4 @@ resources:
   - metrics.yaml
   - logs.yaml
   - gateway.yaml
+  - notif.yaml

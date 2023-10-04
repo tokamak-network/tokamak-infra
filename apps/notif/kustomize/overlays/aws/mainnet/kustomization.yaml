@@ -6,8 +6,8 @@ generatorOptions:
 
 resources:
   - namespace.yaml
-  - ../../bases
-  - ../../envs/goerli-nightly
+  - ../../../bases
+  - ../../../envs/mainnet
 
 patchesStrategicMerge:
   - resource_override.yaml

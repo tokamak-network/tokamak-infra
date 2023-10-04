@@ -12,3 +12,4 @@ resources:
   - redis.yaml
   - metrics.yaml
   - logs.yaml
+  - notif.yaml

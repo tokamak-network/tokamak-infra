@@ -8,6 +8,8 @@ spec:
     spec:
       containers:
         - name: app-notif
+          image: onthertech/titan-events-listener:latest
+          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: notif-app-config

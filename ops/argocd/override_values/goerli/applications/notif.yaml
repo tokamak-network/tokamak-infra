@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: notif
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    path: apps/notif/kustomize/overlays/aws/goerli
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: app-notif
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

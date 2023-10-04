@@ -8,10 +8,6 @@ spec:
     spec:
       containers:
         - name: app-notif
-          resources:
-            limits:
-              cpu: 0.5
-              memory: 0.75Gi
           envFrom:
             - configMapRef:
                 name: notif-app-config

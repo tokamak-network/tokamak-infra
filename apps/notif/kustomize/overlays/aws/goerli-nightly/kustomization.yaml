@@ -5,9 +5,12 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - namespace.yaml
-  - ../../../bases
-  - ../../../envs/goerli-nightly
+- namespace.yaml
+- ../../../bases
+- ../../../envs/goerli-nightly
 
 patchesStrategicMerge:
-  - resource_override.yaml
+- resource_override.yaml
+images:
+- name: onthertech/titan-events-listener
+  newTag: nightly-ab3d55b7

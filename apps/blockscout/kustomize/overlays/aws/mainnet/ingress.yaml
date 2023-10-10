@@ -8,8 +8,10 @@ metadata:
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-2:005310045109:certificate/f58d87ca-6a31-4f49-a95f-56111ef81a6b
 spec:
+  tls:
+    - hosts:
+        - explorer.titan.tokamak.network
   rules:
     - host: explorer.titan.tokamak.network
       http:

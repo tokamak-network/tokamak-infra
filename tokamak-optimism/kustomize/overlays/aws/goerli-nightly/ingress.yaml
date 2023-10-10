@@ -6,8 +6,8 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/group.name: l2geth
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/group.name: titan-goerli-nightly
     alb.ingress.kubernetes.io/conditions.ws-rule: >
       [
         {
@@ -66,8 +66,8 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/group.name: l2geth
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+    alb.ingress.kubernetes.io/group.name: titan-goerli-nightly
     alb.ingress.kubernetes.io/actions.http-badrequest: >
       {
         "type": "fixed-response",

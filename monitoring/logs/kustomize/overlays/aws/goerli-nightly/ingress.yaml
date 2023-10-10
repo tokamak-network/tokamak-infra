@@ -8,7 +8,6 @@ metadata:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/scheme: internal
-    alb.ingress.kubernetes.io/group.name: titan-goerli-nightly
 spec:
   rules:
     - host: es.private.titan-goerli-nightly.tokamak.network

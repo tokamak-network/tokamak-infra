@@ -6,42 +6,41 @@ generatorOptions:
 
 # - ../../../bases/gas-oracle
 resources:
-- ../../../bases/data-transport-layer
-- ../../../bases/l2geth
-- ../../../bases/l2geth-replica
-- ../../../bases/batch-submitter
-- ../../../bases/proxyd
-- ../../../bases/proxyd-l2geth
-- ../../../bases/roles
-- ingress.yaml
-- sc.yaml
-- pv.yaml
-- pvc.yaml
-- aws-logging.yaml
-- secretstore.yaml
-- externalsecret.yaml
-- ../../../envs/goerli
-- ../../../scripts
+  - ../../../bases/data-transport-layer
+  - ../../../bases/l2geth
+  - ../../../bases/l2geth-replica
+  - ../../../bases/batch-submitter
+  - ../../../bases/proxyd
+  - ../../../bases/proxyd-l2geth
+  - ../../../bases/roles
+  - ingress.yaml
+  - pv.yaml
+  - pvc.yaml
+  - aws-logging.yaml
+  - secretstore.yaml
+  - externalsecret.yaml
+  - ../../../envs/goerli
+  - ../../../scripts
 
 patchesStrategicMerge:
-- resource_override.yaml
-- service_override.yaml
+  - resource_override.yaml
+  - service_override.yaml
 
 configMapGenerator:
-- literals:
-  - CLUSTER_NAME=goerli
-  - ENV_NAME=aws
-  name: chain-config
+  - literals:
+      - CLUSTER_NAME=goerli
+      - ENV_NAME=aws
+    name: chain-config
 images:
-- name: onthertech/titan-batch-submitter-service
-  newTag: release-0.1.15
-- name: onthertech/titan-data-transport-layer
-  newTag: release-0.1.15
-- name: onthertech/titan-gas-oracle
-  newTag: release-0.1.15
-- name: onthertech/titan-l2geth
-  newTag: release-0.1.15
-- name: onthertech/titan-message-relayer
-  newTag: release-0.1.15
-- name: onthertech/titan-proxyd
-  newTag: release-0.1.15
+  - name: onthertech/titan-batch-submitter-service
+    newTag: release-0.1.15
+  - name: onthertech/titan-data-transport-layer
+    newTag: release-0.1.15
+  - name: onthertech/titan-gas-oracle
+    newTag: release-0.1.15
+  - name: onthertech/titan-l2geth
+    newTag: release-0.1.15
+  - name: onthertech/titan-message-relayer
+    newTag: release-0.1.15
+  - name: onthertech/titan-proxyd
+    newTag: release-0.1.15

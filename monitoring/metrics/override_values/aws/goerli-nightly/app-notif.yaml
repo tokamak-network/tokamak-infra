@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: my-service-monitor
+
+spec:
+  selector:
+    matchLabels:
+      app: app-notif-svc
+  endpoints:
+    - targetPort: 80
+      interval: 15s

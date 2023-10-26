@@ -10,7 +10,7 @@ prometheus:
       - job_name: app-notif
         static_configs:
           - targets:
-              - app-notif-svc:8080
+              - app-notif-svc.app-notif:8080
       - job_name: data-transport-layer
         static_configs:
           - targets:

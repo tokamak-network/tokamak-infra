@@ -25,3 +25,9 @@ configMapGenerator:
     options:
       labels:
         grafana_dashboard: '1'
+  - name: app-notif-dashboards
+    files:
+      - app_notif_dashboard.json
+    options:
+      labels:
+        grafana_dashboard: '1'

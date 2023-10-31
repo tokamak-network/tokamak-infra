@@ -13,4 +13,4 @@ patchesStrategicMerge:
 - resource_override.yaml
 images:
 - name: onthertech/titan-events-listener
-  newTag: nightly-c6317ee1
+  newTag: nightly-0ba8e79d

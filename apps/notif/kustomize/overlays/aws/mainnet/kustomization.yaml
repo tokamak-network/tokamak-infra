@@ -13,4 +13,4 @@ patchesStrategicMerge:
 - resource_override.yaml
 images:
 - name: onthertech/titan-events-listener
-  newTag: release-0.1.2
+  newTag: release-0.1.3

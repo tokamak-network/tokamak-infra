@@ -34,14 +34,14 @@ configMapGenerator:
   name: chain-config
 images:
 - name: onthertech/titan-batch-submitter-service
-  newTag: nightly-0.1.15
+  newTag: nightly-
 - name: onthertech/titan-data-transport-layer
-  newTag: nightly-0.5.47
+  newTag: nightly-
 - name: onthertech/titan-gas-oracle
-  newTag: nightly-0.1.12
+  newTag: nightly-
 - name: onthertech/titan-l2geth
-  newTag: nightly-0.5.26
+  newTag: nightly-
 - name: onthertech/titan-message-relayer
-  newTag: nightly-0.5.13
+  newTag: nightly-
 - name: onthertech/titan-proxyd
-  newTag: nightly-3.10.5
+  newTag: nightly-

@@ -11,7 +11,7 @@ spec:
           resources:
             requests:
               cpu: 0.5
-              memory: 1.25Gi
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -25,7 +25,7 @@ spec:
           resources:
             requests:
               cpu: 0.5
-              memory: 1.25Gi
+              memory: 0.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -38,22 +38,8 @@ spec:
         - name: l2geth
           resources:
             requests:
-              cpu: 1
-              memory: 1.75Gi
-# ---
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: relayer
-# spec:
-#   template:
-#     spec:
-#       containers:
-#         - name: relayer
-#           resources:
-#             requests:
-#               cpu: 0.5
-#               memory: 0.75Gi
+              cpu: 2
+              memory: 3.75Gi
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -67,4 +53,18 @@ spec:
           resources:
             requests:
               cpu: 0.5
-              memory: 1.75Gi
+              memory: 0.75Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxyd-l2geth
+spec:
+  template:
+    spec:
+      containers:
+        - name: proxyd-l2geth
+          resources:
+            requests:
+              cpu: 0.5
+              memory: 0.75Gi

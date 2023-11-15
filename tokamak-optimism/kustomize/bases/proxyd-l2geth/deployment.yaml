@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: proxyd-l2geth
 spec:
-  replicas: 1
+  replicas: 2
   template:
     spec:
       terminationGracePeriodSeconds: 10
@@ -12,7 +12,12 @@ spec:
       initContainers:
         - name: wait-for-redis
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;',
+            ]
       containers:
         - name: proxyd-l2geth
           image: onthertech/titan-proxyd

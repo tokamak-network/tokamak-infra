@@ -51,8 +51,8 @@ grafana:
       - grafana.titan-goerli.tokamak.network
   resources:
     requests:
-      cpu: 250m
-      memory: 256Mi
+      cpu: 500m
+      memory: 0.75Gi
   sidecar:
     provider:
       allowUiUpdates: true

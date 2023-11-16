@@ -25,4 +25,4 @@ configMapGenerator:
   name: app-blockscout-config
 images:
 - name: onthertech/titan-explorer
-  newTag: release-1.2.6
+  newTag: release-1.2.7

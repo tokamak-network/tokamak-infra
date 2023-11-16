@@ -66,5 +66,5 @@ spec:
         - name: proxyd-l2geth
           resources:
             requests:
-              cpu: 0.5
-              memory: 0.75Gi
+              cpu: 1
+              memory: 1.75Gi

@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: proxyd-l2geth
 spec:
-  replicas: 1
+  replicas: 2
   template:
     spec:
       terminationGracePeriodSeconds: 10

@@ -9,6 +9,10 @@ spec:
       port: 8545
       protocol: TCP
       targetPort: 8080
+    - name: ws
+      port: 8546
+      protocol: TCP
+      targetPort: 8085
     - name: metric
       port: 9761
       protocol: TCP

@@ -42,6 +42,6 @@ images:
 - name: onthertech/titan-l2geth
   newTag: nightly-0.5.26
 - name: onthertech/titan-message-relayer
-  newTag: nightly-0.5.14
+  newTag: nightly-0.5.15
 - name: onthertech/titan-proxyd
   newTag: nightly-3.10.6

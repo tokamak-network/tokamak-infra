@@ -1,61 +1,80 @@
-module "waf" {
-  source  = "umotif-public/waf-webaclv2/aws"
+resource "aws_wafv2_web_acl" "block_ddos" {
+  name = "${var.cluster_name}-block-ddos"
+  scope = "REGIONAL"
 
-  name_prefix = "${var.cluster_name}-block-ddos"
+  default_action {
+    allow {}
+  }
 
-  allow_default_action = true
+  rule {
+    name = "AWS-AWSManagedRulesAnonymousIpList"
+    priority = 0
 
-  create_alb_association = false
+    override_action {
+      none {}
+    }
 
-  visibility_config = {
+    statement {
+      managed_rule_group_statement {
+        name = "AWSManagedRulesAnonymousIpList"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled = true
+      cloudwatch_metrics_enabled = true
+      metric_name = "AWS-AWSManagedRulesAnonymousIpList"
+    }
+  }
+
+  rule {
+    name = "AWS-AWSManagedRulesAmazonIpReputationList"
+    priority = 1
+
+    override_action {
+      none {}
+    }
+
+    statement {
+      managed_rule_group_statement {
+        name = "AWSManagedRulesAmazonIpReputationList"
+        vendor_name = "AWS"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled = true
+      cloudwatch_metrics_enabled = true
+      metric_name = "AWS-AWSManagedRulesAnonymousIpList"
+    }
+  }
+
+  rule {
+    name = "block_too_many_request"
+    priority = 2
+
+    action {
+      block {}
+    }
+
+    statement {
+      rate_based_statement {
+        limit = 30000
+        aggregate_key_type = "IP"
+      }
+    }
+
+    visibility_config {
+      sampled_requests_enabled = true
+      cloudwatch_metrics_enabled = true
+      metric_name = "block_too_many_request"
+    }
+  }
+
+  visibility_config {
     cloudwatch_metrics_enabled = false
     metric_name                = "${var.cluster_name}-waf-main-metrics"
     sampled_requests_enabled   = false
   }
-
-  rules = [
-    {
-      name = "AWS-AWSManagedRulesAnonymousIpList"
-      priority = 0
-      managed_rule_group_statement = {
-          vendor_name = "AWS"
-          name = "AWSManagedRulesAnonymousIpList"
-      }
-      override_action = "none"
-      visibility_config = {
-        sampled_requests_enabled = true
-        cloudwatch_metrics_enabled = true
-        metric_name = "AWS-AWSManagedRulesAnonymousIpList"
-      }
-    },
-    {
-      name = "AWS-AWSManagedRulesAmazonIpReputationList"
-      priority = 1    
-      managed_rule_group_statement = {
-        vendor_name = "AWS"
-        name = "AWSManagedRulesAmazonIpReputationList"
-      }
-      override_action = "none"
-      visibility_config = {
-        sampled_requests_enabled = true
-        cloudwatch_metrics_enabled = true
-        metric_name = "AWS-AWSManagedRulesAmazonIpReputationList"
-      }
-    },
-    {
-      name = "block_too_many_request"
-      priority = 2
-      rate_based_statement = {
-        limit = 30000
-        evaluation_window_sec = 300
-        aggregate_key_type = "IP"
-      }
-      action = "block"
-      visibility_config = {
-        sampled_requests_enabled = true
-        cloudwatch_metrics_enabled = true
-        metric_name = "block_too_many_request"
-      }
-    }
-  ]
 }

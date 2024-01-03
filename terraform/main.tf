@@ -81,16 +81,16 @@ module "waf" {
   cluster_name = module.eks.cluster_name
 }
 
-module "s3_elb" {
+module "s3_alb" {
   source = "./modules/aws/s3"
 
-  bucket_name = "s3-elb-access-logs-lambda-test"
+  bucket_name = var.alb_bucket_name
 }
 
 module "lambda" {
   source = "./modules/aws/lambda"
 
-  function_name = "alb_logs_to_elasticsearch"
+  function_name = var.lambda_function_name
 
   s3_bucket_id = module.s3_elb.bucket_id
   s3_bucket_arn = module.s3_elb.bucket_arn

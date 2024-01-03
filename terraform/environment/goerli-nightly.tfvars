@@ -9,3 +9,5 @@ vpc_name        = "titan-goerli-nightly/VPC"
 efs_name        = "titan-goerli-nightly"
 parent_domain   = "titan-goerli-nightly.tokamak.network"
 service_names   = ["argocd", "rpc", "explorer", "thegraph", "ipfs", "grafana", "kibana", "gateway"]
+alb_bucket_name = "s3-alb-access-logs-lambda-test"
+lambda_function_name = "alb_logs_to_elasticsearch"

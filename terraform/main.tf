@@ -92,6 +92,12 @@ module "lambda" {
 
   function_name = var.lambda_function_name
 
-  s3_bucket_id = module.s3_elb.bucket_id
-  s3_bucket_arn = module.s3_elb.bucket_arn
+  s3_bucket_id = module.s3_alb.bucket_id
+  s3_bucket_arn = module.s3_alb.bucket_arn
+
+  es_endpoint = var.es_endpoint
+  es_basic_auth = var.es_basic_auth
+
+  git_user_name = var.git_user_name
+  git_repo_name = var.git_repo_name
 }

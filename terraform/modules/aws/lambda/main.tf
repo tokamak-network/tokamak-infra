@@ -1,18 +1,39 @@
-data "archive_file" "source_zip" {
-  type = "zip"
+resource "null_resource" "pull_github_repo" {
+  triggers = {
+    on_version_change = "1.0"
+  }
 
-  source_dir = "${path.module}/functions/${var.function_name}"
-  output_path = "${path.module}/functions/zips/${var.function_name}/dist.zip"
+  provisioner "local-exec" {
+    working_dir = "${path.module}/functions/src"
+    command = "git clone https://github.com/${var.git_user_name}/${var.git_repo_name}"
+  }
+
+  provisioner "local-exec" {
+    working_dir = "${path.module}/functions/src/${var.git_repo_name}"
+    command = "make zip && mv ${var.git_repo_name}.zip ../../zips"
+  }
+}
+
+data "local_file" "zip_file" {
+  filename = "${path.module}/functions/zips/${var.git_repo_name}.zip"
+  depends_on = [ null_resource.pull_github_repo ]
 }
 
 resource "aws_lambda_function" "lambda" {
   function_name = var.function_name
-  filename = data.archive_file.source_zip.output_path
+  filename = data.local_file.zip_file.filename
 
   runtime = "nodejs16.x"
   handler = "index.handler"
 
   role = aws_iam_role.lambda_role.arn
+
+  environment {
+    variables = {
+      ES_ENDPOINT = var.es_endpoint
+      ES_BASIC_AUTH = var.es_basic_auth
+    }
+  }
 }
 
 resource "aws_iam_role" "lambda_role" {

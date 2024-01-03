@@ -53,3 +53,13 @@ variable "service_names" {
   description = "Service Names"
   type        = list(string)
 }
+
+variable "alb_bucket_name" {
+  description = "ALB Logs Bucket Name"
+  type        = string
+}
+
+variable "lambda_function_name" {
+  description = "Lambda Function Name"
+  type        = string 
+}

@@ -80,3 +80,22 @@ module "waf" {
 
   cluster_name = module.eks.cluster_name
 }
+
+module "s3_alb" {
+  source = "./modules/aws/s3"
+
+  bucket_name = var.alb_bucket_name
+}
+
+module "lambda" {
+  source = "./modules/aws/lambda"
+
+  source_version = var.lambda_source_version
+  function_name  = var.lambda_function_name
+  s3_bucket_id   = module.s3_alb.bucket_id
+  s3_bucket_arn  = module.s3_alb.bucket_arn
+  es_endpoint    = var.es_endpoint
+  es_basic_auth  = var.es_basic_auth
+  git_user_name  = var.git_user_name
+  git_repo_name  = var.git_repo_name
+}

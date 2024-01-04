@@ -61,7 +61,7 @@ variable "alb_bucket_name" {
 
 variable "lambda_function_name" {
   description = "Lambda Function Name"
-  type        = string 
+  type        = string
 }
 
 variable "es_endpoint" {

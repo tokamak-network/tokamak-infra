@@ -83,3 +83,8 @@ variable "git_repo_name" {
   description = "Git Repo Name for lambda function"
   type        = string
 }
+
+variable "lambda_source_version" {
+  description = "Version of source which lambda should run"
+  type        = string
+}

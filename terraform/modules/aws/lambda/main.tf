@@ -1,22 +1,35 @@
-resource "null_resource" "pull_github_repo" {
-  triggers = {
-    on_version_change = "1.0"
-  }
+resource "terraform_data" "pull_github_repo" {
+  triggers_replace = [
+    var.source_version
+  ]
 
   provisioner "local-exec" {
-    working_dir = "${path.module}/functions/src"
+    working_dir = path.module
     command = "git clone https://github.com/${var.git_user_name}/${var.git_repo_name}"
   }
 
   provisioner "local-exec" {
-    working_dir = "${path.module}/functions/src/${var.git_repo_name}"
-    command = "make zip && mv ${var.git_repo_name}.zip ../../zips"
+    working_dir = "${path.module}/${var.git_repo_name}"
+    command = "make zip && cp -f ${var.git_repo_name}.zip ../src"
+  }
+}
+
+resource "terraform_data" "del_github_repo" {
+  lifecycle {
+    replace_triggered_by = [ 
+      terraform_data.pull_github_repo,
+    ]
+  }
+
+  provisioner "local-exec" {
+    working_dir = path.module
+    command = "rm -rf ${var.git_repo_name}"
   }
 }
 
 data "local_file" "zip_file" {
-  filename = "${path.module}/functions/zips/${var.git_repo_name}.zip"
-  depends_on = [ null_resource.pull_github_repo ]
+  filename = "${path.module}/src/${var.git_repo_name}.zip"
+  depends_on = [ terraform_data.pull_github_repo ]
 }
 
 resource "aws_lambda_function" "lambda" {
@@ -25,6 +38,8 @@ resource "aws_lambda_function" "lambda" {
 
   runtime = "nodejs16.x"
   handler = "index.handler"
+
+  source_code_hash = data.local_file.zip_file.content_base64sha256
 
   role = aws_iam_role.lambda_role.arn
 

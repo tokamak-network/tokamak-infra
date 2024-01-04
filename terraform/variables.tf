@@ -53,3 +53,38 @@ variable "service_names" {
   description = "Service Names"
   type        = list(string)
 }
+
+variable "alb_bucket_name" {
+  description = "ALB Logs Bucket Name"
+  type        = string
+}
+
+variable "lambda_function_name" {
+  description = "Lambda Function Name"
+  type        = string 
+}
+
+variable "es_endpoint" {
+  description = "Elasticsearch Endpoint"
+  type        = string
+}
+
+variable "es_basic_auth" {
+  description = "Elasticsearch Basic Auth"
+  type        = string
+}
+
+variable "git_user_name" {
+  description = "Git User Name for lambda function"
+  type        = string
+}
+
+variable "git_repo_name" {
+  description = "Git Repo Name for lambda function"
+  type        = string
+}
+
+variable "lambda_source_version" {
+  description = "Version of source which lambda should run"
+  type        = string
+}

@@ -204,3 +204,27 @@ additionalPrometheusRulesMap:
             expr: 'probe_success{job="blackbox-eth-node-synced",target="https://goerli.rpc.tokamak.network"} == 1 and on() (message_relayer_balance_eth < 0.1 and message_relayer_balance_eth != 0)'
             annotations:
               message: "relayer balance is lower than 0.1 ether.\nrelayer balance: {{ printf \"message_relayer_balance_eth{instance=~'.*'}\" | query | first | value }} eth"
+      - name: 'mismatch the block number between CTC and L2 block head'
+        rules:
+        - alert: 'mismatch the block number between CTC and L2 block head'
+          labels:
+            group: tokamak
+            app: batch-submitter
+            severity: critical
+            severity_resolved: info
+          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != 0'
+          annotations:
+            message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
+            message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
+      - name: 'mismatch the block number between SCC and L2 block head'
+        rules:
+        - alert: 'mismatch the block number between SCC and L2 block head'
+          labels:
+            group: tokamak
+            app: batch-submitter
+            severity: critical
+            severity_resolved: info
+          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != 0'
+          annotations:
+            message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
+            message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'

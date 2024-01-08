@@ -99,3 +99,12 @@ module "lambda" {
   git_user_name  = var.git_user_name
   git_repo_name  = var.git_repo_name
 }
+
+module "rds" {
+  source = "./modules/aws/rds"
+
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
+
+  rds_name = "${var.cluster_name}-rds"
+}

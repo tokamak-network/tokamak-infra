@@ -1,5 +1,5 @@
 resource "aws_wafv2_web_acl" "block_ddos" {
-  name = "${var.cluster_name}-block-ddos"
+  name  = "${var.cluster_name}-block-ddos"
   scope = "REGIONAL"
 
   default_action {
@@ -7,7 +7,7 @@ resource "aws_wafv2_web_acl" "block_ddos" {
   }
 
   rule {
-    name = "AWS-AWSManagedRulesAnonymousIpList"
+    name     = "AWS-AWSManagedRulesAnonymousIpList"
     priority = 0
 
     override_action {
@@ -16,20 +16,20 @@ resource "aws_wafv2_web_acl" "block_ddos" {
 
     statement {
       managed_rule_group_statement {
-        name = "AWSManagedRulesAnonymousIpList"
+        name        = "AWSManagedRulesAnonymousIpList"
         vendor_name = "AWS"
       }
     }
 
     visibility_config {
-      sampled_requests_enabled = true
+      sampled_requests_enabled   = true
       cloudwatch_metrics_enabled = true
-      metric_name = "AWS-AWSManagedRulesAnonymousIpList"
+      metric_name                = "AWS-AWSManagedRulesAnonymousIpList"
     }
   }
 
   rule {
-    name = "AWS-AWSManagedRulesAmazonIpReputationList"
+    name     = "AWS-AWSManagedRulesAmazonIpReputationList"
     priority = 1
 
     override_action {
@@ -38,20 +38,20 @@ resource "aws_wafv2_web_acl" "block_ddos" {
 
     statement {
       managed_rule_group_statement {
-        name = "AWSManagedRulesAmazonIpReputationList"
+        name        = "AWSManagedRulesAmazonIpReputationList"
         vendor_name = "AWS"
       }
     }
 
     visibility_config {
-      sampled_requests_enabled = true
+      sampled_requests_enabled   = true
       cloudwatch_metrics_enabled = true
-      metric_name = "AWS-AWSManagedRulesAmazonIpReputationList"
+      metric_name                = "AWS-AWSManagedRulesAmazonIpReputationList"
     }
   }
 
   rule {
-    name = "block_too_many_request"
+    name     = "block_too_many_request"
     priority = 2
 
     action {
@@ -60,15 +60,15 @@ resource "aws_wafv2_web_acl" "block_ddos" {
 
     statement {
       rate_based_statement {
-        limit = 30000
+        limit              = 30000
         aggregate_key_type = "IP"
       }
     }
 
     visibility_config {
-      sampled_requests_enabled = true
+      sampled_requests_enabled   = true
       cloudwatch_metrics_enabled = true
-      metric_name = "block_too_many_request"
+      metric_name                = "block_too_many_request"
     }
   }
 

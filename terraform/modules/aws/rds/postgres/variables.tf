@@ -3,11 +3,6 @@ variable "rds_name" {
   type        = string
 }
 
-variable "rds_database_name" {
-  description = "RDS Database Name"
-  type        = string
-}
-
 variable "rds_allocated_storage" {
   description = "RDS Allocated Storage"
   type        = number

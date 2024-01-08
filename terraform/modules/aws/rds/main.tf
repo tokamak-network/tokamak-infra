@@ -1,5 +1,5 @@
 module "example_rds" {
-  source = "../_module/postgres"
+  source = "./postgres"
 
   vpc_id             = var.vpc_id
   private_subnet_ids = var.private_subnet_ids

@@ -191,7 +191,7 @@ additionalPrometheusRulesMap:
             severity: critical
             severity_resolved: info
           expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != 0'
-          for: 10m
+          for: 15m
           annotations:
             message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
             message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
@@ -204,7 +204,7 @@ additionalPrometheusRulesMap:
             severity: critical
             severity_resolved: info
           expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != 0'
-          for: 20m
+          for: 25m
           annotations:
             message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
             message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'

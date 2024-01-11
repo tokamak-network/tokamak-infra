@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titan-proposer
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: proposer
+          image: onthertech/titan-op-proposer
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8560
+              protocol: TCP
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: titan-proposer-config
+            - secretRef:
+                name: secret

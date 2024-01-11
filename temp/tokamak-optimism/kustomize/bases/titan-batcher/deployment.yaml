@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: titan-batcher
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: batcher
+          image: onthertech/titan-op-batcher
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8548
+              protocol: TCP
+          resources: {}
+          envFrom:
+            - configMapRef:
+                name: titan-batcher-config
+            - secretRef:
+                name: secret

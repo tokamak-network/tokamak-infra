@@ -1,0 +1,10 @@
+source:
+  kind: ConfigMap
+  name: chain-config
+  fieldPath: data.L2_ETH_RPC
+targets:
+  - select:
+      kind: ConfigMap
+      name: titan-batcher-config
+    fieldPaths:
+      - data.OP_BATCHER_L2_ETH_RPC

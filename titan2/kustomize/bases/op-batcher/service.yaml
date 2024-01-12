@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: titan-batcher-svc
+  name: op-batcher-svc
 spec:
+  selector:
+    app: op-batcher
   ports:
     - name: http
       port: 8548
       protocol: TCP
       targetPort: 8548
-  selector:
-    app: titan-batcher

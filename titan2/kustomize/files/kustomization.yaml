@@ -17,3 +17,4 @@ configMapGenerator:
     files:
       - ./wait-for-l1.sh
       - ./wait-for-l2.sh
+      - ./wait-for-rollup.sh

@@ -49,7 +49,8 @@ resource "null_resource" "kubectl" {
   }
 
   provisioner "local-exec" {
-    command = "kubectl --kubeconfig ~/.kube/config_temp patch deployment coredns -n kube-system --type json -p='[{\"op\": \"remove\", \"path\": \"/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type\"}]'"
+    command    = "kubectl --kubeconfig ~/.kube/config_temp patch deployment coredns -n kube-system --type json -p='[{\"op\": \"remove\", \"path\": \"/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type\"}]'"
+    on_failure = continue
   }
 
   provisioner "local-exec" {

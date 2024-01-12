@@ -14,3 +14,9 @@ configMapGenerator:
   - name: op-node
     envs:
       - ./op-node.env
+  - name: op-batcher
+    envs:
+      - ./op-batcher.env
+  - name: op-proposer
+    envs:
+      - ./op-proposer.env

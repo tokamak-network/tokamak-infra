@@ -14,9 +14,8 @@ resources:
   - ../../envs/titan-sepolia-test
   - ../../files
 
-# patchesStrategicMerge:
-#   - resource_override.yaml
-#   - service_override.yaml
+patchesStrategicMerge:
+  - resource_override.yaml
 
 images:
   - name: onthertech/titan-op-geth

@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: titan2
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - namespace.yaml
+  - ../../bases/op-geth
+  - ../../bases/op-node
+  - ../../envs/titan-sepolia-test
+  - ../../files
+
+# patchesStrategicMerge:
+#   - resource_override.yaml
+#   - service_override.yaml
+
+images:
+  - name: onthertech/titan-op-geth
+    newTag: nightly-bd8f732b
+  - name: onthertech/titan-op-node
+    newTag: nightly-815fa291

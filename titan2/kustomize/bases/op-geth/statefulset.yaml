@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: op-geth
+spec:
+  selector:
+    matchLabels:
+      app: op-geth
+  replicas: 1
+  serviceName: op-geth-svc
+  template:
+    metadata:
+      labels:
+        app: op-geth
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: op-geth
+          image: onthertech/titan-op-geth
+          imagePullPolicy: IfNotPresent
+          command: ['/bin/sh', '/op-geth-scripts/entrypoint-op-geth.sh']
+          envFrom:
+            - configMapRef:
+                name: op-geth
+          ports:
+            - containerPort: 8545
+              protocol: TCP
+            - containerPort: 8546
+              protocol: TCP
+            - containerPort: 8551
+              protocol: TCP
+            - containerPort: 30303
+              protocol: TCP
+            - containerPort: 6060
+              protocol: TCP
+          volumeMounts:
+            - name: op-geth-scripts
+              mountPath: /op-geth-scripts
+            - name: op-geth-auth
+              mountPath: /op-geth-auth
+            # - name: op-geth-volume
+            #   mountPath: /db
+            #   subPath: op-geth
+      volumes:
+        # - name: op-geth-volume
+        #   persistentVolumeClaim:
+        #     claimName: op-geth-pvc
+        - name: op-geth-scripts
+          configMap:
+            name: op-geth-scripts
+            defaultMode: 0777
+        - name: op-geth-auth
+          configMap:
+            name: op-geth-auth
+            defaultMode: 0777

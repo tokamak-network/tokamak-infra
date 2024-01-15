@@ -224,3 +224,11 @@ resource "kustomization_resource" "p2" {
 
   depends_on = [null_resource.kubectl, helm_release.argocd, kustomization_resource.p1]
 }
+
+resource "kubernetes_manifest" "resources" {
+  for_each = fileset(path.module, "resources/**")
+
+  manifest = yamldecode(file("${path.module}/${each.value}"))
+
+  depends_on = [null_resource.kubectl]
+}

@@ -13,6 +13,8 @@ resources:
   - ../../bases/op-proposer
   - ../../envs/titan-sepolia-test
   - ../../files
+  - pv.yaml
+  - pvc.yaml
 
 patchesStrategicMerge:
   - resource_override.yaml

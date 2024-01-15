@@ -51,9 +51,6 @@ spec:
             - containerPort: 6060
               protocol: TCP
           volumeMounts:
-            # - name: op-node-volume
-            #   mountPath: /op-node
-            #   subPath: op-node
             - name: op-node-scripts
               mountPath: /op-node-scripts
             - name: op-geth-auth
@@ -64,9 +61,6 @@ spec:
           configMap:
             name: wait-scripts
             defaultMode: 0777
-        # - name: op-node-volume
-        #   persistentVolumeClaim:
-        #     claimName: op-node-pvc
         - name: op-node-scripts
           configMap:
             name: op-node-scripts

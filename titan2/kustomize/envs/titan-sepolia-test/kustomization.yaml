@@ -20,3 +20,6 @@ configMapGenerator:
   - name: op-proposer
     envs:
       - ./op-proposer.env
+  - name: proxyd
+    files:
+      - ./proxyd-config.toml

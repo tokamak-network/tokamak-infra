@@ -149,7 +149,7 @@ module "eks-external-secrets" {
   cluster_identity_oidc_issuer     = var.cluster_oidc_issuer_url
   cluster_identity_oidc_issuer_arn = var.oidc_provider_arn
   helm_chart_version               = ""
-  namespace                        = "default"
+  namespace                        = var.external_secret_namespace
   create_namespace                 = false
 
   settings = {

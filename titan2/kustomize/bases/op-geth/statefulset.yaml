@@ -40,13 +40,13 @@ spec:
               mountPath: /op-geth-scripts
             - name: op-geth-auth
               mountPath: /op-geth-auth
-            # - name: op-geth-volume
-            #   mountPath: /db
-            #   subPath: op-geth
+            - name: op-geth-volume
+              mountPath: /db
+              subPath: op-geth
       volumes:
-        # - name: op-geth-volume
-        #   persistentVolumeClaim:
-        #     claimName: op-geth-pvc
+        - name: op-geth-volume
+          persistentVolumeClaim:
+            claimName: op-geth-pvc
         - name: op-geth-scripts
           configMap:
             name: op-geth-scripts

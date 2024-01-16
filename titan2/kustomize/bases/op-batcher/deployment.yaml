@@ -29,6 +29,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: op-batcher
+            - secretRef:
+                name: secret
       volumes:
         - name: wait-scripts
           configMap:

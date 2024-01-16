@@ -11,6 +11,7 @@ resources:
   - ../../bases/op-node
   - ../../bases/op-batcher
   - ../../bases/op-proposer
+  - ../../bases/proxyd
   - ../../envs/titan-sepolia-test
   - ../../files
   - pv.yaml
@@ -29,4 +30,6 @@ images:
   - name: onthertech/titan-op-batcher
     newTag: nightly-815fa291
   - name: onthertech/titan-op-proposer
+    newTag: nightly-815fa291
+  - name: onthertech/titan-proxyd
     newTag: nightly-815fa291

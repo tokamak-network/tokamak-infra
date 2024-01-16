@@ -7,3 +7,4 @@ generatorOptions:
 
 resources:
   - titan2.yaml
+  - redis.yaml

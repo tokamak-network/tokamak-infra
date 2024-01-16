@@ -88,3 +88,8 @@ variable "lambda_source_version" {
   description = "Version of source which lambda should run"
   type        = string
 }
+
+variable "external_secret_namespace" {
+  description = "External_Secret_Namespace"
+  type        = string
+}

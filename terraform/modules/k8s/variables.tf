@@ -68,3 +68,8 @@ variable "aws_secretsmanager_id" {
   description = "AWS_Secretmanager_ID"
   type        = string
 }
+
+variable "external_secret_namespace" {
+  description = "External_Secret_Namespace"
+  type        = string
+}

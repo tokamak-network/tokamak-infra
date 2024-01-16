@@ -73,6 +73,7 @@ module "k8s" {
   efs_id                             = module.efs.efs_id
   efs_es_id                          = module.efs_es.efs_id
   aws_secretsmanager_id              = module.secretsmanager.aws_secretsmanager_id
+  external_secret_namespace          = var.external_secret_namespace
 }
 
 module "waf" {

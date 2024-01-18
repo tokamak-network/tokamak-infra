@@ -20,6 +20,8 @@ module "eks" {
       ]
     }
   }
+
+  kms_key_administrators = var.kms_key_administrators
 }
 
 data "aws_iam_policy_document" "aws_fargate_logging_policy" {

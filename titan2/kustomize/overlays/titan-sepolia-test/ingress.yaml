@@ -8,6 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/group.name: op-geth
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-test,access_logs.s3.prefix=op-geth
     alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/titan-sepolia-test-block-ddos/b35152de-5008-4090-83c3-4ee67f6d6398
     alb.ingress.kubernetes.io/conditions.ws-rule: >
       [

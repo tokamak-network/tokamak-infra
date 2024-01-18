@@ -17,7 +17,7 @@ data "aws_iam_policy_document" "bucket_policy" {
     actions = ["s3:PutObject"]
 
     resources = [
-      "arn:aws:s3:::${var.bucket_name}/op-geth/AWSLogs/156512274928/*"
+      "arn:aws:s3:::${var.bucket_name}/*"
     ]
   }
 }

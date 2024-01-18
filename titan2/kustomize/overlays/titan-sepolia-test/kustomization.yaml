@@ -18,6 +18,7 @@ resources:
   - pvc.yaml
   - secretstore.yaml
   - externalsecret.yaml
+  - ingress.yaml
 
 patchesStrategicMerge:
   - resource_override.yaml

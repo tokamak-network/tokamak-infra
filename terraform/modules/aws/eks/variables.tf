@@ -27,3 +27,8 @@ variable "public_subnet_ids" {
   description = "Public Subnet IDs"
   type        = list(string)
 }
+
+variable "kms_key_administrators" {
+  description = "kms key administrators"
+  type        = list(string)
+}

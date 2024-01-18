@@ -17,3 +17,7 @@ git_user_name             = "tokamak-network"
 git_repo_name             = "ALB_S3_Logs_To_ES"
 lambda_source_version     = "1.0"
 external_secret_namespace = "titan2"
+kms_key_administrators = [
+  "arn:aws:iam::156512274928:user/steven.l@onther.io",
+  "arn:aws:iam::156512274928:user/austin.o@onther.io"
+]

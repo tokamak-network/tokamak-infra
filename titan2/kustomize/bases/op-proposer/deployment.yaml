@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: op-proposer
 spec:
+  selector:
+    matchLabels:
+      app: op-proposer
   replicas: 1
   template:
     spec:

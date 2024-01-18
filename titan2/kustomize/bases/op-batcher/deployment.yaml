@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: op-batcher
 spec:
+  selector:
+    matchLabels:
+      app: op-batcher
   replicas: 1
   template:
     spec:

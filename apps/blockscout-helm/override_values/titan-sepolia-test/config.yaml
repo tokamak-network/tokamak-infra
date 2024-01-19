@@ -1,0 +1,14 @@
+config:
+  network:
+    id: '111551115050'
+    name: Titan Sepolia Test
+    shortname: Titan Sepolia Test
+    currency:
+      name: Ether
+      symbol: ETH
+      decimals: 18
+
+  testnet: true
+
+  prometheus:
+    enabled: false

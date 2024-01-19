@@ -6,5 +6,6 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - titan2.yaml
+  - blockscout.yaml
   - redis.yaml
+  - titan2.yaml

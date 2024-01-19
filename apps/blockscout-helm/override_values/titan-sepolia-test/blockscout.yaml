@@ -14,8 +14,6 @@ blockscout:
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
     MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
-    MICROSERVICE_SIG_PROVIDER_ENABLED: true
-    MICROSERVICE_SIG_PROVIDER_URL: 'http://sig-provider-svc:8050'
     # Optimism
     INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.titan2:8545'
     INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '5070000'

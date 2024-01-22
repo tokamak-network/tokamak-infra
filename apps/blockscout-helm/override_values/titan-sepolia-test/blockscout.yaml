@@ -1,0 +1,43 @@
+blockscout:
+  image:
+    repository: blockscout/blockscout-optimism
+
+  env:
+    DATABASE_URL: 'postgresql://postgres:postgres@titan-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-test'
+    ETHEREUM_JSONRPC_VARIANT: geth
+    ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.titan2:8545'
+    ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.titan2:8545'
+    ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.titan2:8546'
+    CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/titan-sepolia-test/genesis.json'
+    SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
+    # EXCHANGE_RATES_COINGECKO_COIN_ID: tokamak-network
+    # MICROSERVICES
+    MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
+    MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
+    # Optimism
+    INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.titan2:8545'
+    INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '5070000'
+    INDEXER_OPTIMISM_L1_BATCH_INBOX: '0xff00000000000000000000000000111551115050'
+    INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: '0x364Dee8Ae11133c99e86c1D59875BFD51cAF8A20'
+    INDEXER_OPTIMISM_L1_OUTPUT_ROOTS_START_BLOCK: '5074000'
+    INDEXER_OPTIMISM_L1_OUTPUT_ORACLE_CONTRACT: '0xf44376c327655C6D6Ca65B42C0F961284387A2b0'
+    INDEXER_OPTIMISM_L1_PORTAL_CONTRACT: '0x3ddbaa55c9462d9dc3a38d184246d1fb12c7f2d3'
+    INDEXER_OPTIMISM_L1_DEPOSITS_START_BLOCK: '5113000'
+    INDEXER_OPTIMISM_L1_WITHDRAWALS_START_BLOCK: '5113000'
+    INDEXER_OPTIMISM_L2_WITHDRAWALS_START_BLOCK: '1'
+    INDEXER_OPTIMISM_L2_MESSAGE_PASSER_CONTRACT: '0x4200000000000000000000000000000000000016'
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/group.name: titan-sepolia-test
+      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-test,access_logs.s3.prefix=titan-sepolia-test
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/titan-sepolia-test-block-ddos/b35152de-5008-4090-83c3-4ee67f6d6398
+    tls:
+      enabled: true
+    hostname: explorer.titan-sepolia-test.tokamak.network

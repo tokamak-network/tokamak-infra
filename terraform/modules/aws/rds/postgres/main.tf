@@ -42,7 +42,7 @@ resource "aws_db_instance" "default" {
   allocated_storage      = var.rds_allocated_storage
   engine                 = "postgres"
   engine_version         = "14"
-  instance_class         = "db.t3.micro"
+  instance_class         = "db.t3.medium"
   username               = "postgres"
   password               = "postgres"
   db_subnet_group_name   = aws_db_subnet_group.default.name

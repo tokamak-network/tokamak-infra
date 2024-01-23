@@ -212,11 +212,11 @@ additionalPrometheusRulesMap:
             app: batch-submitter
             severity: critical
             severity_resolved: info
-          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != 0'
-          for: 15m
+          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != -1'
+          for: 5m
           annotations:
-            message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
-            message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
+            message: "CTC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
+            message_resolved: 'CTC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
       - name: 'mismatch the block number between SCC and L2 block head'
         rules:
         - alert: 'mismatch the block number between SCC and L2 block head'
@@ -225,8 +225,8 @@ additionalPrometheusRulesMap:
             app: batch-submitter
             severity: critical
             severity_resolved: info
-          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != 0'
-          for: 25m
+          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != -1'
+          for: 5m
           annotations:
-            message: "Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
-            message_resolved: 'The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'
+            message: "SCC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
+            message_resolved: 'SCC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'

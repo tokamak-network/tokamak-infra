@@ -182,7 +182,7 @@ additionalPrometheusRulesMap:
           # end = l2LatestBlockNumber + 1
           # ref: https://github.com/tokamak-network/tokamak-titan/blob/main/batch-submitter/drivers/sequencer/driver.go#L144
           expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != -1'
-          for: 15m
+          for: 20m
           annotations:
             message: "CTC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   
             message_resolved: 'CTC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
@@ -194,7 +194,7 @@ additionalPrometheusRulesMap:
             app: batch-submitter
             severity: critical
             severity_resolved: info
-          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != 0'
+          expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != -1'
           for: 30m
           annotations:
             message: "SCC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"   

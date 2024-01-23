@@ -5,6 +5,7 @@ frontend:
     tag: v1.21.2
 
   env:
+    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: '89ff902562340030ca1245aa3eea2840'
     NEXT_PUBLIC_NETWORK_RPC_URL: https://rpc.titan-sepolia-test.tokamak.network
     NEXT_PUBLIC_STATS_API_HOST: 'https://stats.titan-sepolia-test.tokamak.network'
     NEXT_PUBLIC_HOMEPAGE_CHARTS: "['daily_txs','coin_price','market_cap']"

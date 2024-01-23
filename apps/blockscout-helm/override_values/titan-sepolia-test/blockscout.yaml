@@ -8,10 +8,12 @@ blockscout:
     ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.titan2:8545'
     ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.titan2:8545'
     ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.titan2:8546'
+    CONTRACT_DISABLE_INTERACTION: false
     CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/titan-sepolia-test/genesis.json'
     SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
     # EXCHANGE_RATES_COINGECKO_COIN_ID: tokamak-network
     # MICROSERVICES
+    MICROSERVICE_SC_VERIFIER_ENABLED: true
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
     MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
     # Optimism

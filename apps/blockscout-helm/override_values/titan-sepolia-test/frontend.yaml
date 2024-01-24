@@ -13,7 +13,7 @@ frontend:
     NEXT_PUBLIC_WEB3_DISABLE_ADD_TOKEN_TO_WALLET: false
     NEXT_PUBLIC_AD_BANNER_PROVIDER: none
     NEXT_PUBLIC_AD_TEXT_PROVIDER: none
-    NEXT_PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: G-XHH4BZQ893
+    NEXT_PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: G-T5Z1M5VZLG
     # NEXT_PUBLIC_VIEWS_NFT_MARKETPLACES: --> https://github.com/blockscout/frontend/blob/main/docs/ENVS.md#nft-views
     NEXT_PUBLIC_NETWORK_LOGO: 'https://fastly.picsum.photos/id/615/120/24.jpg?hmac=0dSwF2kp7bco_1L8dOJE2-0Nz5hJoYrh-q2GoF2GIEE'
     NEXT_PUBLIC_NETWORK_ICON: 'https://fastly.picsum.photos/id/299/60/60.jpg?hmac=nBxlCNpcrTUh1sqmM6Ccj4ufp0Tse0X7jB-E-du2RDc'

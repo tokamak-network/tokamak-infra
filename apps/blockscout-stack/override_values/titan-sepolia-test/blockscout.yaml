@@ -3,7 +3,7 @@ blockscout:
     repository: blockscout/blockscout-optimism
 
   env:
-    DATABASE_URL: 'postgresql://postgres:postgres@titan-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-test'
+    DATABASE_URL: 'postgresql://postgres:postgres@titan-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-test2'
     ETHEREUM_JSONRPC_VARIANT: geth
     ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.titan2:8545'
     ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.titan2:8545'

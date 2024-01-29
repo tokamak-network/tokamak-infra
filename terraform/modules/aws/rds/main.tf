@@ -6,7 +6,7 @@ module "rds" {
 
   rds_name = var.rds_name
 
-  rds_allocated_storage = 10
+  rds_allocated_storage = 500
 
   from_port = 5432
   to_port   = 5432

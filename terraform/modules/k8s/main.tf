@@ -1,14 +1,3 @@
-terraform {
-  required_version = ">= 1.5.5"
-
-  required_providers {
-    kustomization = {
-      source  = "kbst/kustomization"
-      version = ">= 0.9.4"
-    }
-  }
-}
-
 locals {
   lb_controller_iam_role_name        = "aws-load-balancer-controller-role-${var.cluster_name}"
   lb_controller_service_account_name = "aws-load-balancer-controller"
@@ -30,17 +19,6 @@ provider "kubernetes" {
   host                   = var.cluster_endpoint
   token                  = data.aws_eks_cluster_auth.this.token
   cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
-}
-
-provider "kustomization" {
-  kubeconfig_raw = templatefile("${path.module}/templates/kubeconfig.tpl", {
-    kubeconfig_name                 = var.cluster_name
-    endpoint                        = var.cluster_endpoint
-    cluster_auth_base64             = var.cluster_certificate_authority_data
-    aws_authenticator_command       = "aws"
-    aws_authenticator_command_args  = ["eks", "get-token", "--profile", "${var.profile}", "--region", "${var.region}", "--cluster-name", "${var.cluster_name}", "--output", "json"]
-    aws_authenticator_env_variables = []
-  })
 }
 
 resource "null_resource" "kubectl" {
@@ -175,54 +153,10 @@ resource "helm_release" "argocd" {
   depends_on = [null_resource.kubectl, helm_release.aws-load-balancer-controller, module.external_dns]
 }
 
-data "kustomization_build" "argocd_applications" {
-  path = "../ops/argocd/override_values/${var.network_name}/applications"
-}
+resource "kubernetes_manifest" "argocd_applications" {
+  manifest = yamldecode(file("../ops/argocd/override_values/${var.network_name}/applications.yaml"))
 
-resource "kustomization_resource" "p0" {
-  for_each = data.kustomization_build.argocd_applications.ids_prio[0]
-
-  manifest = (
-    contains(["_/Secret"], regex("(?P<group_kind>.*/.*)/.*/.*", each.value)["group_kind"])
-    ? sensitive(data.kustomization_build.argocd_applications.manifests[each.value])
-    : data.kustomization_build.argocd_applications.manifests[each.value]
-  )
-
-  depends_on = [null_resource.kubectl, helm_release.argocd]
-}
-
-# then loop through resources in ids_prio[1]
-# and set an explicit depends_on on kustomization_resource.p0
-# wait 2 minutes for any deployment or daemonset to become ready
-resource "kustomization_resource" "p1" {
-  for_each = data.kustomization_build.argocd_applications.ids_prio[1]
-
-  manifest = (
-    contains(["_/Secret"], regex("(?P<group_kind>.*/.*)/.*/.*", each.value)["group_kind"])
-    ? sensitive(data.kustomization_build.argocd_applications.manifests[each.value])
-    : data.kustomization_build.argocd_applications.manifests[each.value]
-  )
-  wait = true
-  timeouts {
-    create = "2m"
-    update = "2m"
-  }
-
-  depends_on = [null_resource.kubectl, helm_release.argocd, kustomization_resource.p0]
-}
-
-# finally, loop through resources in ids_prio[2]
-# and set an explicit depends_on on kustomization_resource.p1
-resource "kustomization_resource" "p2" {
-  for_each = data.kustomization_build.argocd_applications.ids_prio[2]
-
-  manifest = (
-    contains(["_/Secret"], regex("(?P<group_kind>.*/.*)/.*/.*", each.value)["group_kind"])
-    ? sensitive(data.kustomization_build.argocd_applications.manifests[each.value])
-    : data.kustomization_build.argocd_applications.manifests[each.value]
-  )
-
-  depends_on = [null_resource.kubectl, helm_release.argocd, kustomization_resource.p1]
+  depends_on = [helm_release.argocd]
 }
 
 resource "kubernetes_manifest" "resources" {

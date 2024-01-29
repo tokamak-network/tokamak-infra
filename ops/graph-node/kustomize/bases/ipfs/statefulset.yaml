@@ -12,7 +12,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: ipfs
-          image: ipfs/go-ipfs
+          image: ipfs/kubo
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5001

@@ -156,7 +156,7 @@ resource "helm_release" "argocd" {
 resource "kubernetes_manifest" "argocd_applications" {
   manifest = yamldecode(file("../ops/argocd/override_values/${var.network_name}/applications.yaml"))
 
-  depends_on = [ helm_release.argocd ]
+  depends_on = [helm_release.argocd]
 }
 
 resource "kubernetes_manifest" "resources" {

@@ -7,14 +7,14 @@ spec:
   sources:
     # blockscout-stack
     - repoURL: 'https://blockscout.github.io/helm-charts'
-      chart: blockscout
+      chart: blockscout-stack
       targetRevision: '*-0'
       helm:
         valueFiles:
-          - $repo/apps/blockscout-helm/override_values/titan-sepolia-test/blockscout.yaml
-          - $repo/apps/blockscout-helm/override_values/titan-sepolia-test/config.yaml
-          - $repo/apps/blockscout-helm/override_values/titan-sepolia-test/frontend.yaml
-          - $repo/apps/blockscout-helm/override_values/titan-sepolia-test/stats.yaml
+          - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/blockscout.yaml
+          - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/config.yaml
+          - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/frontend.yaml
+          - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/stats.yaml
     # repoURL
     - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
       targetRevision: main

@@ -6,31 +6,31 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - namespace.yaml
-  - ../../bases/op-geth
-  - ../../bases/op-node
-  - ../../bases/op-batcher
-  - ../../bases/op-proposer
-  - ../../bases/proxyd
-  - ../../envs/titan-sepolia-test
-  - ../../files
-  - pv.yaml
-  - pvc.yaml
-  - secretstore.yaml
-  - externalsecret.yaml
-  - ingress.yaml
+- namespace.yaml
+- ../../bases/op-geth
+- ../../bases/op-node
+- ../../bases/op-batcher
+- ../../bases/op-proposer
+- ../../bases/proxyd
+- ../../envs/titan-sepolia-test
+- ../../files
+- pv.yaml
+- pvc.yaml
+- secretstore.yaml
+- externalsecret.yaml
+- ingress.yaml
 
 patchesStrategicMerge:
-  - resource_override.yaml
+- resource_override.yaml
 
 images:
-  - name: onthertech/titan-op-geth
-    newTag: nightly-bd8f732b
-  - name: onthertech/titan-op-node
-    newTag: nightly-815fa291
-  - name: onthertech/titan-op-batcher
-    newTag: nightly-815fa291
-  - name: onthertech/titan-op-proposer
-    newTag: nightly-815fa291
-  - name: onthertech/titan-proxyd
-    newTag: nightly-815fa291
+- name: onthertech/titan-op-batcher
+  newTag: nightly-815fa291
+- name: onthertech/titan-op-geth
+  newTag: nightly-17b646f9
+- name: onthertech/titan-op-node
+  newTag: nightly-815fa291
+- name: onthertech/titan-op-proposer
+  newTag: nightly-815fa291
+- name: onthertech/titan-proxyd
+  newTag: nightly-815fa291

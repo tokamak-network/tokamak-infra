@@ -8,6 +8,7 @@ spec:
     spec:
       containers:
         - name: ipfs
+          image: ipfs/go-ipfs
           resources:
             requests:
               cpu: 1

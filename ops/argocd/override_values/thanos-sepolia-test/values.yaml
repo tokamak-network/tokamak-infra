@@ -1,3 +1,5 @@
+global:
+  domain: argocd.thanos-sepolia-test.tokamak.network
 configs:
   params:
     server.insecure: true
@@ -22,6 +24,7 @@ server:
       enabled: true
   ingress:
     enabled: true
+    ingressClassName: alb
     annotations:
       kubernetes.io/ingress.class: alb
       alb.ingress.kubernetes.io/target-type: ip
@@ -30,12 +33,8 @@ server:
       alb.ingress.kubernetes.io/ssl-redirect: '443'
       alb.ingress.kubernetes.io/group.name: thanos-sepolia-test
       alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-test,access_logs.s3.prefix=thanos-sepolia-test
-      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/thanos-sepolia-test-block-ddos/145a4fec-90e3-41b5-90d9-8113ea9511f2
-    tls:
-      - hosts:
-          - argocd.thanos-sepolia-test.tokamak.network
-    hosts:
-      - argocd.thanos-sepolia-test.tokamak.network
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/thanos-sepolia-test-block-ddos/1b5e275d-a003-4599-a824-bd2b6d43a9ff
+    tls: true
 applicationSet:
   metrics:
     enabled: true

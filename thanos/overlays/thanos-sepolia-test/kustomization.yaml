@@ -21,7 +21,7 @@ resources:
 - ingress.yaml
 
 patches:
-- resource_override.yaml
+  - path: resource_override.yaml
 
 images:
 - name: onthertech/titan-op-batcher

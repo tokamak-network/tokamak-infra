@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxyd
+spec:
+  selector:
+    matchLabels:
+      app: proxyd
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      initContainers:
+        - name: wait-for-redis
+          image: busybox:latest
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;',
+            ]
+      containers:
+        - name: proxyd
+          image: onthertech/titan-proxyd
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8085
+              protocol: TCP
+            - containerPort: 9761
+              protocol: TCP
+            - containerPort: 6060
+              protocol: TCP
+          command: ['bin/proxyd', '/config/proxyd-config.toml']
+          resources: {}
+          volumeMounts:
+            - name: proxyd-config
+              mountPath: /config
+
+      volumes:
+        - name: proxyd-config
+          configMap:
+            name: proxyd
+            defaultMode: 0777

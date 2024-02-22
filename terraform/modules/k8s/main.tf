@@ -1,24 +1,50 @@
+terraform {
+  required_providers {
+    kubectl = {
+      source  = "gavinbunney/kubectl"
+      version = ">= 1.14.0"
+    }
+  }
+}
+
 locals {
   lb_controller_iam_role_name        = "aws-load-balancer-controller-role-${var.cluster_name}"
   lb_controller_service_account_name = "aws-load-balancer-controller"
 }
 
-data "aws_eks_cluster_auth" "this" {
-  name = var.cluster_name
-}
-
 provider "helm" {
   kubernetes {
     host                   = var.cluster_endpoint
-    token                  = data.aws_eks_cluster_auth.this.token
     cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
+
+    exec {
+      api_version = "client.authentication.k8s.io/v1beta1"
+      args        = ["eks", "get-token", "--cluster-name", var.cluster_name, "--region", var.region]
+      command     = "aws"
+    }
   }
 }
 
 provider "kubernetes" {
   host                   = var.cluster_endpoint
-  token                  = data.aws_eks_cluster_auth.this.token
   cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
+
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args        = ["eks", "get-token", "--cluster-name", var.cluster_name, "--region", var.region]
+    command     = "aws"
+  }
+}
+
+provider "kubectl" {
+  host                   = var.cluster_endpoint
+  cluster_ca_certificate = base64decode(var.cluster_certificate_authority_data)
+
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    args        = ["eks", "get-token", "--cluster-name", var.cluster_name, "--region", var.region]
+    command     = "aws"
+  }
 }
 
 resource "null_resource" "kubectl" {
@@ -29,6 +55,10 @@ resource "null_resource" "kubectl" {
   provisioner "local-exec" {
     command    = "kubectl --kubeconfig ~/.kube/config_temp patch deployment coredns -n kube-system --type json -p='[{\"op\": \"remove\", \"path\": \"/spec/template/metadata/annotations/eks.amazonaws.com~1compute-type\"}]'"
     on_failure = continue
+  }
+
+  provisioner "local-exec" {
+    command = "kubectl --kubeconfig ~/.kube/config_temp rollout restart deployment coredns -n kube-system"
   }
 
   provisioner "local-exec" {
@@ -128,7 +158,7 @@ module "eks-external-secrets" {
   cluster_identity_oidc_issuer_arn = var.oidc_provider_arn
   helm_chart_version               = ""
   namespace                        = var.external_secret_namespace
-  create_namespace                 = false
+  create_namespace                 = true
 
   settings = {
     "webhook" : {
@@ -153,16 +183,16 @@ resource "helm_release" "argocd" {
   depends_on = [null_resource.kubectl, helm_release.aws-load-balancer-controller, module.external_dns]
 }
 
-resource "kubernetes_manifest" "argocd_applications" {
-  manifest = yamldecode(file("../ops/argocd/override_values/${var.network_name}/applications.yaml"))
+resource "kubectl_manifest" "argocd_applications" {
+  yaml_body = file("../ops/argocd/override_values/${var.network_name}/applications.yaml")
 
   depends_on = [helm_release.argocd]
 }
 
-resource "kubernetes_manifest" "resources" {
+resource "kubectl_manifest" "resources" {
   for_each = fileset(path.module, "resources/**")
 
-  manifest = yamldecode(file("${path.module}/${each.value}"))
+  yaml_body = file("${path.module}/${each.value}")
 
   depends_on = [null_resource.kubectl]
 }

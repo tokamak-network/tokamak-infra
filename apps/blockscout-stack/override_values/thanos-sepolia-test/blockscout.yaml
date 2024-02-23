@@ -5,19 +5,19 @@ blockscout:
   env:
     DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-thanos'
     ETHEREUM_JSONRPC_VARIANT: geth
-    ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.thanos:8545'
-    ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.thanos:8545'
-    ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.thanos:8546'
+    ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.default:8545'
+    ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.default:8545'
+    ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.default:8546'
     CONTRACT_DISABLE_INTERACTION: false
     CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/thanos-sepolia-test/genesis.json'
     SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
-    EXCHANGE_RATES_COINGECKO_COIN_ID: ethereum # tokamak-network
+    EXCHANGE_RATES_COINGECKO_COIN_ID: tokamak-network
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_ENABLED: true
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
     MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
     # Optimism
-    INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.thanos:8545'
+    INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.default:8545'
     INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '5070000'
     INDEXER_OPTIMISM_L1_BATCH_INBOX: '0xff00000000000000000000000000111551116060'
     INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: '0x8464014579e4EdDC648767688CBaAcbEb10c2e8C'

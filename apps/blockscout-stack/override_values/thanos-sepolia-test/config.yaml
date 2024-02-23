@@ -4,8 +4,8 @@ config:
     name: Thanos Sepolia Test
     shortname: Thanos Sepolia Test
     currency:
-      name: Ether
-      symbol: ETH
+      name: Tokamak Network Token
+      symbol: TON
       decimals: 18
 
   testnet: true

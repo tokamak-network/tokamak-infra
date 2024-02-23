@@ -1,0 +1,14 @@
+config:
+  network:
+    id: '111551116060'
+    name: Thanos Sepolia Test
+    shortname: Thanos Sepolia Test
+    currency:
+      name: Ether
+      symbol: ETH
+      decimals: 18
+
+  testnet: true
+
+  prometheus:
+    enabled: false

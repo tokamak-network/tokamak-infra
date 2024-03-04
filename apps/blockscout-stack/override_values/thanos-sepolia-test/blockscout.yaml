@@ -1,0 +1,45 @@
+blockscout:
+  image:
+    repository: blockscout/blockscout-optimism
+
+  env:
+    DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-thanos'
+    ETHEREUM_JSONRPC_VARIANT: geth
+    ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.thanos:8545'
+    ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.thanos:8545'
+    ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.thanos:8546'
+    CONTRACT_DISABLE_INTERACTION: false
+    CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/thanos-sepolia-test/genesis.json'
+    SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
+    EXCHANGE_RATES_COINGECKO_COIN_ID: tokamak-network
+    # MICROSERVICES
+    MICROSERVICE_SC_VERIFIER_ENABLED: true
+    MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
+    MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
+    # Optimism
+    INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.thanos:8545'
+    INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '5412811'
+    INDEXER_OPTIMISM_L1_BATCH_INBOX: '0xff00000000000000000000000000111661118080'
+    INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: '0x92546dE8ebC70E236C8F27f0B0aE254309B84332'
+    INDEXER_OPTIMISM_L1_OUTPUT_ROOTS_START_BLOCK: '5412811'
+    INDEXER_OPTIMISM_L1_OUTPUT_ORACLE_CONTRACT: '0xfa565a84075091044FC891e3f73E26A014A4fd8c'
+    INDEXER_OPTIMISM_L1_PORTAL_CONTRACT: '0x54A01163474FCD8a781455f09Ff0910e7e31B772'
+    INDEXER_OPTIMISM_L1_DEPOSITS_START_BLOCK: '5412811'
+    INDEXER_OPTIMISM_L1_WITHDRAWALS_START_BLOCK: '5412811'
+    INDEXER_OPTIMISM_L2_WITHDRAWALS_START_BLOCK: '1'
+    INDEXER_OPTIMISM_L2_MESSAGE_PASSER_CONTRACT: '0x4200000000000000000000000000000000000016'
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/group.name: thanos-sepolia-test
+      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-test,access_logs.s3.prefix=thanos-sepolia-test
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/thanos-sepolia-test-block-ddos/cfa600d8-3b76-4bb2-b89d-e115247ae4f8
+    tls:
+      enabled: true
+    hostname: explorer.thanos-sepolia-test.tokamak.network

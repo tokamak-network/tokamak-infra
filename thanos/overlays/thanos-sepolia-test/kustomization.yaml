@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: thanos
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- namespace.yaml
+- ../../bases/op-geth
+- ../../bases/op-node
+- ../../bases/op-batcher
+- ../../bases/op-proposer
+- ../../bases/proxyd
+- ../../envs/thanos-sepolia-test
+- ../../files
+- pv.yaml
+- pvc.yaml
+- secretstore.yaml
+- externalsecret.yaml
+- ingress.yaml
+
+patches:
+  - path: resource_override.yaml
+
+images:
+- name: onthertech/titan-op-batcher
+  newTag: nightly-1bb83d4d
+- name: onthertech/titan-op-geth
+  newTag: nightly-17b646f9
+- name: obm4489/thanos-op-node
+  newTag: prepare
+- name: onthertech/titan-op-proposer
+  newTag: nightly-1bb83d4d
+- name: onthertech/titan-proxyd
+  newTag: nightly-1bb83d4d

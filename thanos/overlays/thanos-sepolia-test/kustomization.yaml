@@ -25,12 +25,12 @@ patches:
 
 images:
 - name: onthertech/titan-op-batcher
-  newTag: nightly-1bb83d4d
+  newTag: nightly-aad30909
 - name: onthertech/titan-op-geth
   newTag: nightly-17b646f9
-- name: obm4489/thanos-op-node
-  newTag: prepare
+- name: onthertech/titan-op-node
+  newTag: nightly-aad30909
 - name: onthertech/titan-op-proposer
-  newTag: nightly-1bb83d4d
+  newTag: nightly-aad30909
 - name: onthertech/titan-proxyd
-  newTag: nightly-1bb83d4d
+  newTag: nightly-aad30909

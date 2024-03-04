@@ -1,0 +1,14 @@
+config:
+  network:
+    id: '111551118080'
+    name: Thanos Sepolia Test
+    shortname: Thanos Sepolia Test
+    currency:
+      name: Tokamak Network Token
+      symbol: TON
+      decimals: 18
+
+  testnet: true
+
+  prometheus:
+    enabled: false

@@ -1,0 +1,39 @@
+frontend:
+  replicaCount: 1
+
+  image:
+    tag: v1.21.2
+
+  env:
+    NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: '89ff902562340030ca1245aa3eea2840'
+    NEXT_PUBLIC_NETWORK_RPC_URL: https://rpc.thanos-sepolia-test.tokamak.network
+    NEXT_PUBLIC_HOMEPAGE_CHARTS: "['daily_txs','coin_price','market_cap']"
+    NEXT_PUBLIC_API_SPEC_URL: 'https://raw.githubusercontent.com/blockscout/blockscout-api-v2-swagger/main/swagger.yaml'
+    NEXT_PUBLIC_WEB3_DISABLE_ADD_TOKEN_TO_WALLET: false
+    NEXT_PUBLIC_AD_BANNER_PROVIDER: none
+    NEXT_PUBLIC_AD_TEXT_PROVIDER: none
+    NEXT_PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: G-T5Z1M5VZLG
+    # NEXT_PUBLIC_VIEWS_NFT_MARKETPLACES: --> https://github.com/blockscout/frontend/blob/main/docs/ENVS.md#nft-views
+    NEXT_PUBLIC_NETWORK_LOGO: 'https://fastly.picsum.photos/id/615/120/24.jpg?hmac=0dSwF2kp7bco_1L8dOJE2-0Nz5hJoYrh-q2GoF2GIEE'
+    NEXT_PUBLIC_NETWORK_ICON: 'https://fastly.picsum.photos/id/299/60/60.jpg?hmac=nBxlCNpcrTUh1sqmM6Ccj4ufp0Tse0X7jB-E-du2RDc'
+    FAVICON_GENERATOR_API_KEY: 9cbebba57891c43c345be98d6e22a3efc1b9ca79
+    FAVICON_MASTER_URL: 'https://placekitten.com/64/64'
+    # Optimistic rollup (L2) chain
+    NEXT_PUBLIC_IS_OPTIMISTIC_L2_NETWORK: true
+    NEXT_PUBLIC_OPTIMISTIC_L2_WITHDRAWAL_URL: 'https://app.optimism.io/bridge/withdraw'
+    NEXT_PUBLIC_L1_BASE_URL: 'https://eth-sepolia.blockscout.com'
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/group.name: thanos-sepolia-test
+      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-test,access_logs.s3.prefix=thanos-sepolia-test
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/thanos-sepolia-test-block-ddos/cfa600d8-3b76-4bb2-b89d-e115247ae4f8
+    tls:
+      enabled: true
+    hostname: explorer.thanos-sepolia-test.tokamak.network

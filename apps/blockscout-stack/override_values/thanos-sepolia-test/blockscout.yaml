@@ -11,7 +11,9 @@ blockscout:
     CONTRACT_DISABLE_INTERACTION: false
     CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/thanos-sepolia-test/genesis.json'
     SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
-    EXCHANGE_RATES_COINGECKO_COIN_ID: tokamak-network
+    EXCHANGE_RATES_MARKET_CAP_SOURCE: coin_market_cap
+    EXCHANGE_RATES_COINMARKETCAP_API_KEY: 74d06af9-057f-4642-8f05-8f101b3c9844
+    EXCHANGE_RATES_COINMARKETCAP_COIN_ID: '6731' # tokamak-network
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_ENABLED: true
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'

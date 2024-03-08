@@ -1,9 +1,6 @@
 frontend:
   replicaCount: 1
 
-  image:
-    tag: v1.21.2
-
   env:
     NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: '89ff902562340030ca1245aa3eea2840'
     NEXT_PUBLIC_NETWORK_RPC_URL: https://rpc.titan-sepolia-test.tokamak.network
@@ -19,9 +16,9 @@ frontend:
     FAVICON_GENERATOR_API_KEY: 9cbebba57891c43c345be98d6e22a3efc1b9ca79
     FAVICON_MASTER_URL: 'https://placekitten.com/64/64'
     # Optimistic rollup (L2) chain
-    NEXT_PUBLIC_IS_OPTIMISTIC_L2_NETWORK: true
-    NEXT_PUBLIC_OPTIMISTIC_L2_WITHDRAWAL_URL: 'https://app.optimism.io/bridge/withdraw'
-    NEXT_PUBLIC_L1_BASE_URL: 'https://eth-sepolia.blockscout.com'
+    NEXT_PUBLIC_ROLLUP_TYPE: 'optimistic'
+    NEXT_PUBLIC_ROLLUP_L2_WITHDRAWAL_URL: 'https://app.optimism.io/bridge/withdraw'
+    NEXT_PUBLIC_ROLLUP_L1_BASE_URL: 'https://eth-sepolia.blockscout.com'
 
   ingress:
     enabled: true

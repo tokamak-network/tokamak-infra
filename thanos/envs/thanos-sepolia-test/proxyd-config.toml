@@ -78,7 +78,7 @@ out_of_service_seconds = 20
 
 [backends]
 [backends.alchemy]
-rpc_url = "https://eth-sepolia.g.alchemy.com/v2/v_gV838zDZ20Uq1L9e-_ZL1_7mrnK93C"
+rpc_url = "https://eth-sepolia.g.alchemy.com/v2/x4EOshikyKeyJci-23VSqFnwKIddeS7f"
 ws_url = "wss://eth-sepolia.g.alchemy.com/v2/v_gV838zDZ20Uq1L9e-_ZL1_7mrnK93C"
 max_rps = 1000
 max_ws_conns = 0

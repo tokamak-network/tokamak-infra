@@ -27,7 +27,7 @@ images:
 - name: onthertech/titan-op-batcher
   newTag: nightly-5158072d
 - name: onthertech/titan-op-geth
-  newTag: nightly-17b646f9
+  newTag: nightly-ea65010a
 - name: onthertech/titan-op-node
   newTag: nightly-5158072d
 - name: onthertech/titan-op-proposer

@@ -25,12 +25,12 @@ patchesStrategicMerge:
 
 images:
 - name: onthertech/titan-op-batcher
-  newTag: nightly-cefd4520
+  newTag: nightly-e7d6fe4e
 - name: onthertech/titan-op-geth
   newTag: nightly-ea65010a
 - name: onthertech/titan-op-node
-  newTag: nightly-cefd4520
+  newTag: nightly-e7d6fe4e
 - name: onthertech/titan-op-proposer
-  newTag: nightly-cefd4520
+  newTag: nightly-e7d6fe4e
 - name: onthertech/titan-proxyd
-  newTag: nightly-cefd4520
+  newTag: nightly-e7d6fe4e

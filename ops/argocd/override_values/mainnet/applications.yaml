@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra'
+    repoURL: 'https://github.com/tokamak-network/tokamak-infra'
     path: ops/argocd/override_values/mainnet/applications
     targetRevision: main
   destination:

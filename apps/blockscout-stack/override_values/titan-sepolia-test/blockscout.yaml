@@ -9,7 +9,7 @@ blockscout:
     ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.titan2:8545'
     ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.titan2:8546'
     CONTRACT_DISABLE_INTERACTION: false
-    CHAIN_SPEC_PATH: 'https://tokamak-titan-canyon.s3.ap-northeast-2.amazonaws.com/titan-sepolia-test/genesis.json'
+    CHAIN_SPEC_PATH: 'https://tokamak-thanos.s3.ap-northeast-2.amazonaws.com/titan-sepolia-test/genesis.json'
     SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
     EXCHANGE_RATES_MARKET_CAP_SOURCE: coin_market_cap
     EXCHANGE_RATES_COINMARKETCAP_API_KEY: b63a92b6-e45e-4b61-ae37-0ac84d2649ca

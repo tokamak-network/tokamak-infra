@@ -16,7 +16,7 @@ spec:
           - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/frontend.yaml
           - $repo/apps/blockscout-stack/override_values/titan-sepolia-test/stats.yaml
     # repoURL
-    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
       targetRevision: main
       ref: repo
 

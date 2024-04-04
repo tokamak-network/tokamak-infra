@@ -5,7 +5,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
     path: apps/blockscout/kustomize/overlays/aws/goerli-nightly
     targetRevision: main
   destination:

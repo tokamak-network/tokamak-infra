@@ -22,17 +22,17 @@ spec:
         valueFiles:
           - $repo/monitoring/metrics/override_values/aws/mainnet/blackbox.yaml
     # prometheus pv
-    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
       path: monitoring/metrics/override_values/aws/mainnet
       directory:
         include: 'pv.yaml'
       targetRevision: main
     # grafana dashboards
-    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
       path: monitoring/metrics/dashboards
       targetRevision: main
     # repoURL
-    - repoURL: 'https://github.com/tokamak-network/tokamak-titan-infra.git'
+    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
       targetRevision: main
       ref: repo
 

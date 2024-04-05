@@ -14,3 +14,4 @@ variable "host_ip" {
   description = "Public IP of EC2 instance"
 }
 
+ 

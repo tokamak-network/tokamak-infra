@@ -1,14 +1,14 @@
 
 #AMI ID for the EC2 instance
 variable "ami" {
-    description = "AMI ID of the instance"
-    type = string
+  description = "AMI ID of the instance"
+  type        = string
 }
 
 # EC2 Instance Type
 variable "instance_type" {
-    description = "EC2 Instance type"
-    type = string
+  description = "EC2 Instance type"
+  type        = string
 }
 
 # The ID of the Virtual Private Cloud (VPC) where resources such as EC2 instances and subnets will be created.

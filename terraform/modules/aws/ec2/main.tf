@@ -16,7 +16,7 @@ resource "aws_key_pair" "generated_key" {
 resource "aws_security_group" "elasticsearch_sg" {
   name        = "elasticsearch-sg"
   description = "Security group for Elasticsearch"
-  vpc_id      = var.vpc_id  # Associate with a specific VPC.
+  vpc_id      = var.vpc_id # Associate with a specific VPC. 
 
   # Inbound rule to allow SSH (port 22) access from anywhere. 
   ingress {
@@ -42,7 +42,7 @@ resource "aws_instance" "elasticsearch_instance" {
   key_name                    = aws_key_pair.generated_key.key_name
   vpc_security_group_ids      = [aws_security_group.elasticsearch_sg.id]
   subnet_id                   = var.public_subnet_ids[0]
-  associate_public_ip_address = true  # Enable public IP to access the instance.
+  associate_public_ip_address = true # Enable public IP to access the instance.
 
   tags = {
     Name = "ElasticsearchInstance"
@@ -52,7 +52,7 @@ resource "aws_instance" "elasticsearch_instance" {
 # Store the SSH private key in AWS Secrets Manager for secure handling.
 resource "aws_secretsmanager_secret" "ssh_key" {
   name                    = "ec2-ssh-keyv4" # Unique name for the secret.
-  recovery_window_in_days = 0  # Immediate deletion if removed, handle with caution.
+  recovery_window_in_days = 0               # Immediate deletion if removed, handle with caution.
 }
 
 # Create a new version of the secret containing the SSH private key's value.
@@ -63,9 +63,9 @@ resource "aws_secretsmanager_secret_version" "ssh_key_version" {
 
 # Module to configure Elasticsearch on the EC2 instance.
 module "elasticsearch" {
-  source          = "./elasticsearch"
-  instance_id     = aws_instance.elasticsearch_instance.id
-  host_ip         = aws_instance.elasticsearch_instance.public_ip
+  source           = "./elasticsearch"
+  instance_id      = aws_instance.elasticsearch_instance.id
+  host_ip          = aws_instance.elasticsearch_instance.public_ip
   private_key_path = tls_private_key.ssh_key.private_key_pem # Path to the private key.
-  user            = "ec2-user" # Default user, adjust based on the AMI used.
-}
+  user             = "ec2-user"                              # Default user, adjust based on the AMI used.
+} 

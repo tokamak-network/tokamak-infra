@@ -1,6 +1,7 @@
 blockscout:
   image:
     repository: blockscout/blockscout-optimism
+    tag: 6.3.0
 
   env:
     DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-thanos'
@@ -23,6 +24,7 @@ blockscout:
     INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '5412811'
     INDEXER_OPTIMISM_L1_BATCH_INBOX: '0xff00000000000000000000000000111551118080'
     INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: '0x92546dE8ebC70E236C8F27f0B0aE254309B84332'
+    INDEXER_OPTIMISM_L1_BATCH_BLOCKSCOUT_BLOBS_API_URL: 'https://eth-sepolia.blockscout.com/api/v2/blobs'
     INDEXER_OPTIMISM_L2_BATCH_GENESIS_BLOCK_NUMBER: '0'
     INDEXER_OPTIMISM_L1_OUTPUT_ROOTS_START_BLOCK: '5412811'
     INDEXER_OPTIMISM_L1_OUTPUT_ORACLE_CONTRACT: '0xfa565a84075091044FC891e3f73E26A014A4fd8c'

@@ -1,6 +1,9 @@
 stats:
   enabled: true
 
+  image:
+    tag: v1.5.2
+
   env:
     STATS__DB_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/stats-sepolia-test'
     STATS__BLOCKSCOUT_DB_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-thanos'

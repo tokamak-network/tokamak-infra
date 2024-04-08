@@ -1,4 +1,7 @@
 frontend:
+  image:
+    tag: v1.28.0
+
   replicaCount: 1
 
   env:

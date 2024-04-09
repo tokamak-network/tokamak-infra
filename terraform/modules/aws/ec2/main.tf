@@ -1,4 +1,3 @@
-
 # Dynamically generate an RSA SSH key pair for secure EC2 instance access.
 resource "tls_private_key" "ssh_key" {
   algorithm = "RSA"
@@ -68,4 +67,4 @@ module "elasticsearch" {
   host_ip          = aws_instance.elasticsearch_instance.public_ip
   private_key_path = tls_private_key.ssh_key.private_key_pem # Path to the private key.
   user             = "ec2-user"                              # Default user, adjust based on the AMI used.
-} 
+}

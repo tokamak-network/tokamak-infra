@@ -10,8 +10,7 @@ variable "user" {
   description = "The username for SSH access."
   default     = "ec2-user"
 }
+
 variable "host_ip" {
   description = "Public IP of EC2 instance"
 }
-
- 

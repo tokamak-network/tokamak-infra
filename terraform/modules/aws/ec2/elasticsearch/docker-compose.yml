@@ -9,7 +9,7 @@ services:
     environment:
       - discovery.type=single-node
     healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health?wait_for_status=yellow&timeout=50s || exit 1"]
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health?wait_for_status=green&timeout=50s || exit 1"]
       interval: 1m30s
       timeout: 60s
       retries: 3

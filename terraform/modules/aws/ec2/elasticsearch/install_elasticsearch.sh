@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Log file for auditability and troubleshooting

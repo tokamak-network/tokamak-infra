@@ -1,5 +1,3 @@
-
-
 # Resource to install Elasticsearch using a remote-exec provisioner.
 resource "terraform_data" "install_elasticsearch" {
   triggers_replace = {

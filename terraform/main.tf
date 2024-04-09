@@ -16,7 +16,6 @@ module "vpc" {
   cluster_name = var.cluster_name
 }
 
-
 module "eks" {
   source = "./modules/aws/eks"
 
@@ -111,7 +110,6 @@ module "rds" {
 
   rds_name = "${var.cluster_name}-rds"
 }
-
 
 module "ec2_instance" {
   source             = "./modules/aws/ec2"

@@ -1,0 +1,17 @@
+version: '3'
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    ports:
+      - "9200:9200"
+    volumes:
+      - /tmp/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - discovery.type=single-node
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health?wait_for_status=green&timeout=50s || exit 1"]
+      interval: 1m30s
+      timeout: 60s
+      retries: 3
+      start_period: 90s
+    restart: on-failure

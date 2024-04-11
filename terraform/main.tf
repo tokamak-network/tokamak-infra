@@ -110,3 +110,12 @@ module "rds" {
 
   rds_name = "${var.cluster_name}-rds"
 }
+
+module "ec2_instance" {
+  source             = "./modules/aws/ec2"
+  ami                = "ami-0c031a79ffb01a803"
+  instance_type      = "t2.medium"
+  vpc_id             = module.vpc.vpc_id
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  private_subnet_ids = module.vpc.private_subnet_ids
+}

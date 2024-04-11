@@ -24,6 +24,14 @@ patchesStrategicMerge:
 - resource_override.yaml
 
 images:
+- name: onthertech/thanos-op-batcher
+  newTag: nightly-a2db1396
+- name: onthertech/thanos-op-node
+  newTag: nightly-a2db1396
+- name: onthertech/thanos-op-proposer
+  newTag: nightly-a2db1396
+- name: onthertech/thanos-proxyd
+  newTag: nightly-a2db1396
 - name: onthertech/titan-op-batcher
   newTag: nightly-2fdf6833
 - name: onthertech/titan-op-geth

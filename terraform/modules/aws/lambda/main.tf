@@ -10,7 +10,7 @@ resource "terraform_data" "pull_github_repo" {
 
   provisioner "local-exec" {
     working_dir = "${path.module}/${var.git_repo_name}"
-    command     = "make zip && cp -f ${var.git_repo_name}.zip ../src"
+    command     = "make zip && cp -f ${var.git_repo_name}.zip ../src/${var.network_name}"
   }
 }
 
@@ -28,7 +28,7 @@ resource "terraform_data" "del_github_repo" {
 }
 
 data "local_file" "zip_file" {
-  filename   = "${path.module}/src/${var.git_repo_name}.zip"
+  filename   = "${path.module}/src/${var.network_name}/${var.git_repo_name}.zip"
   depends_on = [terraform_data.pull_github_repo]
 }
 

@@ -37,7 +37,7 @@ spec:
                 name: common
       containers:
         - name: op-node
-          image: onthertech/titan-op-node
+          image: onthertech/thanos-op-node
           imagePullPolicy: IfNotPresent
           command: ['/bin/sh', '/op-node-scripts/entrypoint-op-node.sh']
           envFrom:

@@ -25,7 +25,7 @@ patches:
 
 images:
 - name: onthertech/thanos-op-geth
-  newTag: nightly-5b79825a
+  newTag: nightly-d63cdf98
 - name: onthertech/titan-op-batcher
   newTag: nightly-aad30909
 - name: onthertech/titan-op-geth

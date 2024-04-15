@@ -24,13 +24,13 @@ patches:
   - path: resource_override.yaml
 
 images:
-- name: onthertech/titan-op-batcher
+- name: onthertech/thanos-op-batcher
   newTag: nightly-aad30909
-- name: onthertech/titan-op-geth
+- name: onthertech/thanos-op-geth
   newTag: nightly-17b646f9
-- name: onthertech/titan-op-node
+- name: onthertech/thanos-op-node
   newTag: nightly-aad30909
-- name: onthertech/titan-op-proposer
+- name: onthertech/thanos-op-proposer
   newTag: nightly-aad30909
-- name: onthertech/titan-proxyd
+- name: onthertech/thanos-proxyd
   newTag: nightly-aad30909

@@ -21,9 +21,11 @@ resources:
 - ingress.yaml
 
 patches:
-  - path: resource_override.yaml
+- path: resource_override.yaml
 
 images:
+- name: onthertech/thanos-op-geth
+  newTag: nightly-5b79825a
 - name: onthertech/titan-op-batcher
   newTag: nightly-aad30909
 - name: onthertech/titan-op-geth

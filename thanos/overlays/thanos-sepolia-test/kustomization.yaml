@@ -21,16 +21,18 @@ resources:
 - ingress.yaml
 
 patches:
-  - path: resource_override.yaml
+- path: resource_override.yaml
 
 images:
-- name: onthertech/thanos-op-batcher
-  newTag: nightly-aad30909
 - name: onthertech/thanos-op-geth
+  newTag: nightly-d63cdf98
+- name: onthertech/titan-op-batcher
+  newTag: nightly-aad30909
+- name: onthertech/titan-op-geth
   newTag: nightly-17b646f9
-- name: onthertech/thanos-op-node
+- name: onthertech/titan-op-node
   newTag: nightly-aad30909
-- name: onthertech/thanos-op-proposer
+- name: onthertech/titan-op-proposer
   newTag: nightly-aad30909
-- name: onthertech/thanos-proxyd
+- name: onthertech/titan-proxyd
   newTag: nightly-aad30909

@@ -29,3 +29,7 @@ variable "git_repo_name" {
 variable "source_version" {
   type = string
 }
+
+variable "network_name" {
+  type = string
+}

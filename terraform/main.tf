@@ -100,6 +100,7 @@ module "lambda" {
   es_basic_auth  = var.es_basic_auth
   git_user_name  = var.git_user_name
   git_repo_name  = var.git_repo_name
+  network_name   = var.network_name
 }
 
 module "rds" {

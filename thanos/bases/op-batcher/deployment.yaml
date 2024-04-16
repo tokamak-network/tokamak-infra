@@ -28,6 +28,8 @@ spec:
           ports:
             - containerPort: 8548
               protocol: TCP
+            - containerPort: 7300
+              protocol: TCP
           resources: {}
           envFrom:
             - configMapRef:

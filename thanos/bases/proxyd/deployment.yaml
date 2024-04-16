@@ -23,7 +23,7 @@ spec:
             ]
       containers:
         - name: proxyd
-          image: onthertech/titan-proxyd
+          image: onthertech/thanos-proxyd
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

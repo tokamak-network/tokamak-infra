@@ -18,7 +18,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: op-geth
-          image: onthertech/titan-op-geth
+          image: onthertech/thanos-op-geth
           imagePullPolicy: IfNotPresent
           command: ['/bin/sh', '/op-geth-scripts/entrypoint-op-geth.sh']
           envFrom:

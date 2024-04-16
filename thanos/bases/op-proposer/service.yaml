@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: titan-proposer-svc
+  name: op-proposer-svc
 spec:
   ports:
     - name: http
@@ -9,4 +9,4 @@ spec:
       protocol: TCP
       targetPort: 8560
   selector:
-    app: titan-proposer
+    app: op-proposer

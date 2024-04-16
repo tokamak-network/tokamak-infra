@@ -4,4 +4,4 @@ resources:
   - deployment.yaml
   - service.yaml
 commonLabels:
-  app: titan-proposer
+  app: op-proposer

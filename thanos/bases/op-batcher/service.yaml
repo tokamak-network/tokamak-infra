@@ -10,3 +10,6 @@ spec:
       port: 8548
       protocol: TCP
       targetPort: 8548
+    - name: metric
+      port: 7300
+      targetPort: 7300

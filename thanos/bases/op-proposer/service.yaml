@@ -3,10 +3,13 @@ kind: Service
 metadata:
   name: op-proposer-svc
 spec:
+  selector:
+    app: op-proposer
   ports:
     - name: http
       port: 8560
       protocol: TCP
       targetPort: 8560
-  selector:
-    app: op-proposer
+    - name: metric
+      port: 7300
+      targetPort: 7300

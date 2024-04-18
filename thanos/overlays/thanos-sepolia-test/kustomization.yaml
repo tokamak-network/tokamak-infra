@@ -6,22 +6,22 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- namespace.yaml
-- ../../bases/op-geth
-- ../../bases/op-node
-- ../../bases/op-batcher
-- ../../bases/op-proposer
-- ../../bases/proxyd
-- ../../envs/thanos-sepolia-test
-- ../../files
-- pv.yaml
-- pvc.yaml
-- secretstore.yaml
-- externalsecret.yaml
-- ingress.yaml
+  - namespace.yaml
+  - ../../bases/op-geth
+  - ../../bases/op-node
+  - ../../bases/op-batcher
+  - ../../bases/op-proposer
+  - ../../bases/proxyd
+  - ../../envs/thanos-sepolia-test
+  - ../../files
+  - pv.yaml
+  - pvc.yaml
+  - secretstore.yaml
+  - externalsecret.yaml
+  - ingress.yaml
 
 patches:
-- path: resource_override.yaml
+  - path: resource_override.yaml
 
 images:
 - name: onthertech/thanos-op-batcher
@@ -34,13 +34,3 @@ images:
   newTag: nightly-8ee6d4f8
 - name: onthertech/thanos-proxyd
   newTag: nightly-8ee6d4f8
-- name: onthertech/titan-op-batcher
-  newTag: nightly-aad30909
-- name: onthertech/titan-op-geth
-  newTag: nightly-17b646f9
-- name: onthertech/titan-op-node
-  newTag: nightly-aad30909
-- name: onthertech/titan-op-proposer
-  newTag: nightly-aad30909
-- name: onthertech/titan-proxyd
-  newTag: nightly-aad30909

@@ -5,6 +5,7 @@ services:
     ports:
       - "9200:9200"
     volumes:
+      - /mnt/esdata:/usr/share/elasticsearch/data
       - /tmp/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
     environment:
       - discovery.type=single-node

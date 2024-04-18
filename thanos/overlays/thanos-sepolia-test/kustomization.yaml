@@ -24,13 +24,13 @@ patches:
   - path: resource_override.yaml
 
 images:
-  - name: onthertech/thanos-op-batcher
-    newTag: nightly-63a34036
-  - name: onthertech/thanos-op-geth
-    newTag: nightly-d63cdf98
-  - name: onthertech/thanos-op-node
-    newTag: nightly-63a34036
-  - name: onthertech/thanos-op-proposer
-    newTag: nightly-63a34036
-  - name: onthertech/thanos-proxyd
-    newTag: nightly-63a34036
+- name: onthertech/thanos-op-batcher
+  newTag: nightly-8ee6d4f8
+- name: onthertech/thanos-op-geth
+  newTag: nightly-d63cdf98
+- name: onthertech/thanos-op-node
+  newTag: nightly-8ee6d4f8
+- name: onthertech/thanos-op-proposer
+  newTag: nightly-8ee6d4f8
+- name: onthertech/thanos-proxyd
+  newTag: nightly-8ee6d4f8

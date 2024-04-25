@@ -27,7 +27,7 @@ images:
 - name: onthertech/thanos-op-batcher
   newTag: nightly-1200f1ef
 - name: onthertech/thanos-op-geth
-  newTag: nightly-d63cdf98
+  newTag: nightly-7fc3981b
 - name: onthertech/thanos-op-node
   newTag: nightly-1200f1ef
 - name: onthertech/thanos-op-proposer

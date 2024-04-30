@@ -1,16 +1,43 @@
 version: '3'
 services:
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.8.0
     ports:
-      - "9200:9200"
+      - '9200:9200'
     volumes:
       - /mnt/esdata:/usr/share/elasticsearch/data
-      - /tmp/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - /tmp/config:/tmp/config
+      - /tmp/scripts:/usr/share/elasticsearch/scripts
     environment:
-      - discovery.type=single-node
+      node.name: 'elasticsearch'
+      cluster.initial_master_nodes: 'elasticsearch,'
+      node.roles: 'master,data,data_content,data_hot,data_warm,data_cold,ingest,ml,remote_cluster_client,transform,'
+      cluster.name: 'elasticsearch'
+      network.host: '0.0.0.0'
+      ELASTIC_PASSWORD: 'elastic'
+      xpack.security.enabled: 'true'
+      xpack.security.transport.ssl.enabled: 'true'
+      xpack.security.http.ssl.enabled: 'false'
+      xpack.security.transport.ssl.verification_mode: 'certificate'
+      xpack.security.transport.ssl.key: '/usr/share/elasticsearch/config/certs/tls.key'
+      xpack.security.transport.ssl.certificate: '/usr/share/elasticsearch/config/certs/tls.crt'
+      xpack.security.transport.ssl.certificate_authorities: '/usr/share/elasticsearch/config/certs/ca.crt'
+      xpack.security.http.ssl.key: '/usr/share/elasticsearch/config/certs/tls.key'
+      xpack.security.http.ssl.certificate: '/usr/share/elasticsearch/config/certs/tls.crt'
+      xpack.security.http.ssl.certificate_authorities: '/usr/share/elasticsearch/config/certs/ca.crt'
+    command:
+      - bash
+      - -c
+      - |
+        cp -r /tmp/config/* /usr/share/elasticsearch/config
+        scripts/elasticsearch_init.sh &
+        /bin/tini -- /usr/local/bin/docker-entrypoint.sh
     healthcheck:
-      test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health?wait_for_status=green&timeout=50s || exit 1"]
+      test:
+        [
+          'CMD-SHELL',
+          'curl --silent --fail localhost:9200/_cluster/health?wait_for_status=green&timeout=50s || exit 1',
+        ]
       interval: 1m30s
       timeout: 60s
       retries: 3

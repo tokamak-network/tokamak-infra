@@ -1,0 +1,41 @@
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: aws-logging
+  namespace: aws-observability
+data:
+  flb_log_cw: 'true'
+  filters.conf: |
+    [FILTER]
+        Name parser
+        Match *
+        Key_name log
+        Parser crio
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+        Labels Off
+        Annotations Off
+        Buffer_Size 0
+        Kube_Meta_Cache_TTL 300s
+  output.conf: |
+    [OUTPUT]
+        Name  es
+        Match *
+        Host  ${ES_ENDPOINT}
+        Port  9200
+        Index thanos
+        Type  log
+        HTTP_User   log_bulk
+        HTTP_Passwd elastic
+        Suppress_Type_Name On
+  parsers.conf: |
+    [PARSER]
+        Name crio
+        Format Regex
+        Regex ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>P|F) (?<log>.*)$
+        Time_Key    time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L%z

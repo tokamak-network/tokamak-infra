@@ -1,3 +1,8 @@
+variable "network_name" {
+  description = "Network Name"
+  type        = string
+}
+
 #AMI ID for the EC2 instance
 variable "ami" {
   description = "AMI ID of the instance"
@@ -26,4 +31,14 @@ variable "private_subnet_ids" {
 variable "public_subnet_ids" {
   description = "Public Subnet IDs"
   type        = list(string)
+}
+
+variable "vpc_cidr" {
+  description = "VPC CIDR"
+  type        = string
+}
+
+variable "parent_domain" {
+  description = "Parent Domain"
+  type        = string
 }

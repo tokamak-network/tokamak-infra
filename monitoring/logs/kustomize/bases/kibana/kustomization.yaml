@@ -5,10 +5,5 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- deployment.yaml
-- service.yaml
-
-configMapGenerator:
-- name: kibana-dashboards
-  files:
-    - dashboards/savedObjects.ndjson
+  - deployment.yaml
+  - service.yaml

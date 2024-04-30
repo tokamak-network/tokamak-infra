@@ -8,6 +8,7 @@ generatorOptions:
 resources:
   - blockscout.yaml
   - graph-node.yaml
+  - logs.yaml
   - metrics.yaml
   - redis.yaml
   - thanos.yaml

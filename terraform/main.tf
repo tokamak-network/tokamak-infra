@@ -75,6 +75,7 @@ module "k8s" {
   efs_es_id                          = module.efs_es.efs_id
   aws_secretsmanager_id              = module.secretsmanager.aws_secretsmanager_id
   external_secret_namespace          = var.external_secret_namespace
+  es_endpoint                        = module.ec2_instance.es_endpoint
 }
 
 module "waf" {
@@ -92,12 +93,16 @@ module "s3_alb" {
 module "lambda" {
   source = "./modules/aws/lambda"
 
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
+
   source_version = var.lambda_source_version
   function_name  = var.lambda_function_name
   s3_bucket_id   = module.s3_alb.bucket_id
   s3_bucket_arn  = module.s3_alb.bucket_arn
-  es_endpoint    = var.es_endpoint
-  es_basic_auth  = var.es_basic_auth
+  es_endpoint    = module.ec2_instance.es_endpoint
+  es_port        = module.ec2_instance.es_port
+  es_basic_auth  = module.ec2_instance.es_basic_auth
   git_user_name  = var.git_user_name
   git_repo_name  = var.git_repo_name
   network_name   = var.network_name
@@ -115,10 +120,15 @@ module "rds" {
 module "ec2_instance" {
   source = "./modules/aws/ec2"
 
-  ami           = "ami-0c031a79ffb01a803"
-  instance_type = "t2.medium"
+  network_name = var.network_name
+
+  ami           = var.ec2_ami
+  instance_type = var.ec2_instance
 
   vpc_id             = module.vpc.vpc_id
+  vpc_cidr           = var.vpc_cidr
   public_subnet_ids  = module.vpc.public_subnet_ids
   private_subnet_ids = module.vpc.private_subnet_ids
+
+  parent_domain = var.parent_domain
 }

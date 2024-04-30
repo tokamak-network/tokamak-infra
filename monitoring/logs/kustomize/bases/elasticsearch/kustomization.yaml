@@ -5,6 +5,6 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- service.yaml
-- statefulset.yaml
-- secret-cert.yaml
+  - service.yaml
+  - statefulset.yaml
+  - secret-cert.yaml

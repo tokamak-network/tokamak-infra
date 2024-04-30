@@ -64,16 +64,6 @@ variable "lambda_function_name" {
   type        = string
 }
 
-variable "es_endpoint" {
-  description = "Elasticsearch Endpoint"
-  type        = string
-}
-
-variable "es_basic_auth" {
-  description = "Elasticsearch Basic Auth"
-  type        = string
-}
-
 variable "git_user_name" {
   description = "Git User Name for lambda function"
   type        = string
@@ -97,4 +87,14 @@ variable "external_secret_namespace" {
 variable "kms_key_administrators" {
   description = "kms key administrators"
   type        = list(string)
+}
+
+variable "ec2_ami" {
+  description = "EC2 AMI"
+  type        = string
+}
+
+variable "ec2_instance" {
+  description = "EC2 instance"
+  type        = string
 }

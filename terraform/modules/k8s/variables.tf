@@ -73,3 +73,7 @@ variable "external_secret_namespace" {
   description = "External_Secret_Namespace"
   type        = string
 }
+
+variable "es_endpoint" {
+  type = string
+}

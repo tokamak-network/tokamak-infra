@@ -60,7 +60,7 @@ sudo systemctl start docker
 
 # Install Docker Compose
 echo "Installing Docker Compose..."
-DOCKER_COMPOSE_VERSION="v2.3.3"  
+DOCKER_COMPOSE_VERSION="v2.3.3"
 sudo mkdir -p /usr/local/lib/docker/cli-plugins
 sudo curl -SL "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-linux-x86_64" -o /usr/local/lib/docker/cli-plugins/docker-compose
 sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
@@ -68,12 +68,20 @@ sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 # Verify Docker and Docker Compose installation
 echo "Verifying Docker and Docker Compose installation..."
 sudo docker --version
-sudo docker compose version 
+sudo docker compose version
 
 # Assuming docker-compose.yml is already transferred to /tmp
 cd /tmp || exit
 
+# Update permission of scripts
+sudo chown -R 1000:1000 scripts/elasticsearch_init.sh
+sudo chmod 750 scripts/elasticsearch_init.sh
+
+# update vm.max_map_count
+sudo sysctl -w vm.max_map_count=262144
+sudo systemctl restart docker
+
 echo "Starting Elasticsearch with Docker Compose..."
-sudo docker compose up -d  # Using the integrated `docker compose` command
+sudo docker compose up -d # Using the integrated `docker compose` command
 
 echo "Setup completed at $(date)"

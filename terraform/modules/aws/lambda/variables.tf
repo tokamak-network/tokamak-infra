@@ -1,3 +1,14 @@
+# A list of IDs for private subnets within the specified VPC.
+variable "private_subnet_ids" {
+  description = "Private Subnet IDs"
+  type        = list(string)
+}
+
+variable "vpc_id" {
+  description = "VPC ID"
+  type        = string
+}
+
 variable "function_name" {
   type = string
 }
@@ -11,6 +22,10 @@ variable "s3_bucket_arn" {
 }
 
 variable "es_endpoint" {
+  type = string
+}
+
+variable "es_port" {
   type = string
 }
 

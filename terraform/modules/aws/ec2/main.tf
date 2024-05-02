@@ -7,7 +7,7 @@ resource "tls_private_key" "ssh_key" {
 # Create an AWS key pair using the public key generated above. This key pair
 # is used to securely SSH into the EC2 instances.
 resource "aws_key_pair" "generated_key" {
-  key_name   = "ec2-ssh-keyv4" # Unique name for the SSH key pair on AWS.
+  key_name   = "${var.network_name}-ec2-ssh-key" # Unique name for the SSH key pair on AWS.
   public_key = tls_private_key.ssh_key.public_key_openssh
 }
 
@@ -23,6 +23,13 @@ resource "aws_security_group" "elasticsearch_sg" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 9200
+    to_port     = 9200
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc_cidr]
   }
 
   # Outbound rule to allow all outbound traffic. 
@@ -48,13 +55,31 @@ resource "aws_instance" "elasticsearch_instance" {
   }
 }
 
+resource "aws_route53_zone" "private" {
+  name = "${var.network_name}.private"
+
+  vpc {
+    vpc_id = var.vpc_id
+  }
+}
+
+resource "aws_route53_record" "this" {
+  allow_overwrite = true
+  name            = "es.${var.network_name}.private"
+  records         = [aws_instance.elasticsearch_instance.private_ip]
+  ttl             = 300
+  type            = "A"
+  zone_id         = aws_route53_zone.private.zone_id
+}
+
 # Create EBS volume for Elasticsearch data storage
 resource "aws_ebs_volume" "elasticsearch_data" {
   availability_zone = aws_instance.elasticsearch_instance.availability_zone
   size              = 100
   type              = "gp3"
+
   tags = {
-    Name = "ElasticsearchDataVolume"
+    Name = "${var.network_name}_ElasticsearchDataVolume"
   }
 }
 
@@ -68,8 +93,8 @@ resource "aws_volume_attachment" "elasticsearch_data_attach" {
 
 # Store the SSH private key in AWS Secrets Manager for secure handling.
 resource "aws_secretsmanager_secret" "ssh_key" {
-  name                    = "ec2-ssh-keyv4" # Unique name for the secret.
-  recovery_window_in_days = 0               # Immediate deletion if removed, handle with caution.
+  name                    = "${var.network_name}/ec2-ssh-key" # Unique name for the secret.
+  recovery_window_in_days = 0                                 # Immediate deletion if removed, handle with caution.
 }
 
 # Create a new version of the secret containing the SSH private key's value.
@@ -108,14 +133,14 @@ resource "aws_dlm_lifecycle_policy" "ebs_snapshot_policy" {
     }
 
     target_tags = {
-      "Name" = "ElasticsearchDataVolume"
+      "Name" = "${var.network_name}_ElasticsearchDataVolume"
     }
   }
 }
 
 # IAM role for DLM to manage snapshots
 resource "aws_iam_role" "dlm_lifecycle_role" {
-  name = "dlm_lifecycle_role"
+  name = "${var.network_name}_dlm_lifecycle_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -133,7 +158,7 @@ resource "aws_iam_role" "dlm_lifecycle_role" {
 
 # IAM policy to allow the DLM role to manage EBS snapshots
 resource "aws_iam_role_policy" "dlm_lifecycle_policy" {
-  name = "dlm_snapshot_policy"
+  name = "${var.network_name}_dlm_snapshot_policy"
 
   role = aws_iam_role.dlm_lifecycle_role.id
   policy = jsonencode({

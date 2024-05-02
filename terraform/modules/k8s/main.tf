@@ -192,7 +192,7 @@ resource "kubectl_manifest" "argocd_applications" {
 resource "kubectl_manifest" "resources" {
   for_each = fileset(path.module, "resources/**")
 
-  yaml_body = file("${path.module}/${each.value}")
+  yaml_body = replace(file("${path.module}/${each.value}"), "${"$"}{ES_ENDPOINT}", var.es_endpoint)
 
   depends_on = [null_resource.kubectl]
 }

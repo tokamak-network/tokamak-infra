@@ -11,14 +11,14 @@ parent_domain             = "thanos-sepolia-test.tokamak.network"
 service_names             = ["*"]
 alb_bucket_name           = "s3-alb-access-logs-lambda-thanos-sepolia-test"
 lambda_function_name      = "alb_logs_to_elasticsearch_thanos-sepolia-test"
-es_endpoint               = ""
-es_basic_auth             = ""
 git_user_name             = "tokamak-network"
 git_repo_name             = "ALB_S3_Logs_To_ES"
-lambda_source_version     = "1.0"
+lambda_source_version     = "3.0"
 external_secret_namespace = "thanos"
 kms_key_administrators = [
   "arn:aws:iam::156512274928:user/steven.l@onther.io",
   "arn:aws:iam::156512274928:user/austin.o@onther.io",
   "arn:aws:iam::156512274928:user/steven@tokamak.network",
 ]
+ec2_ami      = "ami-0c031a79ffb01a803"
+ec2_instance = "t3.medium"

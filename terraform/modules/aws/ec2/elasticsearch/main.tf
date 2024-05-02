@@ -20,8 +20,13 @@ resource "terraform_data" "install_elasticsearch" {
 
   # Transfer the Elasticsearch configuration file to the remote EC2 instance.
   provisioner "file" {
-    source      = "${path.module}/elasticsearch.yml"
-    destination = "/tmp/elasticsearch.yml"
+    source      = "${path.module}/config"
+    destination = "/tmp/config"
+  }
+
+  provisioner "file" {
+    source      = "${path.module}/scripts"
+    destination = "/tmp/scripts"
   }
 
   # Transfer a custom shell script to the remote EC2 instance for installing and configuring Elasticsearch.
@@ -37,4 +42,3 @@ resource "terraform_data" "install_elasticsearch" {
     ]
   }
 }
-

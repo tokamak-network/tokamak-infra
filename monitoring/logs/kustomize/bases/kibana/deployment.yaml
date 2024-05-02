@@ -35,69 +35,69 @@ spec:
             defaultMode: 0755
       initContainers:
       containers:
-      - name: kibana
-        securityContext:
-          capabilities:
-            drop:
-            - ALL
-          runAsNonRoot: true
-          runAsUser: 1000
-        image: "docker.elastic.co/kibana/kibana:8.8.0"
-        imagePullPolicy: "IfNotPresent"
-        env:
-          - name: SERVER_HOST
-            value: "0.0.0.0"
-          - name: NODE_OPTIONS
-            value: --max-old-space-size=1800
-          - name: ELASTIC_PASSWORD
-            value: "elastic"
-        command:
-        - bash
-        - -c
-        - |
-          scripts/kibana_init.sh &
-          /bin/tini -- /usr/local/bin/kibana-docker
-        readinessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 3
-          timeoutSeconds: 5
-          exec:
-            command:
-              - bash
-              - -c
-              - |
-                #!/usr/bin/env bash -e
+        - name: kibana
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            runAsUser: 1000
+          image: "docker.elastic.co/kibana/kibana:8.8.0"
+          imagePullPolicy: "IfNotPresent"
+          env:
+            - name: SERVER_HOST
+              value: "0.0.0.0"
+            - name: NODE_OPTIONS
+              value: --max-old-space-size=1800
+            - name: ELASTIC_PASSWORD
+              value: "elastic"
+          command:
+            - bash
+            - -c
+            - |
+              scripts/kibana_init.sh &
+              /bin/tini -- /usr/local/bin/kibana-docker
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 3
+            timeoutSeconds: 5
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  #!/usr/bin/env bash -e
 
-                # Disable nss cache to avoid filling dentry cache when calling curl
-                # This is required with Kibana Docker using nss < 3.52
-                export NSS_SDB_USE_CACHE=no
+                  # Disable nss cache to avoid filling dentry cache when calling curl
+                  # This is required with Kibana Docker using nss < 3.52
+                  export NSS_SDB_USE_CACHE=no
 
-                http () {
-                    local path="${1}"
-                    set -- -XGET -s --fail -L
+                  http () {
+                      local path="${1}"
+                      set -- -XGET -s --fail -L
 
-                    if [ -n "${ELASTICSEARCH_USERNAME}" ] && [ -n "${ELASTICSEARCH_PASSWORD}" ]; then
-                      set -- "$@" -u "${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
-                    fi
+                      if [ -n "${ELASTICSEARCH_USERNAME}" ] && [ -n "${ELASTICSEARCH_PASSWORD}" ]; then
+                        set -- "$@" -u "${ELASTICSEARCH_USERNAME}:${ELASTICSEARCH_PASSWORD}"
+                      fi
 
-                    STATUS=$(curl --output /dev/null --write-out "%{http_code}" -k "$@" "http://localhost:5601${path}")
-                    if [[ "${STATUS}" -eq 200 ]]; then
-                      exit 0
-                    fi
+                      STATUS=$(curl --output /dev/null --write-out "%{http_code}" -k "$@" "http://localhost:5601${path}")
+                      if [[ "${STATUS}" -eq 200 ]]; then
+                        exit 0
+                      fi
 
-                    echo "Error: Got HTTP code ${STATUS} but expected a 200"
-                    exit 1
-                }
+                      echo "Error: Got HTTP code ${STATUS} but expected a 200"
+                      exit 1
+                  }
 
-                http "/app/kibana"
-        ports:
-        - containerPort: 5601
-        volumeMounts:
-          - name: kibanaconfig
-            mountPath: /usr/share/kibana/config
-          - name: kibanadashboards
-            mountPath: /usr/share/kibana/dashboards
-          - name: kibanascripts
-            mountPath: /usr/share/kibana/scripts
+                  http "/app/kibana"
+          ports:
+            - containerPort: 5601
+          volumeMounts:
+            - name: kibanaconfig
+              mountPath: /usr/share/kibana/config
+            - name: kibanadashboards
+              mountPath: /usr/share/kibana/dashboards
+            - name: kibanascripts
+              mountPath: /usr/share/kibana/scripts

@@ -42,7 +42,7 @@ spec:
               mountPath: /op-geth-auth
             - name: op-geth-volume
               mountPath: /db
-              subPath: op-geth-2
+              subPath: op-geth
       volumes:
         - name: op-geth-volume
           persistentVolumeClaim:

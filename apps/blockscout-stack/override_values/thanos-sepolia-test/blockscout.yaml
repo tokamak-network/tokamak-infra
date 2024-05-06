@@ -4,7 +4,7 @@ blockscout:
     tag: 6.3.0
 
   env:
-    DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.ck2xrlqbgpvt.ap-northeast-2.rds.amazonaws.com:5432/blockscout-sepolia-thanos'
+    DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-test-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout'
     ETHEREUM_JSONRPC_VARIANT: geth
     ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.thanos:8545'
     ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.thanos:8545'
@@ -44,7 +44,7 @@ blockscout:
       alb.ingress.kubernetes.io/ssl-redirect: '443'
       alb.ingress.kubernetes.io/group.name: thanos-sepolia-test
       alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-test,access_logs.s3.prefix=thanos-sepolia-test
-      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:156512274928:regional/webacl/thanos-sepolia-test-block-ddos/cfa600d8-3b76-4bb2-b89d-e115247ae4f8
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-test-block-ddos/ead16fdf-9568-4b04-8230-5fbcd5c99c51
     tls:
       enabled: true
     hostname: explorer.thanos-sepolia-test.tokamak.network

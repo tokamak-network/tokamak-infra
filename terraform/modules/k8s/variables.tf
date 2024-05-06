@@ -53,17 +53,6 @@ variable "aws_acm_certificate_validation" {
   type        = any
 }
 
-variable "efs_id" {
-  description = "EFS_ID"
-  type        = string
-}
-
-
-variable "efs_es_id" {
-  description = "EFS_ES_ID"
-  type        = string
-}
-
 variable "aws_secretsmanager_id" {
   description = "AWS_Secretmanager_ID"
   type        = string

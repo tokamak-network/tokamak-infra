@@ -36,14 +36,6 @@ module "efs" {
   private_subnet_ids = module.vpc.private_subnet_ids
 }
 
-module "efs_es" {
-  source = "./modules/aws/efs"
-
-  efs_name           = "${var.efs_name}_es"
-  vpc_id             = module.vpc.vpc_id
-  private_subnet_ids = module.vpc.private_subnet_ids
-}
-
 module "acm" {
   source = "./modules/aws/acm"
 
@@ -71,8 +63,6 @@ module "k8s" {
   cluster_oidc_issuer_url            = module.eks.cluster_oidc_issuer_url
   oidc_provider_arn                  = module.eks.oidc_provider_arn
   aws_acm_certificate_validation     = module.acm.aws_acm_certificate_validation
-  efs_id                             = module.efs.efs_id
-  efs_es_id                          = module.efs_es.efs_id
   aws_secretsmanager_id              = module.secretsmanager.aws_secretsmanager_id
   external_secret_namespace          = var.external_secret_namespace
   es_endpoint                        = module.ec2_instance.es_endpoint

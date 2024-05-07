@@ -5,7 +5,8 @@ nodeExporter:
 
 prometheus:
   prometheusSpec:
-    retentionSize: 1GB
+    retention: 1y
+    retentionSize: 10GB
     additionalScrapeConfigs:
       - job_name: app-notif
         static_configs:
@@ -14,25 +15,25 @@ prometheus:
       - job_name: data-transport-layer
         static_configs:
           - targets:
-              - data-transport-layer-svc.default:7878
+              - data-transport-layer-svc.titan:7878
       - job_name: batch-submitter
         static_configs:
           - targets:
-              - batch-submitter-svc.default:7300
+              - batch-submitter-svc.titan:7300
       - job_name: l2geth
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - l2geth-svc.default:6060
+              - l2geth-svc.titan:6060
       - job_name: l2geth-replica
         metrics_path: /debug/metrics/prometheus
         static_configs:
           - targets:
-              - l2geth-replica-svc.default:6060
+              - l2geth-replica-svc.titan:6060
       - job_name: proxyd
         static_configs:
           - targets:
-              - proxyd-svc.default:9761
+              - proxyd-svc.titan:9761
       - job_name: l1geth
         metrics_path: /debug/metrics/prometheus
         static_configs:
@@ -74,7 +75,7 @@ prometheus:
           module: [http_post_eth_block_number_2xx]
         static_configs:
           - targets:
-              - http://proxyd-svc.default:8545
+              - http://proxyd-svc.titan:8545
               - https://rpc.tokamak.network
         relabel_configs:
           - source_labels: [module]

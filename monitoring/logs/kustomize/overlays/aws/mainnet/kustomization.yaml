@@ -6,14 +6,11 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- namespace.yaml
-- ../../../bases/elasticsearch
-- ../../../bases/kibana
-- ../../../scripts
-- ../../../envs/aws/mainnet
-- pv.yaml
-- pvc.yaml
-- ingress.yaml
+  - namespace.yaml
+  - ../../../bases/kibana
+  - ../../../scripts
+  - ../../../envs/aws/mainnet
+  - ingress.yaml
 
 patchesStrategicMerge:
-- resource_override.yaml
+  - resource_override.yaml

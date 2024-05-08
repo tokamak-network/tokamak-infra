@@ -1,4 +1,4 @@
-elasticsearch.hosts: http://elasticsearch-0.elasticsearch:9200
+elasticsearch.hosts: http://es.mainnet.private:9200
 elasticsearch.username: kibana_system
 elasticsearch.password: elastic
 server.publicBaseUrl: https://kibana.titan.tokamak.network

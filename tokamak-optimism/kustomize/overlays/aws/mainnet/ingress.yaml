@@ -8,7 +8,8 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/group.name: l2geth
-    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:005310045109:regional/webacl/block_ddos/4790812f-9149-46ef-9d02-56851b32c8e5
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-titan,access_logs.s3.prefix=mainnet
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:211125399844:regional/webacl/titan-block-ddos/1b5605c2-7416-43af-9ca3-ae1af5f21c5e
     alb.ingress.kubernetes.io/conditions.ws-rule: >
       [
         {
@@ -69,7 +70,8 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/group.name: l2geth
-    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:005310045109:regional/webacl/block_ddos/4790812f-9149-46ef-9d02-56851b32c8e5
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-titan,access_logs.s3.prefix=mainnet
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:211125399844:regional/webacl/titan-block-ddos/1b5605c2-7416-43af-9ca3-ae1af5f21c5e
     alb.ingress.kubernetes.io/actions.http-badrequest: >
       {
         "type": "fixed-response",

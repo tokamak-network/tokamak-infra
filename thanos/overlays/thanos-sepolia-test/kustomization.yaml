@@ -25,12 +25,12 @@ patches:
 
 images:
 - name: onthertech/thanos-op-batcher
-  newTag: nightly-febb7261
+  newTag: nightly-12036a73
 - name: onthertech/thanos-op-geth
   newTag: nightly-988758d1
 - name: onthertech/thanos-op-node
-  newTag: nightly-febb7261
+  newTag: nightly-12036a73
 - name: onthertech/thanos-op-proposer
-  newTag: nightly-febb7261
+  newTag: nightly-12036a73
 - name: onthertech/thanos-proxyd
-  newTag: nightly-febb7261
+  newTag: nightly-12036a73

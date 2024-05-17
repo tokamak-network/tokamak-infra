@@ -12,9 +12,9 @@ additionalPrometheusRulesMap:
           for: 5m
           annotations:
             message: "Proposer balance is lower than 0.2 ether\nbatcher balance: {{ $value | printf \"%.2f\"}} eth"
-    - name: 'OutputRootProposeWrong'
+    - name: 'OutputRootProposeStuck'
       rules:
-        - alert: 'OutputRootProposeWrong'
+        - alert: 'OutputRootProposeStuck'
           labels:
             group: tokamak
             app: op-proposer
@@ -23,5 +23,5 @@ additionalPrometheusRulesMap:
           expr: 'op_proposer_default_refs_number{layer="l2", type="proposed"} - op_proposer_default_refs_number{layer="l2", type="proposed"} offset 6m < 30'
           for: 6m
           annotations:
-            message: "OutputRoot propose has something wrong\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
-            message_resolved: "Resolved outputRoot propose\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
+            message: "OutputRoot propose is stuck\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
+            message_resolved: "OutputRoot propose resolved\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"

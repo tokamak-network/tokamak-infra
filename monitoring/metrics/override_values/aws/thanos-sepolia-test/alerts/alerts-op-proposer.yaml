@@ -1,0 +1,27 @@
+additionalPrometheusRulesMap:
+  op-proposer:
+    groups:
+    - name: 'ProposerBalance'
+      rules:
+        - alert: 'ProposerBalance'
+          labels:
+            group: tokamak
+            app: op-proposer
+            severity: warning
+          expr: 'op_proposer_default_balance < 0.2'
+          for: 5m
+          annotations:
+            message: "Proposer balance is lower than 0.2 ether\nbatcher balance: {{ $value | printf \"%.2f\"}} eth"
+    - name: 'OutputRootProposeWrong'
+      rules:
+        - alert: 'OutputRootProposeWrong'
+          labels:
+            group: tokamak
+            app: op-proposer
+            severity: critical
+            severity_resolved: info
+          expr: 'op_proposer_default_refs_number{layer="l2", type="proposed"} - op_proposer_default_refs_number{layer="l2", type="proposed"} offset 6m < 30'
+          for: 6m
+          annotations:
+            message: "OutputRoot propose has something wrong\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
+            message_resolved: "Resolved outputRoot propose\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"

@@ -1,0 +1,70 @@
+additionalPrometheusRulesMap:
+  op-node:
+    groups:
+    - name: 'OpGethBusy'
+      rules:
+        - alert: 'OpGethRequestSlow'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: warning
+          expr: histogram_quantile(0.9, sum by (le) (rate(op_node_default_rpc_client_request_duration_seconds_bucket{method=~"engine_forkchoiceUpdatedV2|engine_getPayloadV2|engine_newPayloadV2"}[10m]))) > 0.5
+          for: 5m
+          annotations:
+            message: "op-geth is busy now, block creation can be slow\nreponse time: {{ $value | printf \"%.2f\"}}s"
+    - name: 'L1RPCBusy'
+      rules:
+        - alert: 'L1RPCRequestSlow'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: warning
+          expr: 'histogram_quantile(0.9, sum by (le) (rate(op_node_default_rpc_client_request_duration_seconds_bucket{method=~"eth_getBlockByHash|eth_getBlockReceipts|eth_getBlockByNumber"}[10m]))) > 0.5'
+          for: 5m
+          annotations:
+            message: "L1 RPC is busy now\nresponse time: {{ $value | printf \"%.2f\" }}s"
+    - name: 'OpGethResponseErr'
+      rules:
+        - alert: 'OpGethResponseErr'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: warning
+          expr: 'sum by (error) (rate(op_node_default_rpc_client_responses_total{error!="<nil>", method=~"engine_forkchoiceUpdatedV2|engine_getPayloadV2|engine_newPayloadV2"}[5m])) > 0'
+          for: 5m
+          annotations:
+            message: "L1 RPC Response error"
+    - name: 'L1RPCResponseErr'
+      rules:
+        - alert: 'L1RPCResponseErr'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: warning
+          expr: 'sum by (error) (rate(op_node_default_rpc_client_responses_total{error!="<nil>", method=~"eth_getBlockByHash|eth_getBlockReceipts|eth_getBlockByNumber"}[5m])) > 0'
+          for: 5m
+          annotations:
+            message: "L1 RPC Response error"
+    - name: 'ReorgOccur'
+      rules:
+        - alert: 'ReorgOccur'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: warning
+          expr: 'rate(op_node_default_l1_reorg_depth_bucket{le="1.5"}[1m]) > 0'
+          annotations:
+            message: "L1 chain reorg occoured"
+    - name: 'BlockCreationStuck'
+      rules:
+        - alert: 'BlockCreationStuck'
+          labels:
+            group: tokamak
+            app: op-node
+            severity: critical
+            severity_resolved: info
+          expr: 'op_node_default_refs_number{layer="l2", type="l2_unsafe"} <= op_node_default_refs_number{layer="l2", type="l2_unsafe"} offset 1m'
+          for: 1m
+          annotations:
+            message: "Block creation is stuck. unsafe block is not increase\nLatest L2 Block: {{ \"op_node_default_refs_number{layer='l2', type='l2_unsafe'}\" | query | first | value | printf \"%.0f\"  }}"
+            message_resolved: "Block creation resolved\nLatest L2 Block: {{ \"op_node_default_refs_number{layer='l2', type='l2_unsafe'}\" | query | first | value | printf \"%.0f\"  }}"

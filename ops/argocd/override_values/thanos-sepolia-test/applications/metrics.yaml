@@ -18,7 +18,7 @@ spec:
     #       - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-node.yaml
     #       - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-batcher.yaml
     #       - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-proposer.yaml
-    # # prometheus-blackbox-exporter
+    # prometheus-blackbox-exporter
     - repoURL: 'https://prometheus-community.github.io/helm-charts'
       chart: prometheus-blackbox-exporter
       targetRevision: '*-0'
@@ -31,7 +31,6 @@ spec:
     #   targetRevision: main
     # repository to override
     - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
-      # targetRevision: main
       targetRevision: OR-1573-configure-alert-thanos-sepolia-test
       ref: repo
 

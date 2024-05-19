@@ -14,7 +14,7 @@ spec:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/config.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/prometheus.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/grafana.yaml
-          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alert-manager.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alert.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-node.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-batcher.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-test/alerts/alerts-op-proposer.yaml

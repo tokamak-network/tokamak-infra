@@ -39,7 +39,7 @@ alertmanager:
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
 
 additionalPrometheusRulesMap:
-  rule-name:
+  common:
     groups:
       - name: 'op-geth'
         rules:

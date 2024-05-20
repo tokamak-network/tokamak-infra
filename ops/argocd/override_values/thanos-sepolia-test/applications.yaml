@@ -8,7 +8,8 @@ spec:
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-infra'
     path: ops/argocd/override_values/thanos-sepolia-test/applications
-    targetRevision: main
+    # targetRevision: main
+    targetRevision: OR-1573-configure-alert-thanos-sepolia-test
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd

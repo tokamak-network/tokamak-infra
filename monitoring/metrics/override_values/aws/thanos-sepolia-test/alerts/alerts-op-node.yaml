@@ -19,7 +19,7 @@ additionalPrometheusRulesMap:
             group: tokamak
             app: op-node
             severity: warning
-          expr: 'histogram_quantile(0.9, sum by (le) (rate(op_node_default_rpc_client_request_duration_seconds_bucket{method=~"eth_getBlockByHash|eth_getBlockReceipts|eth_getBlockByNumber"}[10m]))) > 0.5'
+          expr: 'histogram_quantile(0.9, sum by (le) (rate(op_node_default_rpc_client_request_duration_seconds_bucket{method=~"eth_getBlockByHash|eth_getBlockReceipts|eth_getBlockByNumber"}[10m]))) > 1'
           for: 5m
           annotations:
             message: "L1 RPC is busy now\nresponse time: {{ $value | printf \"%.2f\" }}s"

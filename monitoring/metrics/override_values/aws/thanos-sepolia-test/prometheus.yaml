@@ -6,6 +6,8 @@ prometheus:
         memory: 1.7Gi
     retention: 1y
     retentionSize: 10GB
+    scrapeInterval: 1m
+    evaluationInterval: 1m
     additionalScrapeConfigs:
       - job_name: op-node
         static_configs:

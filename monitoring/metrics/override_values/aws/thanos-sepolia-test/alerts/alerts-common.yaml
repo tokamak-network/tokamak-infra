@@ -39,7 +39,7 @@ alertmanager:
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
 
 additionalPrometheusRulesMap:
-  rule-name:
+  common:
     groups:
       - name: 'op-geth'
         rules:
@@ -150,52 +150,3 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'redis is unhealthy'
               message_resolved: 'redis is healthy'
-      # - name: 'sequencer balance'
-      #   rules:
-      #     - alert: 'sequencer balance'
-      #       labels:
-      #         group: tokamak
-      #         app: batch-submitter
-      #         severity: critical
-      #       expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_sequencer_balance_eth < 0.2 and batch_submitter_sequencer_balance_eth != 0)'
-      #       annotations:
-      #         message: "sequencer balance is lower than 0.2 ether\nsequencer balance: {{ printf \"batch_submitter_sequencer_balance_eth{instance=~'.*'}\" | query | first | value }} eth"
-      # - name: 'proposer balance'
-      #   rules:
-      #     - alert: 'proposer balance'
-      #       labels:
-      #         group: tokamak
-      #         app: batch-submitter
-      #         severity: critical
-      #       expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_proposer_balance_eth < 0.2 and batch_submitter_proposer_balance_eth != 0)'
-      #       annotations:
-      #         message: "proposer balance is lower than 0.2 ether\nproposer balance: {{ printf \"batch_submitter_proposer_balance_eth{instance=~'.*'}\" | query | first | value }} eth"
-      # - name: 'mismatch the block number between CTC and L2 block head'
-      #   rules:
-      #     - alert: 'mismatch the block number between CTC and L2 block head'
-      #       labels:
-      #         group: tokamak
-      #         app: batch-submitter
-      #         severity: critical
-      #         severity_resolved: info
-      #       # the end value of sequencer is exclusive.
-      #       # end = l2LatestBlockNumber + 1
-      #       # ref: https://github.com/tokamak-network/tokamak-titan/blob/main/batch-submitter/drivers/sequencer/driver.go#L144
-      #       expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != -1'
-      #       for: 20m
-      #       annotations:
-      #         message: "CTC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
-      #         message_resolved: 'CTC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
-      # - name: 'mismatch the block number between SCC and L2 block head'
-      #   rules:
-      #     - alert: 'mismatch the block number between SCC and L2 block head'
-      #       labels:
-      #         group: tokamak
-      #         app: batch-submitter
-      #         severity: critical
-      #         severity_resolved: info
-      #       expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != -1'
-      #       for: 30m
-      #       annotations:
-      #         message: "SCC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
-      #         message_resolved: 'SCC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'

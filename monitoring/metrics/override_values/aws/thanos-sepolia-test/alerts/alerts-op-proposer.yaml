@@ -11,7 +11,7 @@ additionalPrometheusRulesMap:
           expr: 'op_proposer_default_balance < 0.2'
           for: 5m
           annotations:
-            message: "Proposer balance is lower than 0.2 ether\nbatcher balance: {{ $value | printf \"%.2f\"}} eth"
+            message: "Proposer balance is lower than 0.2 ether\nproposer balance: {{ $value | printf \"%.2f\"}} eth"
     - name: 'OutputRootProposeStuck'
       rules:
         - alert: 'OutputRootProposeStuck'

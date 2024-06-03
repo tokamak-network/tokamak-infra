@@ -32,7 +32,7 @@ additionalPrometheusRulesMap:
             group: tokamak
             app: op-batcher
             severity: critical
-          expr: op_batcher_default_batcher_tx_total{stage="failed"} < op_batcher_default_batcher_tx_total{stage="failed"} offset 6m
+          expr: op_batcher_default_batcher_tx_total{stage="failed"} > op_batcher_default_batcher_tx_total{stage="failed"} offset 6m
           for: 6m
           annotations:
             message: "Batch submit failed\nLast failed timestamp: {{ \"op_batcher_default_last_batcher_tx_unix{stage='failed'}\" | query | first | value | printf \"%.0f\" }}"

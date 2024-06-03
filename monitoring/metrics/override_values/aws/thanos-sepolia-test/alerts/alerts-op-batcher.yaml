@@ -20,11 +20,22 @@ additionalPrometheusRulesMap:
             app: op-batcher
             severity: critical
             severity_resolved: info
-          expr: 'op_batcher_default_batcher_tx_total <= op_batcher_default_batcher_tx_total offset 6m'
-          for: 6m
+          expr: 'op_batcher_default_batcher_tx_total{stage="submitted"} <= op_batcher_default_batcher_tx_total{stage="submitted"} offset 6m'
+          for: 10m
           annotations:
             message: "Batch submit is stuck\nLatest submitted timestamp: {{ \"op_batcher_default_last_batcher_tx_unix{stage='submitted'}\" | query | first | value | printf \"%.0f\" }}"
             message_resolved: "Resolved batch submit"
+    - name: 'BatchSubmitFailed'
+      rules:
+        - alert: 'BatchSubmitFailed'
+          labels:
+            group: tokamak
+            app: op-batcher
+            severity: critical
+          expr: op_batcher_default_batcher_tx_total{stage="failed"} < op_batcher_default_batcher_tx_total{stage="failed"} offset 6m
+          for: 6m
+          annotations:
+            message: "Batch submit failed\nLast failed timestamp: {{ \"op_batcher_default_last_batcher_tx_unix{stage='failed'}\" | query | first | value | printf \"%.0f\" }}"
     - name: 'BlockPending'
       rules:
         - alert: 'BlockPending'

@@ -1,0 +1,152 @@
+alertmanager:
+  config:
+    global:
+      # Also possible to place this URL in a file.
+      # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
+      slack_api_url: 'https://hooks.slack.com/services/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'
+
+    route:
+      receiver: no-alert
+      routes:
+        - matchers:
+            - group = tokamak
+            - severity_resolved = info
+          receiver: slack-notifications-resolve
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - group = tokamak
+          receiver: slack-notifications
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+
+    receivers:
+      - name: no-alert
+      - name: slack-notifications
+        slack_configs:
+          - channel: 'thanos-testnet-status'
+            title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
+      - name: slack-notifications-resolve
+        slack_configs:
+          - channel: 'thanos-testnet-status'
+            send_resolved: true
+            title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
+            text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
+
+additionalPrometheusRulesMap:
+  common:
+    groups:
+      - name: 'op-geth'
+        rules:
+          - alert: 'op-geth down'
+            labels:
+              group: tokamak
+              app: op-geth
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="op-geth"} == 1)'
+            annotations:
+              message: 'op-geth is down'
+              message_resolved: 'op-geth is up'
+      - name: 'op-node'
+        rules:
+          - alert: 'op-node down'
+            labels:
+              group: tokamak
+              app: op-node
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="op-node"} == 1)'
+            annotations:
+              message: 'op-node is down'
+              message_resolved: 'op-node is up'
+      - name: 'op-batcher'
+        rules:
+          - alert: 'op-batcher down'
+            labels:
+              group: tokamak
+              app: op-batcher
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="op-batcher"} == 1)'
+            annotations:
+              message: 'op-batcher is down'
+              message_resolved: 'op-batcher is up'
+      - name: 'op-proposer'
+        rules:
+          - alert: 'op-proposer down'
+            labels:
+              group: tokamak
+              app: op-proposer
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="op-proposer"} == 1)'
+            annotations:
+              message: 'op-proposer is down'
+              message_resolved: 'op-proposer is up'
+      - name: 'proxyd down'
+        rules:
+          - alert: 'proxyd down'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="proxyd"} == 1)'
+            annotations:
+              message: 'proxyd is down'
+              message_resolved: 'proxyd is up'
+      - name: 'proxyd unhealthy'
+        rules:
+          - alert: 'proxyd unhealthy'
+            labels:
+              group: tokamak
+              app: proxyd
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{job="blackbox-eth-block-number", target="http://proxyd-svc.thanos:8545"} == 1)'
+            annotations:
+              message: 'proxyd is unhealthy'
+              message_resolved: 'proxyd is healthy'
+      - name: 'office l1'
+        rules:
+          - alert: 'office l1 unhealthy'
+            for: 1m
+            labels:
+              group: tokamak
+              app: l1
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{job="blackbox-eth-block-number", target="https://sepolia.rpc.tokamak.network"} == 1)'
+            annotations:
+              message: 'office l1 unhealthy'
+              message_resolved: 'office l1 is healthy'
+      - name: 'blockscout'
+        rules:
+          - alert: 'blockscout'
+            labels:
+              group: tokamak
+              app: blockscout
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="blockscout"} == 1)'
+            annotations:
+              message: 'blockscout is down'
+              message_resolved: 'blockscout is up'
+      - name: 'redis unhealthy'
+        rules:
+          - alert: 'redis unhealthy'
+            labels:
+              group: tokamak
+              app: redis
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(probe_success{target="redis-svc.redis:6379"} == 1)'
+            annotations:
+              message: 'redis is unhealthy'
+              message_resolved: 'redis is healthy'

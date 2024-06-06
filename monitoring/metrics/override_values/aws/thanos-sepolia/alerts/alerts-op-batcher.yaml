@@ -1,0 +1,51 @@
+additionalPrometheusRulesMap:
+  op-batcher:
+    groups:
+    - name: 'BatcherBalance'
+      rules:
+        - alert: 'BatcherBalance'
+          labels:
+            group: tokamak
+            app: op-batcher
+            severity: warning
+          expr: 'op_batcher_default_balance < 0.2'
+          for: 5m
+          annotations:
+            message: "Batcher balance is lower than 0.2 ether\nbatcher balance: {{ $value | printf \"%.2f\" }} eth"
+    - name: 'BatchSubmitStuck'
+      rules:
+        - alert: 'BatchSubmitStuck'
+          labels:
+            group: tokamak
+            app: op-batcher
+            severity: critical
+            severity_resolved: info
+          expr: 'op_batcher_default_batcher_tx_total{stage="submitted"} <= op_batcher_default_batcher_tx_total{stage="submitted"} offset 6m'
+          for: 10m
+          annotations:
+            message: "Batch submit is stuck\nLatest submitted timestamp: {{ \"op_batcher_default_last_batcher_tx_unix{stage='submitted'}\" | query | first | value | printf \"%.0f\" }}"
+            message_resolved: "Resolved batch submit"
+    - name: 'BatchSubmitFailed'
+      rules:
+        - alert: 'BatchSubmitFailed'
+          labels:
+            group: tokamak
+            app: op-batcher
+            severity: critical
+          expr: op_batcher_default_batcher_tx_total{stage="failed"} > op_batcher_default_batcher_tx_total{stage="failed"} offset 6m
+          for: 6m
+          annotations:
+            message: "Batch submit failed\nLast failed timestamp: {{ \"op_batcher_default_last_batcher_tx_unix{stage='failed'}\" | query | first | value | printf \"%.0f\" }}"
+    - name: 'BlockPending'
+      rules:
+        - alert: 'BlockPending'
+          labels:
+            group: tokamak
+            app: op-batcher
+            severity: warning
+            severity_resolved: info
+          expr: 'sum by () (op_batcher_default_pending_blocks_count{stage=~"added|closed"}) > 0'
+          for: 12m
+          annotations:
+            message: "Pending Block occurred during channel building"
+            message_resolved: "Pending Block resolved"

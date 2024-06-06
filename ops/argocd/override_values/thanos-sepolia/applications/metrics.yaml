@@ -13,7 +13,6 @@ spec:
         valueFiles:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/config.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/prometheus.yaml
-          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/grafana.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-common.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-node.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-batcher.yaml

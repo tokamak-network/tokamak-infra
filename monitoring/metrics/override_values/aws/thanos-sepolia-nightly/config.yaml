@@ -2,3 +2,6 @@
 
 nodeExporter:
   enabled: false
+
+grafana:
+  enabled: false

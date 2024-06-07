@@ -12,7 +12,7 @@ resources:
 - ../../bases/op-batcher
 - ../../bases/op-proposer
 - ../../bases/proxyd
-- ../../envs/thanos-sepolia-test
+- ../../envs/thanos-sepolia-nightly
 - ../../files
 - pv.yaml
 - pvc.yaml

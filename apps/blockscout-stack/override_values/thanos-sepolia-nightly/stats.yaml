@@ -1,0 +1,29 @@
+stats:
+  enabled: true
+
+  image:
+    tag: v1.6.0
+
+  env:
+    STATS__DB_URL: 'postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/stats'
+    STATS__BLOCKSCOUT_DB_URL: 'postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout'
+    STATS__CREATE_DATABASE: true
+    STATS__RUN_MIGRATIONS: true
+    STATS__FORCE_UPDATE_ON_START: true
+    STATS__SERVER__HTTP__CORS__ENABLED: true
+    STATS__SERVER__HTTP__CORS__ALLOWED_ORIGIN: 'https://explorer.thanos-sepolia-nightly.tokamak.network'
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/group.name: thanos-sepolia-nightly
+      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-nightly,access_logs.s3.prefix=thanos-sepolia-nightly
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-nightly-block-ddos/7d68486d-be76-4086-915c-68760a944ce7
+    tls:
+      enabled: true
+    hostname: stats.thanos-sepolia-nightly.tokamak.network

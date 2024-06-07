@@ -1,0 +1,47 @@
+global:
+  domain: argocd.thanos-sepolia-nightly.tokamak.network
+configs:
+  params:
+    server.insecure: true
+controller:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  resources:
+    requests:
+      cpu: 500m
+      memory: 0.75Gi
+repoServer:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+server:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  ingress:
+    enabled: true
+    ingressClassName: alb
+    annotations:
+      kubernetes.io/ingress.class: alb
+      alb.ingress.kubernetes.io/target-type: ip
+      alb.ingress.kubernetes.io/scheme: internet-facing
+      alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/group.name: thanos-sepolia-nightly
+      alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-nightly,access_logs.s3.prefix=thanos-sepolia-nightly
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-nightly-block-ddos/7d68486d-be76-4086-915c-68760a944ce7
+    tls: true
+applicationSet:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+notifications:
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true

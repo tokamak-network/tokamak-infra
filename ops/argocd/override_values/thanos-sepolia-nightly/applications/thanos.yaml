@@ -1,0 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: thanos
+
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
+    path: thanos/overlays/thanos-sepolia-nightly
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

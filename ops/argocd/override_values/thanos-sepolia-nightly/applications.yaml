@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-infra'
     path: ops/argocd/override_values/thanos-sepolia-nightly/applications
-    targetRevision: OR-1636-create-thanos-sepolia-nightly
+    targetRevision: main
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argocd

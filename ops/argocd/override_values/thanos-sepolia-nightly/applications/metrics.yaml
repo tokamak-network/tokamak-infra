@@ -1,0 +1,43 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring
+spec:
+  project: default
+  sources:
+    # kube-prometheus-stack
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      chart: kube-prometheus-stack
+      targetRevision: '*-0'
+      helm:
+        valueFiles:
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/config.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/prometheus.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/grafana.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/alerts/alerts-common.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/alerts/alerts-op-node.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/alerts/alerts-op-batcher.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/alerts/alerts-op-proposer.yaml
+    # prometheus-blackbox-exporter
+    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+      chart: prometheus-blackbox-exporter
+      targetRevision: '*-0'
+      helm:
+        valueFiles:
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia-nightly/blackbox.yaml
+    # grafana dashboards
+    # - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
+    #   path: monitoring/metrics/dashboards
+    #   targetRevision: main
+    # repository to override
+    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
+      targetRevision: OR-1636-create-thanos-sepolia-nightly
+      ref: repo
+
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: monitoring
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - CreateNamespace=true

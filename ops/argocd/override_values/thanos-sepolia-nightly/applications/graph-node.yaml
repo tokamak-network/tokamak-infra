@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: graph-node
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
+    path: ops/graph-node/kustomize/overlays/aws/thanos-sepolia-nightly
+    targetRevision: OR-1636-create-thanos-sepolia-nightly
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: graph-node
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

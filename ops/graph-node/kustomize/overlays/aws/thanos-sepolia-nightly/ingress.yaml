@@ -1,0 +1,158 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: graph-node-ingress-alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/group.name: thanos-sepolia-nightly
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-nightly,access_logs.s3.prefix=thanos-sepolia-nightly
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-nightly-block-ddos/7d68486d-be76-4086-915c-68760a944ce7
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "graph-node-svc",
+              "servicePort": "8020"
+            }
+          ]
+        }
+      }
+    alb.ingress.kubernetes.io/conditions.ws-rule: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+              "httpHeaderName": "Upgrade",
+              "values": ["websocket"]
+          }
+        },
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Connection",
+            "values": ["Upgrade"]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.ws-rule: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [{
+            "serviceName": "graph-node-svc",
+            "servicePort": "8001"
+          }]
+        }
+      }
+spec:
+  tls:
+    - hosts:
+        - graph-node.thanos-sepolia-nightly.tokamak.network
+  rules:
+    - host: graph-node.thanos-sepolia-nightly.tokamak.network
+      http:
+        paths:
+          - path: /deploy
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8040
+          - path: /subgraphs
+            pathType: Prefix
+            backend:
+              service:
+                name: ws-rule
+                port:
+                  name: use-annotation
+          - path: /subgraphs
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: graph-node-svc
+                port:
+                  number: 8030
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ipfs-ingress-alb
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: '443'
+    alb.ingress.kubernetes.io/group.name: thanos-sepolia-nightly
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-nightly,access_logs.s3.prefix=thanos-sepolia-nightly
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-nightly-block-ddos/7d68486d-be76-4086-915c-68760a944ce7
+    alb.ingress.kubernetes.io/conditions.auth: >
+      [
+        {
+          "field": "http-header",
+          "httpHeaderConfig": {
+            "httpHeaderName": "Authorization",
+            "values": ["Bearer dGl0YW4gaXMgdGhlIGJlc3QgbWFpbm5ldA=="]
+          }
+        }
+      ]
+    alb.ingress.kubernetes.io/actions.auth: >
+      {
+        "type": "forward",
+        "forwardConfig": {
+          "targetGroups": [
+            {
+              "serviceName": "ipfs-svc",
+              "servicePort": "5001"
+            }
+          ]
+        }
+      }
+spec:
+  tls:
+    - hosts:
+        - ipfs.thanos-sepolia-nightly.tokamak.network
+  rules:
+    - host: ipfs.thanos-sepolia-nightly.tokamak.network
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  name: use-annotation

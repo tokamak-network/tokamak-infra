@@ -1,0 +1,14 @@
+config:
+  network:
+    id: '111551118282'
+    name: Thanos Sepolia Nightly
+    shortname: Thanos Sepolia Nightly
+    currency:
+      name: Tokamak Network Token
+      symbol: TON
+      decimals: 18
+
+  testnet: true
+
+  prometheus:
+    enabled: false

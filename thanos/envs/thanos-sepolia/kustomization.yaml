@@ -1,0 +1,25 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: common
+    envs:
+      - ./common.env
+  - name: op-geth
+    envs:
+      - ./op-geth.env
+  - name: op-node
+    envs:
+      - ./op-node.env
+  - name: op-batcher
+    envs:
+      - ./op-batcher.env
+  - name: op-proposer
+    envs:
+      - ./op-proposer.env
+  - name: proxyd
+    files:
+      - ./proxyd-config.toml

@@ -1,4 +1,0 @@
-elasticsearch.hosts: http://es.thanos-sepolia-test.private:9200
-elasticsearch.username: kibana_system
-elasticsearch.password: elastic
-server.publicBaseUrl: https://kibana.thanos-sepolia-test.tokamak.network

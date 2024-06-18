@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: batch-submitter
+  name: tx-batch-submitter
 spec:
   replicas: 1
   template:
@@ -38,7 +38,7 @@ spec:
             - name: wait-scripts
               mountPath: /script/wait
       containers:
-        - name: batch-submitter
+        - name: tx-batch-submitter
           image: onthertech/titan-batch-submitter-service
           imagePullPolicy: IfNotPresent
           ports:
@@ -48,7 +48,7 @@ spec:
           resources: {}
           envFrom:
             - configMapRef:
-                name: batch-submitter
+                name: tx-batch-submitter
             - secretRef:
                 name: secret
       volumes:

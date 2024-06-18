@@ -1,0 +1,14 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thanos-app-notif
+spec:
+  replicas: 1
+  template:
+    spec:
+      terminationGracePeriodSeconds: 10
+      restartPolicy: Always
+      containers:
+        - name: thanos-app-notif
+          image: 
+          imagePullPolicy: Always

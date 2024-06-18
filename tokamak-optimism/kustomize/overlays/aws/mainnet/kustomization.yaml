@@ -10,7 +10,8 @@ resources:
   - ../../../bases/data-transport-layer
   - ../../../bases/l2geth
   - ../../../bases/l2geth-replica
-  - ../../../bases/batch-submitter
+  - ../../../bases/tx-batch-submitter
+  - ../../../bases/state-batch-submitter
   - ../../../bases/proxyd
   - ../../../bases/proxyd-l2geth
   - ingress.yaml

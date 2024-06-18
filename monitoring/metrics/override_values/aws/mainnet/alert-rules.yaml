@@ -77,18 +77,30 @@ additionalPrometheusRulesMap:
             annotations:
               message: 'data-transport-layer is down'
               message_resolved: 'data-transport-layer is up'
-      - name: 'batch-submitter'
+      - name: 'tx-batch-submitter'
         rules:
-          - alert: 'batch-submitter down'
+          - alert: 'tx-batch-submitter down'
             labels:
               group: tokamak
-              app: batch-submitter
+              app: tx-batch-submitter
               severity: critical
               severity_resolved: info
-            expr: 'absent(up{job="batch-submitter"} == 1)'
+            expr: 'absent(up{job="tx-batch-submitter"} == 1)'
             annotations:
-              message: 'batch-submitter is down'
-              message_resolved: 'batch-submitter is up'
+              message: 'tx-batch-submitter is down'
+              message_resolved: 'tx-batch-submitter is up'
+      - name: 'state-batch-submitter'
+        rules:
+          - alert: 'state-batch-submitter down'
+            labels:
+              group: tokamak
+              app: state-batch-submitter
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="state-batch-submitter"} == 1)'
+            annotations:
+              message: 'state-batch-submitter is down'
+              message_resolved: 'state-batch-submitter is up'
       - name: 'proxyd down'
         rules:
           - alert: 'proxyd down'
@@ -155,47 +167,47 @@ additionalPrometheusRulesMap:
           - alert: 'sequencer balance'
             labels:
               group: tokamak
-              app: batch-submitter
+              app: tx-batch-submitter
               severity: critical
-            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_sequencer_balance_eth < 0.2 and batch_submitter_sequencer_balance_eth != 0)'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_sequencer_balance_eth{job="tx-batch-submitter"} < 0.2 and batch_submitter_sequencer_balance_eth{job="tx-batch-submitter"} != 0)'
             annotations:
-              message: "sequencer balance is lower than 0.2 ether\nsequencer balance: {{ printf \"batch_submitter_sequencer_balance_eth{instance=~'.*'}\" | query | first | value }} eth"
+              message: "sequencer balance is lower than 0.2 ether\nsequencer balance: {{ printf \"batch_submitter_sequencer_balance_eth{job='tx-batch-submitter'}\" | query | first | value }} eth"
       - name: 'proposer balance'
         rules:
           - alert: 'proposer balance'
             labels:
               group: tokamak
-              app: batch-submitter
+              app: state-batch-submitter
               severity: critical
-            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_proposer_balance_eth < 0.2 and batch_submitter_proposer_balance_eth != 0)'
+            expr: 'probe_success{job="blackbox-eth-node-synced",target="https://rpc.tokamak.network"} == 1 and on() (batch_submitter_proposer_balance_eth{job="state-batch-submitter"} < 0.2 and batch_submitter_proposer_balance_eth{job="state-batch-submitter"} != 0)'
             annotations:
-              message: "proposer balance is lower than 0.2 ether\nproposer balance: {{ printf \"batch_submitter_proposer_balance_eth{instance=~'.*'}\" | query | first | value }} eth"
+              message: "proposer balance is lower than 0.2 ether\nproposer balance: {{ printf \"batch_submitter_proposer_balance_eth{job='state-batch-submitter'}\" | query | first | value }} eth"
       - name: 'mismatch the block number between CTC and L2 block head'
         rules:
           - alert: 'mismatch the block number between CTC and L2 block head'
             labels:
               group: tokamak
-              app: batch-submitter
+              app: tx-batch-submitter
               severity: critical
               severity_resolved: info
             # the end value of sequencer is exclusive.
             # end = l2LatestBlockNumber + 1
             # ref: https://github.com/tokamak-network/tokamak-titan/blob/main/batch-submitter/drivers/sequencer/driver.go#L144
-            expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="batch-submitter"} != -1'
-            for: 20m
+            expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_sequencer_block_number{job="tx-batch-submitter"} != -1'
+            for: 30m
             annotations:
-              message: "CTC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
+              message: "CTC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_sequencer_block_number: {{ \"batch_submitter_sequencer_block_number{job='tx-batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
               message_resolved: 'CTC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_sequencer_block_number has been resolved'
       - name: 'mismatch the block number between SCC and L2 block head'
         rules:
           - alert: 'mismatch the block number between SCC and L2 block head'
             labels:
               group: tokamak
-              app: batch-submitter
+              app: state-batch-submitter
               severity: critical
               severity_resolved: info
-            expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="batch-submitter"} != -1'
-            for: 30m
+            expr: 'chain_head_block{job="l2geth"} - on () batch_submitter_proposer_block_number{job="state-batch-submitter"} != -1'
+            for: 370m
             annotations:
-              message: "SCC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
+              message: "SCC: Mismatch detected between chain_head_block (job=l2geth): {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}\n batch_submitter_proposer_block_number: {{ \"batch_submitter_proposer_block_number{job='state-batch-submitter'}\" | query | first | value | printf \"%.0f\"  }}"
               message_resolved: 'SCC: The mismatched detected between chain_head_block (job=l2geth) and batch_submitter_proposer_block_number has been resolved'

@@ -16,10 +16,14 @@ prometheus:
         static_configs:
           - targets:
               - data-transport-layer-svc.titan:7878
-      - job_name: batch-submitter
+      - job_name: tx-batch-submitter
         static_configs:
           - targets:
-              - batch-submitter-svc.titan:7300
+              - tx-batch-submitter-svc.titan:7300
+      - job_name: state-batch-submitter
+        static_configs:
+          - targets:
+              - state-batch-submitter-svc.titan:7300
       - job_name: l2geth
         metrics_path: /debug/metrics/prometheus
         static_configs:

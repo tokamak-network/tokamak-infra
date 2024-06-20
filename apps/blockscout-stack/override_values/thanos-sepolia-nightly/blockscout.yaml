@@ -1,7 +1,7 @@
 blockscout:
   image:
     repository: blockscout/blockscout-optimism
-    tag: 6.6.0
+    tag: 6.7.0-alpha.7
 
   env:
     DATABASE_URL: "postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout"

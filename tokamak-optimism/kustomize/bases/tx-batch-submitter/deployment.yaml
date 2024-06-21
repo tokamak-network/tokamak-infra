@@ -39,7 +39,7 @@ spec:
               mountPath: /script/wait
       containers:
         - name: tx-batch-submitter
-          image: onthertech/titan-batch-submitter-service
+          image: tokamaknetwork/titan-batch-submitter-service
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7300

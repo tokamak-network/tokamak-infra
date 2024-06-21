@@ -23,7 +23,7 @@ spec:
                 name: common
       containers:
         - name: proposer
-          image: onthertech/thanos-op-proposer
+          image: tokamaknetwork/thanos-op-proposer
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8560

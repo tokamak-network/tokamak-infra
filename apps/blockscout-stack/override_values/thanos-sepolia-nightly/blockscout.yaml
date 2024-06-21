@@ -1,7 +1,7 @@
 blockscout:
   image:
-    repository: blockscout/blockscout-optimism
-    tag: 6.7.0-alpha.7
+    repository: tokamaknetwork/thanos-blockscout
+    tag: v6.6.0-beta
 
   env:
     DATABASE_URL: "postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout"
@@ -22,7 +22,6 @@ blockscout:
     MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
     # Optimism
     INDEXER_OPTIMISM_L1_RPC: "http://proxyd-svc.thanos:8545"
-    INDEXER_BEACON_RPC_URL: "https://hidden-multi-firefly.ethereum-sepolia.quiknode.pro/dff746ad60a92e930b6be10d54684f9c5e3bcabd"
     INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: "6098312"
     INDEXER_OPTIMISM_L1_BATCH_INBOX: "0xff00000000000000000000000000111551118282"
     INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: "0xc891B50eF1ccF20D5DcCb3bc5c3EA20F95577483"

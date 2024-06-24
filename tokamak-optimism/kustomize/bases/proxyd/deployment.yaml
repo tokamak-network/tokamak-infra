@@ -12,10 +12,15 @@ spec:
       initContainers:
         - name: wait-for-redis
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;',
+            ]
       containers:
         - name: proxyd
-          image: onthertech/titan-proxyd
+          image: tokamaknetwork/titan-proxyd
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

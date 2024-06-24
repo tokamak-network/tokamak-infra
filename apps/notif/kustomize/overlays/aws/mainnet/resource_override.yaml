@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
         - name: app-notif
-          image: onthertech/titan-events-listener:latest
+          image: tokamaknetwork/titan-events-listener:latest
           imagePullPolicy: Always
           envFrom:
             - configMapRef:

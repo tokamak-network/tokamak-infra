@@ -20,7 +20,7 @@ spec:
             ]
       containers:
         - name: proxyd-l2geth
-          image: onthertech/titan-proxyd
+          image: tokamaknetwork/titan-proxyd
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

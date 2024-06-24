@@ -24,13 +24,13 @@ patches:
   - path: resource_override.yaml
 
 images:
-  - name: onthertech/thanos-op-batcher
+  - name: tokamaknetwork/thanos-op-batcher
     newTag: nightly-484fbaaf
-  - name: onthertech/thanos-op-geth
+  - name: tokamaknetwork/thanos-op-geth
     newTag: nightly-89e31474
-  - name: onthertech/thanos-op-node
+  - name: tokamaknetwork/thanos-op-node
     newTag: nightly-484fbaaf
-  - name: onthertech/thanos-op-proposer
+  - name: tokamaknetwork/thanos-op-proposer
     newTag: nightly-484fbaaf
-  - name: onthertech/thanos-proxyd
+  - name: tokamaknetwork/thanos-proxyd
     newTag: nightly-484fbaaf

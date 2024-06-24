@@ -23,7 +23,7 @@ spec:
                 name: common
       containers:
         - name: batcher
-          image: onthertech/thanos-op-batcher
+          image: tokamaknetwork/thanos-op-batcher
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8548

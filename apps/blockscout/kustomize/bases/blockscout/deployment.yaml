@@ -12,20 +12,33 @@ spec:
       initContainers:
         - name: wait-for-redis
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;']
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -vz redis-svc.redis 6379; do echo "Waiting for redis..."; sleep 1; done;',
+            ]
         - name: wait-for-smart-contract-verifier
           image: busybox:latest
-          command: ['sh', '-c', 'until nc -vz smart-contract-verifier-svc 8050; do echo "Waiting for smart-contract-verifier..."; sleep 1; done;']
+          command:
+            [
+              'sh',
+              '-c',
+              'until nc -vz smart-contract-verifier-svc 8050; do echo "Waiting for smart-contract-verifier..."; sleep 1; done;',
+            ]
 
       containers:
         - name: app-blockscout
-          image: onthertech/titan-explorer
+          image: tokamaknetwork/titan-explorer
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 4000
               protocol: TCP
-          command: ['/bin/sh','-c']
-          args: ['bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start']
+          command: ['/bin/sh', '-c']
+          args:
+            [
+              'bin/blockscout eval "Elixir.Explorer.ReleaseTasks.create_and_migrate()" && bin/blockscout start',
+            ]
           envFrom:
             - configMapRef:
                 name: blockscout

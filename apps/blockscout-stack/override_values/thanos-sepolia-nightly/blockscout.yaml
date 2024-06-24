@@ -1,8 +1,7 @@
 blockscout:
   image:
-    repository: blockscout/blockscout-optimism
-    tag: 6.6.0
-
+    repository: tokamaknetwork/thanos-blockscout
+    tag: v6.7.0-beta-tokamak
   env:
     DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout'
     ETHEREUM_JSONRPC_VARIANT: geth

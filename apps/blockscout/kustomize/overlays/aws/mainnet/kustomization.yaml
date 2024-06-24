@@ -6,23 +6,23 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - namespace.yaml
-  - ingress.yaml
-  - ../../../envs/mainnet
-  - ../../../bases/blockscout
-  - ../../../bases/smart-contract-verifier
-  - ../../../bases/visualizer
-  - ../../../bases/sig-provider
+- namespace.yaml
+- ingress.yaml
+- ../../../envs/mainnet
+- ../../../bases/blockscout
+- ../../../bases/smart-contract-verifier
+- ../../../bases/visualizer
+- ../../../bases/sig-provider
 
 patchesStrategicMerge:
-  - resource_override.yaml
+- resource_override.yaml
 
 configMapGenerator:
-  - literals:
-      - APP_NAME=blockscout
-      - CLUSTER_NAME=mainnet
-      - ENV_NAME=aws
-    name: app-blockscout-config
+- literals:
+  - APP_NAME=blockscout
+  - CLUSTER_NAME=mainnet
+  - ENV_NAME=aws
+  name: app-blockscout-config
 images:
-  - name: tokamaknetwork/titan-explorer
-    newTag: release-1.2.9
+- name: tokamaknetwork/titan-explorer
+  newTag: release-1.2.9

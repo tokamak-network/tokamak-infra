@@ -2,38 +2,36 @@ blockscout:
   image:
     repository: tokamaknetwork/thanos-blockscout
     tag: v6.7.0-beta-tokamak
-
   env:
-    DATABASE_URL: "postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout"
+    DATABASE_URL: 'postgresql://postgres:postgres@thanos-sepolia-nightly-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout'
     ETHEREUM_JSONRPC_VARIANT: geth
-    ETHEREUM_JSONRPC_HTTP_URL: "http://op-geth-svc.thanos:8545"
-    ETHEREUM_JSONRPC_TRACE_URL: "http://op-geth-svc.thanos:8545"
-    ETHEREUM_JSONRPC_WS_URL: "ws://op-geth-svc.thanos:8546"
+    ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.thanos:8545'
+    ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.thanos:8545'
+    ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.thanos:8546'
     CONTRACT_DISABLE_INTERACTION: false
-    CHAIN_SPEC_PATH: "https://tokamak-thanos.s3.ap-northeast-2.amazonaws.com/thanos-sepolia-nightly/genesis.json"
-    CHAIN_TYPE: "optimism"
+    CHAIN_SPEC_PATH: 'https://tokamak-thanos.s3.ap-northeast-2.amazonaws.com/thanos-sepolia-nightly/genesis.json'
     SECRET_KEY_BASE: 56NtB48ear7+wMSf0IQuWDAAazhpb31qyc7GiyspBP2vh7t5zlCsF5QDv76chXeN
     EXCHANGE_RATES_MARKET_CAP_SOURCE: coin_market_cap
     EXCHANGE_RATES_COINMARKETCAP_API_KEY: 74d06af9-057f-4642-8f05-8f101b3c9844
-    EXCHANGE_RATES_COINMARKETCAP_COIN_ID: "6731" # tokamak-network
+    EXCHANGE_RATES_COINMARKETCAP_COIN_ID: '6731' # tokamak-network
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_ENABLED: true
-    MICROSERVICE_SC_VERIFIER_URL: "https://eth-bytecode-db.services.blockscout.com"
+    MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'
     MICROSERVICE_SC_VERIFIER_TYPE: eth_bytecode_db
     # Optimism
-    INDEXER_OPTIMISM_L1_RPC: "http://proxyd-svc.thanos:8545"
-    INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: "6098312"
-    INDEXER_OPTIMISM_L1_BATCH_INBOX: "0xff00000000000000000000000000111551118282"
-    INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: "0xc891B50eF1ccF20D5DcCb3bc5c3EA20F95577483"
-    INDEXER_OPTIMISM_L1_BATCH_BLOCKSCOUT_BLOBS_API_URL: "https://eth-sepolia.blockscout.com/api/v2/blobs"
-    INDEXER_OPTIMISM_L2_BATCH_GENESIS_BLOCK_NUMBER: "0"
-    INDEXER_OPTIMISM_L1_OUTPUT_ROOTS_START_BLOCK: "6098312"
-    INDEXER_OPTIMISM_L1_OUTPUT_ORACLE_CONTRACT: "0x80ECF6a211a027188AF783a85b2673Bc92042617"
-    INDEXER_OPTIMISM_L1_PORTAL_CONTRACT: "0x59FED2751eaDB4651E8B06fF5Be17Ae53700E83d"
-    INDEXER_OPTIMISM_L1_DEPOSITS_START_BLOCK: "6098312"
-    INDEXER_OPTIMISM_L1_WITHDRAWALS_START_BLOCK: "6098312"
-    INDEXER_OPTIMISM_L2_WITHDRAWALS_START_BLOCK: "1"
-    INDEXER_OPTIMISM_L2_MESSAGE_PASSER_CONTRACT: "0x4200000000000000000000000000000000000016"
+    INDEXER_OPTIMISM_L1_RPC: 'http://proxyd-svc.thanos:8545'
+    INDEXER_OPTIMISM_L1_BATCH_START_BLOCK: '6098312'
+    INDEXER_OPTIMISM_L1_BATCH_INBOX: '0xff00000000000000000000000000111551118282'
+    INDEXER_OPTIMISM_L1_BATCH_SUBMITTER: '0xc891B50eF1ccF20D5DcCb3bc5c3EA20F95577483'
+    INDEXER_OPTIMISM_L1_BATCH_BLOCKSCOUT_BLOBS_API_URL: 'https://eth-sepolia.blockscout.com/api/v2/blobs'
+    INDEXER_OPTIMISM_L2_BATCH_GENESIS_BLOCK_NUMBER: '0'
+    INDEXER_OPTIMISM_L1_OUTPUT_ROOTS_START_BLOCK: '6098312'
+    INDEXER_OPTIMISM_L1_OUTPUT_ORACLE_CONTRACT: '0x80ECF6a211a027188AF783a85b2673Bc92042617'
+    INDEXER_OPTIMISM_L1_PORTAL_CONTRACT: '0x59FED2751eaDB4651E8B06fF5Be17Ae53700E83d'
+    INDEXER_OPTIMISM_L1_DEPOSITS_START_BLOCK: '6098312'
+    INDEXER_OPTIMISM_L1_WITHDRAWALS_START_BLOCK: '6098312'
+    INDEXER_OPTIMISM_L2_WITHDRAWALS_START_BLOCK: '1'
+    INDEXER_OPTIMISM_L2_MESSAGE_PASSER_CONTRACT: '0x4200000000000000000000000000000000000016'
 
   ingress:
     enabled: true
@@ -42,7 +40,7 @@ blockscout:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: "443"
+      alb.ingress.kubernetes.io/ssl-redirect: '443'
       alb.ingress.kubernetes.io/group.name: thanos-sepolia-nightly
       alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia-nightly,access_logs.s3.prefix=thanos-sepolia-nightly
       alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-nightly-block-ddos/7d68486d-be76-4086-915c-68760a944ce7

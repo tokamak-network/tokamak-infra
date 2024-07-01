@@ -6,7 +6,6 @@ generatorOptions:
 
 resources:
 - deployment.yml
-- service.yml
 
 labels:
 - includeSelectors: true

@@ -6,8 +6,11 @@ generatorOptions:
 
 resources:
 - namespace.yml
-- ../../bases
-- ../../envs/local
+- ../../../bases
+- ../../../envs/sepolia-nightly
 
 patches:
 - path: resource_override.yml
+images:
+- name:
+  newTag:

@@ -56,7 +56,7 @@ resource "aws_lambda_function" "lambda" {
   function_name = var.function_name
   filename      = data.local_file.zip_file.filename
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
   handler = "index.handler"
   timeout = "10"
 

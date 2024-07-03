@@ -11,3 +11,7 @@ resources:
 
 patches:
 - path: resource_override.yml
+
+images:
+- name: tokamaknetwork/thanos-event-listener
+  newTag: nightly-8e0ebc8f

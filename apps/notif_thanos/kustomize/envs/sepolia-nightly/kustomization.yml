@@ -4,10 +4,7 @@ kind: Kustomization
 generatorOptions:
   disableNameSuffixHash: true
 
-resources:
-- deployment.yml
-
-labels:
-- includeSelectors: true
-  pairs:
-    app: thanos-app-notif
+configMapGenerator:
+  - name: thanos-notif-app-config
+    envs:
+      - ./notif.env

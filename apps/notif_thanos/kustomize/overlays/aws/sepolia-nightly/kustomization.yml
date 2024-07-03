@@ -11,6 +11,7 @@ resources:
 
 patches:
 - path: resource_override.yml
+
 images:
 - name:
   newTag:

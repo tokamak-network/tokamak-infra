@@ -10,5 +10,5 @@ spec:
       restartPolicy: Always
       containers:
         - name: thanos-app-notif
-          image: tokamaknetwork/thanos-event-listener:nightly-feedc965
-          imagePullPolicy: Always
+          image: tokamaknetwork/thanos-event-listener
+          imagePullPolicy: IfNotPresent

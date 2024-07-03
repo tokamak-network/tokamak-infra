@@ -7,8 +7,6 @@ spec:
     spec:
       containers:
         - name: thanos-app-notif
-          image: 
-          imagePullPolicy: Always
           envFrom:
             - configMapRef:
                 name: thanos-notif-app-config

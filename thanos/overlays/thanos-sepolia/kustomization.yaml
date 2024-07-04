@@ -33,4 +33,4 @@ images:
   - name: tokamaknetwork/thanos-op-proposer
     newTag: nightly-4b9a5b10
   - name: tokamaknetwork/thanos-proxyd
-    newTag: nightly-4b9a5b10
+    newTag: nightly-2bbacec3

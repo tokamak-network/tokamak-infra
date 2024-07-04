@@ -43,8 +43,10 @@ ws_method_whitelist = [
   "eth_sendTransaction",
   "eth_sign",
   "eth_signTransaction",
+  "eth_subscribe",
   "eth_syncing",
   "eth_uninstallFilter",
+  "eth_unsubscribe",
 ]
 ws_backend_group = "main"
 

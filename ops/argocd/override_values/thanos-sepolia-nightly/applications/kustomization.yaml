@@ -12,3 +12,4 @@ resources:
   - metrics.yaml
   - redis.yaml
   - thanos.yaml
+  - notif_thanos.yaml

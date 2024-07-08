@@ -7,11 +7,11 @@ generatorOptions:
 resources:
 - namespace.yml
 - ../../../bases
-- ../../../envs/sepolia-nightly
+- ../../../envs/sepolia
 
 patches:
 - path: resource_override.yml
 
 images:
 - name: tokamaknetwork/thanos-event-listener
-  newTag: nightly-a2f1d512
+  newTag: nightly-e5c58573

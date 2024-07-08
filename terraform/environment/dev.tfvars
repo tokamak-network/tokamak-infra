@@ -3,7 +3,7 @@ region                    = "ap-northeast-2"
 azs                       = ["ap-northeast-2a", "ap-northeast-2b", "ap-northeast-2c"]
 network_name              = "dev"
 cluster_name              = "dev"
-cluster_version           = 1.28
+cluster_version           = "1.30"
 vpc_cidr                  = "192.168.0.0/16"
 vpc_name                  = "dev/VPC"
 efs_name                  = "dev"
@@ -15,7 +15,7 @@ git_user_name             = "tokamak-network"
 git_repo_name             = "ALB_S3_Logs_To_ES"
 lambda_source_version     = "1.0"
 external_secret_namespace = "dev"
-kms_key_administrators = [
+eks_cluster_admins = [
   "arn:aws:iam::156512274928:user/steven.l@onther.io",
   "arn:aws:iam::156512274928:user/austin.o@onther.io",
   "arn:aws:iam::156512274928:user/steven@tokamak.network",

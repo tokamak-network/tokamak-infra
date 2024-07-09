@@ -6,7 +6,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-infra'
-    path: apps/notif_thanos/kustomize/overlays/aws/sepolia
+    path: apps/notif_thanos/kustomize/overlays/aws/thanos-sepolia
     targetRevision: main
   destination:
     server: 'https://kubernetes.default.svc'
@@ -14,4 +14,3 @@ spec:
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
-  

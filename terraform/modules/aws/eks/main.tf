@@ -1,10 +1,13 @@
 module "eks" {
-  source = "terraform-aws-modules/eks/aws"
+  source  = "terraform-aws-modules/eks/aws"
+  version = "20.17.2"
 
-  cluster_name                    = var.cluster_name
-  cluster_version                 = var.cluster_version
-  cluster_endpoint_private_access = false
-  cluster_endpoint_public_access  = true
+  cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
+
+  cluster_endpoint_public_access = true
+
+  authentication_mode = "API"
 
   vpc_id     = var.vpc_id
   subnet_ids = setunion(var.private_subnet_ids, var.public_subnet_ids)
@@ -21,7 +24,21 @@ module "eks" {
     }
   }
 
-  kms_key_administrators = var.kms_key_administrators
+  access_entries = merge({
+    for user in var.eks_cluster_admins : user => {
+      principal_arn = "${user}"
+      type          = "STANDARD"
+
+      policy_associations = {
+        "${user}" = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  })
 }
 
 data "aws_iam_policy_document" "aws_fargate_logging_policy" {

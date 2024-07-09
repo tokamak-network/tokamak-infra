@@ -28,7 +28,7 @@ variable "public_subnet_ids" {
   type        = list(string)
 }
 
-variable "kms_key_administrators" {
-  description = "kms key administrators"
+variable "eks_cluster_admins" {
+  description = "eks cluster administrators"
   type        = list(string)
 }

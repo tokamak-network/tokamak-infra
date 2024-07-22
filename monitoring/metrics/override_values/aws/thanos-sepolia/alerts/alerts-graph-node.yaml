@@ -1,45 +1,5 @@
-alertmanager:
-  config:
-    global:
-      # Also possible to place this URL in a file.
-      # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
-      slack_api_url: 'https://hooks.slack.com/services/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'
-
-    route:
-      receiver: no-alert
-      routes:
-        - matchers:
-            - group = tokamak
-            - severity_resolved = info
-          receiver: slack-notifications-resolve
-          group_by: ['alertname']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - group = tokamak
-          receiver: slack-notifications
-          group_by: ['alertname']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-
-    receivers:
-      - name: no-alert
-      - name: slack-notifications
-        slack_configs:
-          - channel: 'thanos-testnet-status'
-            title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
-            text: "{{ range .Alerts }}[{{ .Labels.severity }}] {{ .Annotations.message }}\n{{ end }}"
-      - name: slack-notifications-resolve
-        slack_configs:
-          - channel: 'thanos-testnet-status'
-            send_resolved: true
-            title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
-            text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
-
 additionalPrometheusRulesMap:
-  common:
+  graph-node:
     groups:
     - name: 'graph-node'
       rules:

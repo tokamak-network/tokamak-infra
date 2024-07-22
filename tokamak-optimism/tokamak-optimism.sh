@@ -36,9 +36,12 @@ function print_help() {
   echo
 }
 
-MYPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
+MYPATH="$(
+  cd "$(dirname "$0")" >/dev/null 2>&1
+  pwd -P
+)"
 ACTION=$1
-ENV_LIST=$(ls -d $MYPATH/kustomize/overlays/*/ | rev | cut -f2 -d'/' |rev)
+ENV_LIST=$(ls -d $MYPATH/kustomize/overlays/*/ | rev | cut -f2 -d'/' | rev)
 
 if [ -z "$ACTION" ]; then
   print_help
@@ -224,177 +227,126 @@ function get_tags() {
 }
 
 case $ACTION in
-  tag|tags)
-    if [ -z "$2" ]; then
-      image="tokamaknetwork/titan-l2geth"
-      tags=$(get_tags $image)
-      for tag in $tags; do
-        [[ "$tag" =~ ^release|^nightly$|^latest ]] && echo $tag
-      done
-    else
-      image=$(get_resource_image $2)
-      if [ -z "$image" ]; then
-        echo "Error: could not find $2 image."
-        echo "$2 should be already created."
-        exit 1
-      fi
+tag | tags)
+  if [ -z "$2" ]; then
+    image="tokamaknetwork/titan-l2geth"
+    tags=$(get_tags $image)
+    for tag in $tags; do
+      [[ "$tag" =~ ^release|^nightly$|^latest ]] && echo $tag
+    done
+  else
+    image=$(get_resource_image $2)
+    if [ -z "$image" ]; then
+      echo "Error: could not find $2 image."
+      echo "$2 should be already created."
+      exit 1
+    fi
+    tags=$(get_tags $image)
+    for tag in $tags; do
+      echo $tag
+    done
+  fi
+  ;;
+create)
+  if [ "$2" == "list" ]; then
+    print_create_list
+    exit 0
+  fi
+
+  cluster_name=$2
+  env_name=$3
+
+  CLUSTER_LIST=$(ls -d $MYPATH/kustomize/overlays/${env_name}/*/ | rev | cut -f2 -d'/' | rev)
+  CLUSTER_LIST=${CLUSTER_LIST/templates/}
+  cluster_path=$MYPATH/kustomize/overlays/${env_name}/${cluster_name}
+
+  if !(check_cluster $cluster_name); then
+    print_help
+    print_create_list
+    exit 1
+  fi
+
+  if !(check_env $env_name); then
+    print_help
+    print_create_list
+    exit 1
+  fi
+
+  kubectl apply -k $cluster_path
+  ;;
+delete)
+  if !(ask_going); then
+    echo "aborted."
+    exit 0
+  fi
+
+  get_configmap
+
+  delete_cluster_path=$MYPATH/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
+  kubectl delete -k $delete_cluster_path
+  ;;
+update | upgrade)
+  deployment_list=$(get_resource_list deployments)
+  statefulset_list=$(get_resource_list statefulsets)
+
+  if [ "$2" == "list" ]; then
+    [[ ! -z "$deployment_list" || ! -z "$statefulset_list" ]] && echo config
+    for name in $deployment_list; do
+      echo $name
+    done
+    for name in $statefulset_list; do
+      echo $name
+    done
+    exit 0
+  fi
+
+  if [[ "$2" =~ ^config$|^configmap$ ]]; then
+    if !(ask_going); then
+      echo "aborted."
+      exit 0
+    fi
+    get_configmap
+    update_configmap
+  else
+    image=$(get_resource_image $2)
+    tagname=$3
+    if [ -z "$tagname" ]; then
+      print_help
+      echo "Error: write tag version you want to update!"
+      echo "You can show tags as running '$0 tag'"
+      exit 1
+    elif [ "$tagname" == "list" ]; then
       tags=$(get_tags $image)
       for tag in $tags; do
         echo $tag
       done
-    fi
-    ;;
-  create)
-    if [ "$2" == "list" ]; then
-      print_create_list
       exit 0
     fi
 
-    cluster_name=$2
-    env_name=$3
-
-    CLUSTER_LIST=$(ls -d $MYPATH/kustomize/overlays/${env_name}/*/ | rev | cut -f2 -d'/' | rev)
-    CLUSTER_LIST=${CLUSTER_LIST/templates/}
-    cluster_path=$MYPATH/kustomize/overlays/${env_name}/${cluster_name}
-
-    if !(check_cluster $cluster_name); then
-      print_help
-      print_create_list
-      exit 1
-    fi
-
-    if !(check_env $env_name); then
-      print_help
-      print_create_list
-      exit 1
-    fi
-
-    kubectl apply -k $cluster_path
-    ;;
-  delete)
     if !(ask_going); then
       echo "aborted."
       exit 0
     fi
-
-    get_configmap
-
-    delete_cluster_path=$MYPATH/kustomize/overlays/${CONFIGMAP_ENV_NAME}/${CONFIGMAP_CLUSTER_NAME}
-    kubectl delete -k $delete_cluster_path
-    ;;
-  update|upgrade)
-    deployment_list=$(get_resource_list deployments)
-    statefulset_list=$(get_resource_list statefulsets)
-
-    if [ "$2" == "list" ]; then
-      [[ ! -z "$deployment_list" || ! -z "$statefulset_list" ]] && echo config
+    if [ "$2" == "all" ]; then
       for name in $deployment_list; do
-        echo $name
-      done
-      for name in $statefulset_list; do
-        echo $name
-      done
-      exit 0
-    fi
-
-    if [[ "$2" =~ ^config$|^configmap$ ]]; then
-      if !(ask_going); then
-        echo "aborted."
-        exit 0
-      fi
-      get_configmap
-      update_configmap
-    else
-      image=$(get_resource_image $2)
-      tagname=$3
-      if [ -z "$tagname" ]; then
-        print_help
-        echo "Error: write tag version you want to update!"
-        echo "You can show tags as running '$0 tag'"
-        exit 1
-      elif [ "$tagname" == "list" ]; then
-        tags=$(get_tags $image)
-        for tag in $tags; do
-          echo $tag
-        done
-        exit 0
-      fi
-
-      if !(ask_going); then
-        echo "aborted."
-        exit 0
-      fi
-      if [ "$2" == "all" ]; then
-        for name in $deployment_list; do
-          update_image deployment $name $tagname
-        done
-
-        for name in $statefulset_list; do
-          update_image statefulset $name $tagname
-        done
-      else
-        res=0
-        for name in $deployment_list; do
-          if [ "$2" == $name ]; then
-            update_image deployment $name $tagname
-            res=1
-          fi
-        done
-
-        for name in $statefulset_list; do
-          if [ "$2" == $name ]; then
-            update_image statefulset $name $tagname
-            res=1
-          fi
-        done
-
-        if [ $res == 0 ]; then
-          echo "Error: could not find resource ($2)"
-          print_running_list
-          exit 1
-        fi
-      fi
-    fi
-    ;;
-  reload|restart)
-    if !(ask_going); then
-      echo "aborted."
-      exit 0
-    fi
-
-    if [ -z "$2" ]; then
-      print_help
-      exit 1
-    fi
-
-    if [ "$2" == "list" ]; then
-      print_running_list
-      exit 0
-    fi
-
-    deployment_list=$(get_resource_list deployments)
-    statefulset_list=$(get_resource_list statefulsets)
-
-    if [ "$2" == "all" ];then
-      for name in $deployment_list; do
-        rollout_restart deployment $name
+        update_image deployment $name $tagname
       done
 
       for name in $statefulset_list; do
-        rollout_restart statefulset $name
+        update_image statefulset $name $tagname
       done
     else
       res=0
       for name in $deployment_list; do
         if [ "$2" == $name ]; then
-          rollout_restart deployment $name
+          update_image deployment $name $tagname
           res=1
         fi
       done
 
       for name in $statefulset_list; do
         if [ "$2" == $name ]; then
-          rollout_restart statefulset $name
+          update_image statefulset $name $tagname
           res=1
         fi
       done
@@ -405,9 +357,60 @@ case $ACTION in
         exit 1
       fi
     fi
-    ;;
-  *)
+  fi
+  ;;
+reload | restart)
+  if !(ask_going); then
+    echo "aborted."
+    exit 0
+  fi
+
+  if [ -z "$2" ]; then
     print_help
     exit 1
-    ;;
+  fi
+
+  if [ "$2" == "list" ]; then
+    print_running_list
+    exit 0
+  fi
+
+  deployment_list=$(get_resource_list deployments)
+  statefulset_list=$(get_resource_list statefulsets)
+
+  if [ "$2" == "all" ]; then
+    for name in $deployment_list; do
+      rollout_restart deployment $name
+    done
+
+    for name in $statefulset_list; do
+      rollout_restart statefulset $name
+    done
+  else
+    res=0
+    for name in $deployment_list; do
+      if [ "$2" == $name ]; then
+        rollout_restart deployment $name
+        res=1
+      fi
+    done
+
+    for name in $statefulset_list; do
+      if [ "$2" == $name ]; then
+        rollout_restart statefulset $name
+        res=1
+      fi
+    done
+
+    if [ $res == 0 ]; then
+      echo "Error: could not find resource ($2)"
+      print_running_list
+      exit 1
+    fi
+  fi
+  ;;
+*)
+  print_help
+  exit 1
+  ;;
 esac

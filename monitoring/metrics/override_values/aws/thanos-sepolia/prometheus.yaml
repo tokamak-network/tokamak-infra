@@ -87,4 +87,3 @@ prometheus:
         static_configs:
           - targets:
               - graph-node-svc.graph-node:8040
-        

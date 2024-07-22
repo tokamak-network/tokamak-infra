@@ -42,15 +42,15 @@ spec:
                 - ALL
             runAsNonRoot: true
             runAsUser: 1000
-          image: "docker.elastic.co/kibana/kibana:8.8.0"
-          imagePullPolicy: "IfNotPresent"
+          image: 'docker.elastic.co/kibana/kibana:8.8.0'
+          imagePullPolicy: 'IfNotPresent'
           env:
             - name: SERVER_HOST
-              value: "0.0.0.0"
+              value: '0.0.0.0'
             - name: NODE_OPTIONS
               value: --max-old-space-size=1800
             - name: ELASTIC_PASSWORD
-              value: "elastic"
+              value: 'elastic'
           command:
             - bash
             - -c

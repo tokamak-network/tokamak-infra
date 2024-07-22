@@ -4,8 +4,8 @@
 
 ### Helm
 
-* [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)
-* add helm chart repository
+- [https://helm.sh/docs/intro/install](https://helm.sh/docs/intro/install/)
+- add helm chart repository
 
 ```
 helm repo add argo https://argoproj.github.io/argo-helm

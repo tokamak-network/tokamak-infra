@@ -12,7 +12,7 @@ cp .env.example .env
 
 ## Run test
 
-**Install Packages
+\*\*Install Packages
 
 ```sh
 yarn

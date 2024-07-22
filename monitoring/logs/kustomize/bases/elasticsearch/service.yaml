@@ -6,11 +6,11 @@ metadata:
   name: elasticsearch
   namespace: log-monitoring
   labels:
-    app: "elasticsearch"
+    app: 'elasticsearch'
 spec:
   type: ClusterIP
   selector:
-    app: "elasticsearch"
+    app: 'elasticsearch'
   publishNotReadyAddresses: false
   ports:
     - name: http

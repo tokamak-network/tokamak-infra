@@ -4,6 +4,6 @@ variable "parent_domain" {
 }
 
 variable "service_names" {
-    description = "Service Names"
-    type = list(string)
+  description = "Service Names"
+  type        = list(string)
 }

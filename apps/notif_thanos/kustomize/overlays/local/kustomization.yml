@@ -5,13 +5,13 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- namespace.yml
-- ../../bases
-- ../../envs/local
+  - namespace.yml
+  - ../../bases
+  - ../../envs/local
 
 patches:
-- path: resource_override.yml
+  - path: resource_override.yml
 
 images:
-- name: tokamaknetwork/thanos-event-listener
-  newTag: nightly-8e0ebc8f
+  - name: tokamaknetwork/thanos-event-listener
+    newTag: nightly-8e0ebc8f

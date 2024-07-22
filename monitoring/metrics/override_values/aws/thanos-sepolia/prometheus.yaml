@@ -83,3 +83,8 @@ prometheus:
             target_label: target
           - target_label: __address__
             replacement: monitoring-prometheus-blackbox-exporter:9115
+      - job_name: graph-node
+        static_configs:
+          - targets:
+              - graph-node-svc.graph-node:8040
+        

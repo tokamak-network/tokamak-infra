@@ -5,12 +5,13 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- namespace.yaml
-- ../../../bases
-- ../../../envs/mainnet
+  - namespace.yaml
+  - ../../../bases
+  - ../../../envs/mainnet
 
-patchesStrategicMerge:
-- resource_override.yaml
+patches:
+  - path: resource_override.yaml
+
 images:
-- name: tokamaknetwork/titan-events-listener
-  newTag: release-0.1.3
+  - name: tokamaknetwork/titan-events-listener
+    newTag: release-0.1.3

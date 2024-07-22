@@ -12,5 +12,5 @@ resources:
   - ../../../envs/aws/mainnet
   - ingress.yaml
 
-patchesStrategicMerge:
-  - resource_override.yaml
+patches:
+  - path: resource_override.yaml

@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: app-blockscout
+labels:
+  - includeSelectors: true
+    pairs:
+      app: app-blockscout

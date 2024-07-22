@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - statefulset.yaml
   - service.yaml
-commonLabels:
-  app: ipfs
+labels:
+  - includeSelectors: true
+    pairs:
+      app: ipfs

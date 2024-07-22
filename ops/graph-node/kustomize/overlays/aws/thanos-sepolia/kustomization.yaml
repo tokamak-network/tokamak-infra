@@ -14,5 +14,5 @@ resources:
   - ../../../bases/ipfs
   - ../../../bases/graph-node
 
-patchesStrategicMerge:
-  - resource_override.yaml
+patches:
+  - path: resource_override.yaml

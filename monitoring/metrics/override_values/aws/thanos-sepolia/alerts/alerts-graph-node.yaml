@@ -11,8 +11,8 @@ additionalPrometheusRulesMap:
             severity_resolved: info
           expr: 'absent(up{job="graph-node"} == 1)'
           annotations:
-            summary: "Graph Node is down"
-            description: "The Graph Node is not responding."
+            message: "Graph Node is down"
+            message_resolved: "Graph Node is up"
 
         - alert: 'GraphNodeStaled'
           labels:

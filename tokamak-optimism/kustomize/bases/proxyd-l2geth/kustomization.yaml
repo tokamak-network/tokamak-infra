@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: proxyd-l2geth
+labels:
+  - includeSelectors: true
+    pairs:
+      app: proxyd-l2geth

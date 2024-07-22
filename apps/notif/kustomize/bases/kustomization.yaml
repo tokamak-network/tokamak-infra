@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: app-notif
+labels:
+  - includeSelectors: true
+    pairs:
+      app: app-notif

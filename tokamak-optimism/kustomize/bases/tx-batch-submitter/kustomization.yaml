@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: tx-batch-submitter
+labels:
+  - includeSelectors: true
+    pairs:
+      app: tx-batch-submitter

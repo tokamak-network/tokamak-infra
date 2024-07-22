@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - statefulset.yaml
   - service.yaml
-commonLabels:
-  app: op-geth
+labels:
+  - includeSelectors: true
+    pairs:
+      app: op-geth

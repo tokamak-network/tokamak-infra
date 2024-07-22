@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - statefulset.yaml
   - service.yaml
-commonLabels:
-  app: data-transport-layer
+labels:
+  - includeSelectors: true
+    pairs:
+      app: data-transport-layer

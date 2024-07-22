@@ -1,0 +1,28 @@
+additionalPrometheusRulesMap:
+  graph-node:
+    groups:
+    - name: 'graph-node'
+      rules:
+        - alert: 'GraphNodeDown'
+          labels:
+            group: tokamak
+            app: graph-node
+            severity: critical
+            severity_resolved: info
+          expr: 'absent(up{job="graph-node"} == 1)'
+          annotations:
+            message: "Graph Node is down"
+            message_resolved: "Graph Node is up"
+
+        - alert: 'GraphNodeStaled'
+          labels:
+            group: tokamak
+            app: graph-node
+            severity: critical
+            severity_resolved: info
+          expr: 'chain_head_block{job="l2geth"} != on () ethereum_chain_head_number{network="thanos",job="graph-node"}'          
+          for: 30s
+          annotations:
+            message: "Graph node is staled \n GraphNode block number: {{ \"ethereum_chain_head_number{network='thanos',job='graph-node'}\" | query | first | value | printf \"%.0f\" }}  \n RPC block number: {{ \"chain_head_block{job='l2geth'}\" | query | first | value | printf \"%.0f\" }}"
+            message_resolved: "Graph node is synced up, block number: {{ \"ethereum_chain_head_number{network='thanos',job='graph-node'}\" | query | first | value | printf \"%.0f\" }}"
+ 

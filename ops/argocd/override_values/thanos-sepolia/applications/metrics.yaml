@@ -17,6 +17,7 @@ spec:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-node.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-batcher.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-proposer.yaml
+          - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-graph-node.yaml
     # prometheus-blackbox-exporter
     - repoURL: 'https://prometheus-community.github.io/helm-charts'
       chart: prometheus-blackbox-exporter

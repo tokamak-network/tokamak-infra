@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: smart-contract-verifier
+labels:
+  - includeSelectors: true
+    pairs:
+      app: smart-contract-verifier

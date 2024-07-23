@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
-commonLabels:
-  app: op-batcher
+labels:
+  - includeSelectors: true
+    pairs:
+      app: op-batcher

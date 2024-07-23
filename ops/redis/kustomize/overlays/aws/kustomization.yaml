@@ -9,8 +9,8 @@ resources:
   - namespace.yaml
   - ../../bases
 
-patchesStrategicMerge:
-  - resource_override.yaml
+patches:
+  - path: resource_override.yaml
 
 configMapGenerator:
   - literals:

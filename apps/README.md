@@ -11,8 +11,8 @@
 
 Check configuraion files at `gateway/kustomize/overlays/aws/<cluster_name>`
 
-* config.json: gateway configuration
-* ingress.yml: aws loadbalancer configuration
+- config.json: gateway configuration
+- ingress.yml: aws loadbalancer configuration
 
 ### Fargate Profile(AWS)
 

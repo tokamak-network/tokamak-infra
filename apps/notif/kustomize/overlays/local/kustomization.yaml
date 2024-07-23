@@ -9,5 +9,5 @@ resources:
   - ../../bases
   - ../../envs/goerli-nightly
 
-patchesStrategicMerge:
-  - resource_override.yaml
+patches:
+  - path: resource_override.yaml

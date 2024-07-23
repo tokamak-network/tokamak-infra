@@ -5,5 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
 
-commonLabels:
-  app: graph-node
+labels:
+  - includeSelectors: true
+    pairs:
+      app: graph-node

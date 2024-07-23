@@ -3,5 +3,7 @@ kind: Kustomization
 resources:
   - statefulset.yaml
   - service.yaml
-commonLabels:
-  app: l1chain
+labels:
+  - includeSelectors: true
+    pairs:
+      app: l1chain

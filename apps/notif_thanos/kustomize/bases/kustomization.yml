@@ -5,9 +5,9 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-- deployment.yml
+  - deployment.yml
 
 labels:
-- includeSelectors: true
-  pairs:
-    app: thanos-app-notif
+  - includeSelectors: true
+    pairs:
+      app: thanos-app-notif

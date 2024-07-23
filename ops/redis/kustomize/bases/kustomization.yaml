@@ -4,5 +4,7 @@ resources:
   - deployment.yaml
   - service.yaml
   - redis-service-config.yaml
-commonLabels:
-  app: redis
+labels:
+  - includeSelectors: true
+    pairs:
+      app: redis

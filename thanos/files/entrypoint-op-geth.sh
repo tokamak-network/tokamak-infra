@@ -54,4 +54,6 @@ exec geth \
 	--metrics.addr=0.0.0.0 \
 	--metrics.port=6060 \
 	--rollup.disabletxpoolgossip=true \
+	--rpc.batch-request-limit=1000000 \
+	--rpc.batch-response-max-size=25000000000 \
 	"$@"

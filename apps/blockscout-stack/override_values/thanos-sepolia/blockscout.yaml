@@ -14,6 +14,17 @@ blockscout:
     EXCHANGE_RATES_MARKET_CAP_SOURCE: coin_market_cap
     EXCHANGE_RATES_COINMARKETCAP_API_KEY: 74d06af9-057f-4642-8f05-8f101b3c9844
     EXCHANGE_RATES_COINMARKETCAP_COIN_ID: '6731' # tokamak-network
+    # My Account
+    ACCOUNT_ENABLED: true
+    ACCOUNT_AUTH0_DOMAIN: tokamak.us.auth0.com
+    ACCOUNT_AUTH0_CLIENT_ID: JrVraCwlM0weu9MpTqN45s0Gpy2FEqj6
+    ACCOUNT_AUTH0_CLIENT_SECRET: XrvVxA1ISYroSgc8MXk22zFZO14GJL0WIY1uRKvsj0QS5uNs7y9rFDThB5zI27Ie
+    ACCOUNT_SENDGRID_API_KEY: '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'
+    ACCOUNT_SENDGRID_SENDER: noreply@tokamak.network
+    ACCOUNT_SENDGRID_TEMPLATE: d-ab8071b3991840bab0f96d4b5beee46f
+    ACCOUNT_CLOAK_KEY: 'M47b58tXHTUxwRT4jZSDiu4j80FaCBBndv8mL39AgUM='
+    ACCOUNT_REDIS_URL: 'redis://redis-svc.redis:6379/10'
+    ACCOUNT_DATABASE_URL: postgresql://postgres:postgres@thanos-sepolia-rds.cdask0s0a99e.ap-northeast-2.rds.amazonaws.com:5432/blockscout-user
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_ENABLED: true
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'

@@ -13,6 +13,11 @@ frontend:
     NEXT_PUBLIC_AD_BANNER_PROVIDER: none
     NEXT_PUBLIC_AD_TEXT_PROVIDER: none
     NEXT_PUBLIC_GOOGLE_ANALYTICS_PROPERTY_ID: G-T5Z1M5VZLG
+    # My Account
+    NEXT_PUBLIC_IS_ACCOUNT_SUPPORTED: true
+    NEXT_PUBLIC_AUTH0_CLIENT_ID: JrVraCwlM0weu9MpTqN45s0Gpy2FEqj6
+    NEXT_PUBLIC_AUTH_URL: 'https://explorer.thanos-sepolia.tokamak.network'
+    NEXT_PUBLIC_LOGOUT_URL: 'https://tokamak.us.auth0.com/v2/logout'
     # NEXT_PUBLIC_VIEWS_NFT_MARKETPLACES: --> https://github.com/blockscout/frontend/blob/main/docs/ENVS.md#nft-views
     NEXT_PUBLIC_NETWORK_LOGO: 'https://thanos-assets.s3.ap-northeast-2.amazonaws.com/thanos_B.png'
     NEXT_PUBLIC_NETWORK_LOGO_DARK: 'https://thanos-assets.s3.ap-northeast-2.amazonaws.com/thanos_W.png'

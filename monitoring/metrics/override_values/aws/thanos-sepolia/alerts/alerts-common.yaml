@@ -23,6 +23,47 @@ alertmanager:
           group_wait: 0s
           group_interval: 10s
           repeat_interval: 1h
+        - matchers:
+            - app = op-geth
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - app = op-node
+          receiver: op-node-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - app = op-batcher
+          receiver: op-batcher-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - app = op-proposer
+          receiver: op-proposer-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - app = blockscout
+          receiver: op-blockscout-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+        - matchers:
+            - app = graph-node
+          receiver: graph-node-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
 
     receivers:
       - name: no-alert
@@ -37,6 +78,30 @@ alertmanager:
             send_resolved: true
             title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
+      - name: op-geth-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzggw55d465276h6ocszgbo30k
+            send_resolved: true
+      - name: op-node-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzggx5ni465752h6oc9w34mga2
+            send_resolved: true
+      - name: op-batcher-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzggwwi1465633h6oc20xjngt0
+            send_resolved: true
+      - name: op-proposer-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzggx1vm476727hmocvjg9r3o2
+            send_resolved: true
+      - name: op-blockscout-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzggy488465973h6ock9gcq90t
+            send_resolved: true
+      - name: graph-node-instatus
+        webhook_configs:
+          - url: https://api.instatus.com/v3/integrations/prometheus/clzgjr6il476218h6ocksk6jgcw
+            send_resolved: true
 
 additionalPrometheusRulesMap:
   common:

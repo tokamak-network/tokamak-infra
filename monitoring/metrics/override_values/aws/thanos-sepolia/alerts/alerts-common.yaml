@@ -9,6 +9,60 @@ alertmanager:
       receiver: no-alert
       routes:
         - matchers:
+            - class = instatus
+            - app = op-geth
+          receiver: op-geth-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-node
+          receiver: op-node-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-batcher
+          receiver: op-batcher-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-proposer
+          receiver: op-proposer-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = blockscout
+          receiver: op-blockscout-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = graph-node
+          receiver: graph-node-instatus
+          group_by: ['alertname']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
             - group = tokamak
             - severity_resolved = info
           receiver: slack-notifications-resolve
@@ -20,48 +74,6 @@ alertmanager:
             - group = tokamak
           receiver: slack-notifications
           group_by: ['alertname']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = op-geth
-          receiver: op-geth-instatus
-          group_by: ['instatus']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = op-node
-          receiver: op-node-instatus
-          group_by: ['instatus']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = op-batcher
-          receiver: op-batcher-instatus
-          group_by: ['instatus']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = op-proposer
-          receiver: op-proposer-instatus
-          group_by: ['instatus']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = blockscout
-          receiver: op-blockscout-instatus
-          group_by: ['instatus']
-          group_wait: 0s
-          group_interval: 10s
-          repeat_interval: 1h
-        - matchers:
-            - app = graph-node
-          receiver: graph-node-instatus
-          group_by: ['instatus']
           group_wait: 0s
           group_interval: 10s
           repeat_interval: 1h
@@ -112,6 +124,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-geth down'
             labels:
               group: tokamak
+              class: instatus
               app: op-geth
               severity: critical
               severity_resolved: info
@@ -124,6 +137,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-node down'
             labels:
               group: tokamak
+              class: instatus
               app: op-node
               severity: critical
               severity_resolved: info
@@ -136,6 +150,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-batcher down'
             labels:
               group: tokamak
+              class: instatus
               app: op-batcher
               severity: critical
               severity_resolved: info
@@ -148,6 +163,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-proposer down'
             labels:
               group: tokamak
+              class: instatus
               app: op-proposer
               severity: critical
               severity_resolved: info
@@ -197,6 +213,7 @@ additionalPrometheusRulesMap:
           - alert: 'blockscout'
             labels:
               group: tokamak
+              class: instatus
               app: blockscout
               severity: critical
               severity_resolved: info

@@ -31,7 +31,7 @@ configMapGenerator:
       - ENV_NAME=aws
     name: chain-config
 images:
-  - name: tokamaknetwork/titan-batch-submitter-service
+  - name: tokamaknetwork/titan-batch-submitter
     newTag: release-0.1.20
   - name: tokamaknetwork/titan-data-transport-layer
     newTag: release-0.1.20

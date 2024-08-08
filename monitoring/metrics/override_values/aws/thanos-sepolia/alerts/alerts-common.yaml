@@ -93,27 +93,27 @@ alertmanager:
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
       - name: op-geth-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzggw55d465276h6ocszgbo30k
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknf8te750188hioo2gq0nc2s'
             send_resolved: true
       - name: op-node-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzggx5ni465752h6oc9w34mga2
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfgeg735558hboodt5l13ru'
             send_resolved: true
       - name: op-batcher-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzggwwi1465633h6oc20xjngt0
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfp1x750437hiool1fmhe21'
             send_resolved: true
       - name: op-proposer-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzggx1vm476727hmocvjg9r3o2
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfkow735635hboogenwgxyc'
             send_resolved: true
-      - name: op-blockscout-instatus
+      - name: blockscout-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzggy488465973h6ock9gcq90t
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfutl735948hboos7c2zqq4'
             send_resolved: true
       - name: graph-node-instatus
         webhook_configs:
-          - url: https://api.instatus.com/v3/integrations/prometheus/clzgjr6il476218h6ocksk6jgcw
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfyrr741037hqooex0ipzza'
             send_resolved: true
 
 additionalPrometheusRulesMap:

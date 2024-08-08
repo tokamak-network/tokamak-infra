@@ -47,7 +47,7 @@ alertmanager:
         - matchers:
             - class = instatus
             - app = blockscout
-          receiver: op-blockscout-instatus
+          receiver: blockscout-instatus
           group_by: ['instatus']
           group_wait: 0s
           group_interval: 10s

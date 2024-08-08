@@ -9,6 +9,69 @@ alertmanager:
       receiver: no-alert
       routes:
         - matchers:
+            - class = instatus
+            - app = l2geth
+          receiver: l2geth-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = l2geth-replica
+          receiver: l2geth-replica-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = data-transport-layer
+          receiver: data-transport-layer-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = tx-batch-submitter
+          receiver: tx-batch-submitter-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = state-batch-submitter
+          receiver: state-batch-submitter-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = l1
+          receiver: l1-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = block-explorer
+          receiver: block-explorer-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
             - group = tokamak
             - severity_resolved = info
           receiver: slack-notifications-resolve
@@ -37,6 +100,34 @@ alertmanager:
             send_resolved: true
             title: "{{ range .Alerts }}[Titan Mainnet] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
+      - name: l2geth-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmeqcg741206hioodw72n6w1'
+            send_resolved: true
+      - name: l2geth-replica-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmev7s727619hbooz4zqumdl'
+            send_resolved: true
+      - name: data-transport-layer-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmezky710577i8ook2c158nd'
+            send_resolved: true
+      - name: tx-batch-submitter-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmf5h3710710i8oo00mxtfnb'
+            send_resolved: true
+      - name: state-batch-submitter-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmf9pl741381hiooggbk9tjd'
+            send_resolved: true
+      - name: l1-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmeihd727264hboo7aldzitn'
+            send_resolved: true
+      - name: block-explorer-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmnjc2734474hqoo7vbgm2wm'
+            send_resolved: true
 
 additionalPrometheusRulesMap:
   rule-name:
@@ -46,6 +137,7 @@ additionalPrometheusRulesMap:
           - alert: 'l2geth down'
             labels:
               group: tokamak
+              class: instatus
               app: l2geth
               severity: critical
               severity_resolved: info
@@ -58,6 +150,7 @@ additionalPrometheusRulesMap:
           - alert: 'l2geth-replica down'
             labels:
               group: tokamak
+              class: instatus
               app: l2geth-replica
               severity: critical
               severity_resolved: info
@@ -70,6 +163,7 @@ additionalPrometheusRulesMap:
           - alert: 'data-transport-layer down'
             labels:
               group: tokamak
+              class: instatus
               app: data-transport-layer
               severity: critical
               severity_resolved: info
@@ -82,6 +176,7 @@ additionalPrometheusRulesMap:
           - alert: 'tx-batch-submitter down'
             labels:
               group: tokamak
+              class: instatus
               app: tx-batch-submitter
               severity: critical
               severity_resolved: info
@@ -95,6 +190,7 @@ additionalPrometheusRulesMap:
             labels:
               group: tokamak
               app: state-batch-submitter
+              class: instatus
               severity: critical
               severity_resolved: info
             expr: 'absent(up{job="state-batch-submitter"} == 1)'
@@ -131,6 +227,7 @@ additionalPrometheusRulesMap:
             for: 1m
             labels:
               group: tokamak
+              class: instatus
               app: l1
               severity: critical
               severity_resolved: info
@@ -143,6 +240,7 @@ additionalPrometheusRulesMap:
           - alert: 'block-explorer'
             labels:
               group: tokamak
+              class: instatus
               app: block-explorer
               severity: critical
               severity_resolved: info

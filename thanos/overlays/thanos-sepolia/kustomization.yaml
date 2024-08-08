@@ -25,12 +25,12 @@ patches:
 
 images:
 - name: tokamaknetwork/thanos-op-batcher
-  newTag: nightly-334d114d
+  newTag: nightly-8cae7ee1
 - name: tokamaknetwork/thanos-op-geth
   newTag: nightly-ed8f6db8
 - name: tokamaknetwork/thanos-op-node
-  newTag: nightly-334d114d
+  newTag: nightly-8cae7ee1
 - name: tokamaknetwork/thanos-op-proposer
-  newTag: nightly-334d114d
+  newTag: nightly-8cae7ee1
 - name: tokamaknetwork/thanos-proxyd
-  newTag: nightly-334d114d
+  newTag: nightly-8cae7ee1

@@ -126,7 +126,7 @@ alertmanager:
             send_resolved: true
       - name: block-explorer-instatus
         webhook_configs:
-          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkmnjc2734474hqoo7vbgm2wm'
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzkrjogj768723hioojs1873ev'
             send_resolved: true
 
 additionalPrometheusRulesMap:

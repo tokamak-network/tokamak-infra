@@ -6,6 +6,7 @@ additionalPrometheusRulesMap:
           - alert: 'GraphNodeDown'
             labels:
               group: tokamak
+              class: instatus
               app: graph-node
               severity: critical
               severity_resolved: info

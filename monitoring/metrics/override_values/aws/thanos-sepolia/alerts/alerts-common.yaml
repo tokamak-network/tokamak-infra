@@ -9,6 +9,60 @@ alertmanager:
       receiver: no-alert
       routes:
         - matchers:
+            - class = instatus
+            - app = op-geth
+          receiver: op-geth-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-node
+          receiver: op-node-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-batcher
+          receiver: op-batcher-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = op-proposer
+          receiver: op-proposer-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = blockscout
+          receiver: blockscout-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
+            - class = instatus
+            - app = graph-node
+          receiver: graph-node-instatus
+          group_by: ['instatus']
+          group_wait: 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true
+        - matchers:
             - group = tokamak
             - severity_resolved = info
           receiver: slack-notifications-resolve
@@ -37,6 +91,30 @@ alertmanager:
             send_resolved: true
             title: "{{ range .Alerts }}[Thanos Sepolia] {{ .Labels.app }}\n{{ end }}"
             text: "{{ range .Alerts }}{{ if eq .Status \"firing\" }}[{{ .Labels.severity }}] {{ .Annotations.message }} {{ else }}[{{ .Labels.severity_resolved }}] {{ .Annotations.message_resolved }} {{ end }}\n{{ end }}"
+      - name: op-geth-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknf8te750188hioo2gq0nc2s'
+            send_resolved: true
+      - name: op-node-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfgeg735558hboodt5l13ru'
+            send_resolved: true
+      - name: op-batcher-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfp1x750437hiool1fmhe21'
+            send_resolved: true
+      - name: op-proposer-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfkow735635hboogenwgxyc'
+            send_resolved: true
+      - name: blockscout-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfutl735948hboos7c2zqq4'
+            send_resolved: true
+      - name: graph-node-instatus
+        webhook_configs:
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfyrr741037hqooex0ipzza'
+            send_resolved: true
 
 additionalPrometheusRulesMap:
   common:
@@ -46,6 +124,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-geth down'
             labels:
               group: tokamak
+              class: instatus
               app: op-geth
               severity: critical
               severity_resolved: info
@@ -58,6 +137,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-node down'
             labels:
               group: tokamak
+              class: instatus
               app: op-node
               severity: critical
               severity_resolved: info
@@ -70,6 +150,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-batcher down'
             labels:
               group: tokamak
+              class: instatus
               app: op-batcher
               severity: critical
               severity_resolved: info
@@ -82,6 +163,7 @@ additionalPrometheusRulesMap:
           - alert: 'op-proposer down'
             labels:
               group: tokamak
+              class: instatus
               app: op-proposer
               severity: critical
               severity_resolved: info
@@ -131,6 +213,7 @@ additionalPrometheusRulesMap:
           - alert: 'blockscout'
             labels:
               group: tokamak
+              class: instatus
               app: blockscout
               severity: critical
               severity_resolved: info

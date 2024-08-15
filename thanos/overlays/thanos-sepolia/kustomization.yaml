@@ -27,7 +27,7 @@ images:
 - name: tokamaknetwork/thanos-op-batcher
   newTag: nightly-8cae7ee1
 - name: tokamaknetwork/thanos-op-geth
-  newTag: nightly-ed8f6db8
+  newTag: nightly-8c38499f
 - name: tokamaknetwork/thanos-op-node
   newTag: nightly-8cae7ee1
 - name: tokamaknetwork/thanos-op-proposer

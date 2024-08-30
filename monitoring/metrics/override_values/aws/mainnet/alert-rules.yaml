@@ -3,7 +3,7 @@ alertmanager:
     global:
       # Also possible to place this URL in a file.
       # Ex: `slack_api_url_file: '/etc/alertmanager/slack_url'`
-      slack_api_url: 'https://hooks.slack.com/services/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'
+      slack_api_url: 'https://hooks.slack.com/services/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'
 
     route:
       receiver: no-alert

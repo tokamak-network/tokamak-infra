@@ -32,7 +32,7 @@ metadata:
         "type": "forward",
         "forwardConfig": {
           "targetGroups": [{
-            "serviceName": "op-geth-svc",
+            "serviceName": "proxyd-l2gth-svc",
             "servicePort": "8546"
           }]
         }
@@ -56,7 +56,7 @@ spec:
             pathType: Exact
             backend:
               service:
-                name: op-geth-svc
+                name: proxyd-l2gth-svc
                 port:
                   number: 8545
 ---

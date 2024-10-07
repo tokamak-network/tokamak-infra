@@ -23,3 +23,6 @@ configMapGenerator:
   - name: proxyd
     files:
       - ./proxyd-config.toml
+  - name: proxyd-l2geth
+    files:
+      - ./proxyd-l2geth-config.toml

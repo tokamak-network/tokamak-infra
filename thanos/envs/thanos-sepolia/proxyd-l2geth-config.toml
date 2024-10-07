@@ -1,0 +1,139 @@
+# List of WS methods to whitelist.
+ws_method_whitelist = [
+  # List of ethereum standard APIs expects engine APIs. refer to https://ethereum.github.io/execution-apis/api-documentation
+  "debug_getBadBlocks",
+  "debug_getRawBlock",
+  "debug_getRawHeader",
+  "debug_getRawReceipts",
+  "debug_getRawTransaction",
+
+  "eth_accounts",
+  "eth_blockNumber",
+  "eth_call",
+  "eth_chainId",
+  "eth_coinbase",
+  "eth_createAccessList",
+  "eth_estimateGas",
+  "eth_feeHistory",
+  "eth_gasPrice",
+  "eth_getBalance",
+  "eth_getBlockByHash",
+  "eth_getBlockByNumber",
+  "eth_getBlockReceipts",
+  "eth_getBlockTransactionCountByHash",
+  "eth_getBlockTransactionCountByNumber",
+  "eth_getCode",
+  "eth_getFilterChanges",
+  "eth_getFilterLogs",
+  "eth_getLogs",
+  "eth_getProof",
+  "eth_getStorageAt",
+  "eth_getTransactionByBlockHashAndIndex",
+  "eth_getTransactionByBlockNumberAndIndex",
+  "eth_getTransactionByHash",
+  "eth_getTransactionCount",
+  "eth_getTransactionReceipt",
+  "eth_getUncleCountByBlockHash",
+  "eth_getUncleCountByBlockNumber",
+  "eth_maxPriorityFeePerGas",
+  "eth_newBlockFilter",
+  "eth_newFilter",
+  "eth_newPendingTransactionFilter",
+  "eth_sendRawTransaction",
+  "eth_sendTransaction",
+  "eth_sign",
+  "eth_signTransaction",
+  "eth_subscribe",
+  "eth_syncing",
+  "eth_uninstallFilter",
+  "eth_unsubscribe",
+]
+ws_backend_group = "l2geth"
+
+[server]
+rpc_host = "0.0.0.0"
+rpc_port = 8080
+ws_host = "0.0.0.0"
+ws_port = 8085
+max_body_size_bytes = 10485760
+max_concurrent_rpcs = 10000
+log_level = "info"
+enable_pprof = true
+
+[redis]
+url = "redis://redis-svc.redis:6379/1"
+
+[cache]
+enabled = true
+
+[metrics]
+enabled = true
+host = "0.0.0.0"
+port = 9761
+
+[backend]
+response_timeout_seconds = 5
+max_response_size_bytes = 104857600
+max_retries = 3
+out_of_service_seconds = 20
+
+
+[backends]
+[backends.l2geth]
+rpc_url = "http://op-geth-0.op-geth-svc:8545"
+ws_url = "ws://op-geth-0.op-geth-svc:8546"
+max_rps = 1000
+max_ws_conns = 0
+strip_trailing_xff = true
+
+[backend_groups]
+[backend_groups.l2geth]
+backends = ["l2geth"]
+
+[rpc_method_mappings]
+# List of ethereum standard APIs expects engine APIs. refer to https://ethereum.github.io/execution-apis/api-documentation
+debug_getBadBlocks = "l2geth"
+debug_getRawBlock = "l2geth"
+debug_getRawHeader = "l2geth"
+debug_getRawReceipts = "l2geth"
+debug_getRawTransaction = "l2geth"
+eth_accounts = "l2geth"
+eth_blockNumber = "l2geth"
+eth_call = "l2geth"
+eth_chainId = "l2geth"
+eth_coinbase = "l2geth"
+eth_createAccessList = "l2geth"
+eth_estimateGas = "l2geth"
+eth_feeHistory = "l2geth"
+eth_gasPrice = "l2geth"
+eth_getBalance = "l2geth"
+eth_getBlockByHash = "l2geth"
+eth_getBlockByNumber = "l2geth"
+eth_getBlockReceipts = "l2geth"
+eth_getBlockTransactionCountByHash = "l2geth"
+eth_getBlockTransactionCountByNumber = "l2geth"
+eth_getCode = "l2geth"
+eth_getFilterChanges = "l2geth"
+eth_getFilterLogs = "l2geth"
+eth_getLogs = "l2geth"
+eth_getProof = "l2geth"
+eth_getStorageAt = "l2geth"
+eth_getTransactionByBlockHashAndIndex = "l2geth"
+eth_getTransactionByBlockNumberAndIndex = "l2geth"
+eth_getTransactionByHash = "l2geth"
+eth_getTransactionCount = "l2geth"
+eth_getTransactionReceipt = "l2geth"
+eth_getUncleCountByBlockHash = "l2geth"
+eth_getUncleCountByBlockNumber = "l2geth"
+eth_maxPriorityFeePerGas = "l2geth"
+eth_newBlockFilter = "l2geth"
+eth_newFilter = "l2geth"
+eth_newPendingTransactionFilter = "l2geth"
+eth_sendRawTransaction = "l2geth"
+eth_sendTransaction = "l2geth"
+eth_sign = "l2geth"
+eth_signTransaction = "l2geth"
+eth_subscribe = "l2geth"
+eth_syncing = "l2geth"
+eth_uninstallFilter = "l2geth"
+eth_unsubscribe = "l2geth"

@@ -32,7 +32,7 @@ metadata:
         "type": "forward",
         "forwardConfig": {
           "targetGroups": [{
-            "serviceName": "proxyd-l2geth-svc",
+            "serviceName": "op-geth-svc",
             "servicePort": "8546"
           }]
         }

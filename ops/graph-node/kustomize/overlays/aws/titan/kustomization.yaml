@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: graph-node
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - namespace.yaml
+  - ingress.yaml
+  - pv.yaml
+  - pvc.yaml
+  - ../../../envs/titan
+  - ../../../bases/ipfs
+  - ../../../bases/graph-node
+
+patches:
+  - path: resource_override.yaml

@@ -1,16 +1,16 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: graph-node
+  name: graph-node-legacy
 spec:
   project: default
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-infra'
-    path: ops/graph-node/kustomize/overlays/aws/titan
+    path: ops/graph-node/kustomize/overlays/aws/mainnet
     targetRevision: main
   destination:
     server: 'https://kubernetes.default.svc'
-    namespace: graph-node
+    namespace: thegraph
   syncPolicy:
     syncOptions:
       - CreateNamespace=true

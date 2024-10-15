@@ -1,52 +1,98 @@
 # List of WS methods to whitelist.
 ws_method_whitelist = [
   # List of ethereum standard APIs expects engine APIs. refer to https://ethereum.github.io/execution-apis/api-documentation
+  "debug_accountRange",
+  "debug_backtraceAt",
+  "debug_blockProfile",
+  "debug_chaindbCompact",
+  "debug_chaindbProperty",
+  "debug_cpuProfile",
+  "debug_dumpBlock",
+  "debug_freeOSMemory",
+  "debug_gcStats",
   "debug_getBadBlocks",
-  "debug_getRawBlock",
-  "debug_getRawHeader",
-  "debug_getRawReceipts",
-  "debug_getRawTransaction",
+  "debug_getModifiedAccountsByHash",
+  "debug_getModifiedAccountsByNumber",
+  "debug_goTrace",
+  "debug_memStats",
+  "debug_mutexProfile",
+  "debug_preimage",
+  "debug_printBlock",
+  "debug_seedHash",
+  "debug_setBlockProfileRate",
+  "debug_setGCPercent",
+  "debug_setHead",
+  "debug_setMutexProfileFraction",
+  "debug_stacks",
+  "debug_standardTraceBlockToFile",
+  "debug_standardTraceBadBlockToFile",
+  "debug_startCPUProfile",
+  "debug_startGoTrace",
+  "debug_stopCPUProfile",
+  "debug_stopGoTrace",
+  "debug_storageRangeAt",
+  "debug_traceBadBlock",
+  "debug_traceBlock",
+  "debug_traceBlockByNumber",
+  "debug_traceBlockByHash",
+  "debug_traceBlockFromFile",
+  "debug_traceTransaction",
+  "debug_verbosity",
+  "debug_vmodule",
+  "debug_writeBlockProfile",
+  "debug_writeMemProfile",
+  "debug_writeMutexProfile",
 
+  "web3_clientVersion",
+  "web3_sha3",
+
+  "net_version",
+  "net_listening",
+  "net_peerCount",
+
+  "eth_protocolVersion",
+  "eth_syncing",
+  "eth_coinbase",
+  "eth_chainId",
+  "eth_mining",
+  "eth_hashrate",
+  "eth_gasPrice",
   "eth_accounts",
   "eth_blockNumber",
-  "eth_call",
-  "eth_chainId",
-  "eth_coinbase",
-  "eth_createAccessList",
-  "eth_estimateGas",
-  "eth_feeHistory",
-  "eth_gasPrice",
   "eth_getBalance",
-  "eth_getBlockByHash",
-  "eth_getBlockByNumber",
-  "eth_getBlockReceipts",
+  "eth_getStorageAt",
+  "eth_getTransactionCount",
   "eth_getBlockTransactionCountByHash",
   "eth_getBlockTransactionCountByNumber",
+  "eth_getUncleCountByBlockHash",
+  "eth_getUncleCountByBlockNumber",
   "eth_getCode",
+  "eth_sign",
+  "eth_signTransaction",
+  "eth_sendTransaction",
+  "eth_sendRawTransaction",
+  "eth_call",
+  "eth_estimateGas",
+  "eth_getBlockByHash",
+  "eth_getBlockByNumber",
+  "eth_getTransactionByHash",
+  "eth_getTransactionByBlockHashAndIndex",
+  "eth_getTransactionByBlockNumberAndIndex",
+  "eth_getTransactionReceipt",
+  "eth_getUncleByBlockHashAndIndex",
+  "eth_getUncleByBlockNumberAndIndex",
+  "eth_newFilter",
+  "eth_newBlockFilter",
+  "eth_newPendingTransactionFilter",
+  "eth_uninstallFilter",
   "eth_getFilterChanges",
   "eth_getFilterLogs",
   "eth_getLogs",
-  "eth_getProof",
-  "eth_getStorageAt",
-  "eth_getTransactionByBlockHashAndIndex",
-  "eth_getTransactionByBlockNumberAndIndex",
-  "eth_getTransactionByHash",
-  "eth_getTransactionCount",
-  "eth_getTransactionReceipt",
-  "eth_getUncleCountByBlockHash",
-  "eth_getUncleCountByBlockNumber",
-  "eth_maxPriorityFeePerGas",
-  "eth_newBlockFilter",
-  "eth_newFilter",
-  "eth_newPendingTransactionFilter",
-  "eth_sendRawTransaction",
-  "eth_sendTransaction",
-  "eth_sign",
-  "eth_signTransaction",
   "eth_subscribe",
-  "eth_syncing",
-  "eth_uninstallFilter",
   "eth_unsubscribe",
+  "eth_getHeaderByNumber",
+  "eth_getHeaderByHash",
+  "eth_getProof",
 ]
 ws_backend_group = "l2geth"
 
@@ -92,48 +138,101 @@ backends = ["l2geth"]
 
 [rpc_method_mappings]
 # List of ethereum standard APIs expects engine APIs. refer to https://ethereum.github.io/execution-apis/api-documentation
+debug_accountRange = "l2geth"
+debug_backtraceAt = "l2geth"
+debug_blockProfile = "l2geth"
+debug_chaindbCompact = "l2geth"
+debug_chaindbProperty = "l2geth"
+debug_cpuProfile = "l2geth"
+debug_dumpBlock = "l2geth"
+debug_freeOSMemory = "l2geth"
+debug_gcStats = "l2geth"
 debug_getBadBlocks = "l2geth"
-debug_getRawBlock = "l2geth"
-debug_getRawHeader = "l2geth"
-debug_getRawReceipts = "l2geth"
-debug_getRawTransaction = "l2geth"
+debug_getModifiedAccountsByHash = "l2geth"
+debug_getModifiedAccountsByNumber = "l2geth"
+debug_goTrace = "l2geth"
+debug_memStats = "l2geth"
+debug_mutexProfile = "l2geth"
+debug_preimage = "l2geth"
+debug_printBlock = "l2geth"
+debug_seedHash = "l2geth"
+debug_setBlockProfileRate = "l2geth"
+debug_setGCPercent = "l2geth"
+debug_setHead = "l2geth"
+debug_setMutexProfileFraction = "l2geth"
+debug_stacks = "l2geth"
+debug_standardTraceBlockToFile = "l2geth"
+debug_standardTraceBadBlockToFile = "l2geth"
+debug_startCPUProfile = "l2geth"
+debug_startGoTrace = "l2geth"
+debug_stopCPUProfile = "l2geth"
+debug_stopGoTrace = "l2geth"
+debug_storageRangeAt = "l2geth"
+debug_traceBadBlock = "l2geth"
+debug_traceBlock = "l2geth"
+debug_traceBlockByNumber = "l2geth"
+debug_traceBlockByHash = "l2geth"
+debug_traceBlockFromFile = "l2geth"
+debug_traceTransaction = "l2geth"
+debug_verbosity = "l2geth"
+debug_vmodule = "l2geth"
+debug_writeBlockProfile = "l2geth"
+debug_writeMemProfile = "l2geth"
+debug_writeMutexProfile = "l2geth"
+
+web3_clientVersion = "l2geth"
+web3_sha3 = "l2geth"
+
+net_version = "l2geth"
+net_listening = "l2geth"
+net_peerCount = "l2geth"
+
+eth_protocolVersion = "l2geth"
+eth_syncing = "l2geth"
+eth_coinbase = "l2geth"
+eth_chainId = "l2geth"
+eth_mining = "l2geth"
+eth_hashrate = "l2geth"
+eth_gasPrice = "l2geth"
 eth_accounts = "l2geth"
 eth_blockNumber = "l2geth"
-eth_call = "l2geth"
-eth_chainId = "l2geth"
-eth_coinbase = "l2geth"
-eth_createAccessList = "l2geth"
-eth_estimateGas = "l2geth"
-eth_feeHistory = "l2geth"
-eth_gasPrice = "l2geth"
 eth_getBalance = "l2geth"
-eth_getBlockByHash = "l2geth"
-eth_getBlockByNumber = "l2geth"
-eth_getBlockReceipts = "l2geth"
+eth_getStorageAt = "l2geth"
+eth_getTransactionCount = "l2geth"
 eth_getBlockTransactionCountByHash = "l2geth"
 eth_getBlockTransactionCountByNumber = "l2geth"
+eth_getUncleCountByBlockHash = "l2geth"
+eth_getUncleCountByBlockNumber = "l2geth"
 eth_getCode = "l2geth"
+eth_sign = "l2geth"
+eth_signTransaction = "l2geth"
+eth_sendTransaction = "l2geth"
+eth_sendRawTransaction = "l2geth"
+eth_call = "l2geth"
+eth_estimateGas = "l2geth"
+eth_getBlockByHash = "l2geth"
+eth_getBlockByNumber = "l2geth"
+eth_getTransactionByHash = "l2geth"
+eth_getTransactionByBlockHashAndIndex = "l2geth"
+eth_getTransactionByBlockNumberAndIndex = "l2geth"
+eth_getTransactionReceipt = "l2geth"
+eth_getUncleByBlockHashAndIndex = "l2geth"
+eth_getUncleByBlockNumberAndIndex = "l2geth"
+eth_newFilter = "l2geth"
+eth_newBlockFilter = "l2geth"
+eth_newPendingTransactionFilter = "l2geth"
+eth_uninstallFilter = "l2geth"
 eth_getFilterChanges = "l2geth"
 eth_getFilterLogs = "l2geth"
 eth_getLogs = "l2geth"
-eth_getProof = "l2geth"
-eth_getStorageAt = "l2geth"
-eth_getTransactionByBlockHashAndIndex = "l2geth"
-eth_getTransactionByBlockNumberAndIndex = "l2geth"
-eth_getTransactionByHash = "l2geth"
-eth_getTransactionCount = "l2geth"
-eth_getTransactionReceipt = "l2geth"
-eth_getUncleCountByBlockHash = "l2geth"
-eth_getUncleCountByBlockNumber = "l2geth"
-eth_maxPriorityFeePerGas = "l2geth"
-eth_newBlockFilter = "l2geth"
-eth_newFilter = "l2geth"
-eth_newPendingTransactionFilter = "l2geth"
-eth_sendRawTransaction = "l2geth"
-eth_sendTransaction = "l2geth"
-eth_sign = "l2geth"
-eth_signTransaction = "l2geth"
 eth_subscribe = "l2geth"
-eth_syncing = "l2geth"
-eth_uninstallFilter = "l2geth"
 eth_unsubscribe = "l2geth"
+eth_getHeaderByNumber = "l2geth"
+eth_getHeaderByHash = "l2geth"
+eth_getProof = "l2geth"
+
+[rate_limit]
+enable_backend_rate_limiter = false
+
+[sender_rate_limit]
+enabled = false

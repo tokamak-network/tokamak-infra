@@ -8,7 +8,6 @@ generatorOptions:
 resources:
   - tokamak-optimism.yaml
   - blockscout.yaml
-  - graph-node-legacy.yaml
   - graph-node.yaml
   - redis.yaml
   - metrics.yaml

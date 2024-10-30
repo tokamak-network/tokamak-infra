@@ -13,3 +13,18 @@ spec:
   selector:
     matchLabels:
       app: op-geth
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: op-challenger-pvc
+spec:
+  storageClassName: efs-sc
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  selector:
+    matchLabels:
+      app: op-challenger

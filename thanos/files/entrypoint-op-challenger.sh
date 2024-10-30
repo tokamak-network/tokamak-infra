@@ -7,9 +7,9 @@ wget \
     -O rollup.json
 
 wget \
-	  "${OP_CHALLENGER_CANNON_L2_GENESIS_URL}" \
-	  -q \
-	  -O l2-genesis.json
+    "${OP_CHALLENGER_CANNON_L2_GENESIS_URL}" \
+    -q \
+    -O l2-genesis.json
 
 exec op-challenger \
     --cannon-rollup-config=./rollup.json \

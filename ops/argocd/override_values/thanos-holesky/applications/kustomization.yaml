@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: argocd
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+  - blockscout.yaml
+  - graph-node.yaml
+  - logs.yaml
+  - metrics.yaml
+  - redis.yaml
+  - thanos.yaml
+  - notif_thanos.yaml

@@ -26,3 +26,6 @@ configMapGenerator:
   - name: proxyd-l2geth
     files:
       - ./proxyd-l2geth-config.toml
+  - name: op-challenger
+    files:
+      - ./op-challenger.env

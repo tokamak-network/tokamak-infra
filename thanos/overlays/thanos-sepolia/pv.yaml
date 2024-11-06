@@ -34,3 +34,21 @@ spec:
   csi:
     driver: efs.csi.aws.com
     volumeHandle: fs-032bd032daed4455d
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: op-node-pv
+  labels:
+    app: op-node
+spec:
+  capacity:
+    storage: 500Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: efs-sc
+  csi:
+    driver: efs.csi.aws.com
+    volumeHandle: fs-032bd032daed4455d

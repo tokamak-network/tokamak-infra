@@ -8,4 +8,5 @@ wget \
 
 exec op-node \
     --rollup.config=./rollup.json \
+    --safedb.path=/safedb
     "$@"

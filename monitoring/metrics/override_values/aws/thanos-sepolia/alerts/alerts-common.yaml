@@ -126,7 +126,7 @@ alertmanager:
             send_resolved: true
       - name: op-challenger-instatus
         webhook_configs:
-          - url: ''
+          - url: 'https://api.instatus.com/v3/integrations/prometheus/cm35lfui10031hkv04otymaee'
             send_resolve: true
 
 additionalPrometheusRulesMap:

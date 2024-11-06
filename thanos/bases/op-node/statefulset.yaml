@@ -55,6 +55,7 @@ spec:
           volumeMounts:
             - name: safedb-data
               mountPath: /safedb
+              subPath: op-node
             - name: op-node-scripts
               mountPath: /op-node-scripts
             - name: op-geth-auth

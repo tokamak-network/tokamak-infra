@@ -63,6 +63,15 @@ alertmanager:
           repeat_interval: 1h
           continue: true
         - matchers:
+            - class = instatus
+            - app = op-challenger
+          receiver: op-challenger-instatus
+          group_by: ['instatus']
+          group_wait : 0s
+          group_interval: 10s
+          repeat_interval: 1h
+          continue: true         
+        - matchers:
             - group = tokamak
             - severity_resolved = info
           receiver: slack-notifications-resolve
@@ -115,6 +124,10 @@ alertmanager:
         webhook_configs:
           - url: 'https://api.instatus.com/v3/integrations/prometheus/clzknfyrr741037hqooex0ipzza'
             send_resolved: true
+      - name: op-challenger-instatus
+        webhook_configs:
+          - url: ''
+            send_resolve: true
 
 additionalPrometheusRulesMap:
   common:

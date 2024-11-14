@@ -5,11 +5,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-infra'
+    repoURL: "https://github.com/tokamak-network/tokamak-infra"
     path: apps/notif_thanos/kustomize/overlays/aws/thanos-sepolia
-    targetRevision: main
+    targetRevision: deploy-demo
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: thanos-app-notif
   syncPolicy:
     syncOptions:

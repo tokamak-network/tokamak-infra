@@ -6,11 +6,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
+    repoURL: "https://github.com/tokamak-network/tokamak-infra.git"
     path: thanos/overlays/thanos-sepolia
-    targetRevision: main
+    targetRevision: deploy-demo
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: default
   syncPolicy:
     syncOptions:

@@ -6,11 +6,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/tokamak-network/tokamak-infra'
+    repoURL: "https://github.com/tokamak-network/tokamak-infra"
     path: ops/argocd/override_values/thanos-sepolia/applications
-    targetRevision: main
+    targetRevision: deploy-demo
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: argocd
   syncPolicy:
     syncOptions:

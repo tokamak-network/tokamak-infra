@@ -7,7 +7,7 @@ spec:
   source:
     repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
     path: monitoring/logs/kustomize/overlays/aws/thanos-sepolia
-    targetRevision: main
+    targetRevision: deploy-demo
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: log-monitoring

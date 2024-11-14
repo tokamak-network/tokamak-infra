@@ -6,9 +6,9 @@ spec:
   project: default
   sources:
     # kube-prometheus-stack
-    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+    - repoURL: "https://prometheus-community.github.io/helm-charts"
       chart: kube-prometheus-stack
-      targetRevision: '*-0'
+      targetRevision: "*-0"
       helm:
         valueFiles:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/config.yaml
@@ -19,9 +19,9 @@ spec:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-op-proposer.yaml
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/alerts/alerts-graph-node.yaml
     # prometheus-blackbox-exporter
-    - repoURL: 'https://prometheus-community.github.io/helm-charts'
+    - repoURL: "https://prometheus-community.github.io/helm-charts"
       chart: prometheus-blackbox-exporter
-      targetRevision: '*-0'
+      targetRevision: "*-0"
       helm:
         valueFiles:
           - $repo/monitoring/metrics/override_values/aws/thanos-sepolia/blackbox.yaml
@@ -30,12 +30,12 @@ spec:
     #   path: monitoring/metrics/dashboards
     #   targetRevision: main
     # repository to override
-    - repoURL: 'https://github.com/tokamak-network/tokamak-infra.git'
-      targetRevision: main
+    - repoURL: "https://github.com/tokamak-network/tokamak-infra.git"
+      targetRevision: deploy-demo
       ref: repo
 
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: monitoring
   syncPolicy:
     syncOptions:

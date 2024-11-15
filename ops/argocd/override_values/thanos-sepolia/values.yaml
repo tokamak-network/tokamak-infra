@@ -30,10 +30,10 @@ server:
       alb.ingress.kubernetes.io/target-type: ip
       alb.ingress.kubernetes.io/scheme: internet-facing
       alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
-      alb.ingress.kubernetes.io/ssl-redirect: '443'
+      alb.ingress.kubernetes.io/ssl-redirect: "443"
       alb.ingress.kubernetes.io/group.name: thanos-sepolia
       alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=s3-alb-access-logs-lambda-thanos-sepolia,access_logs.s3.prefix=thanos-sepolia
-      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-block-ddos/3a0498c3-896f-49f5-908b-b9ba3fb88d0f
+      alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:ap-northeast-2:992382494724:regional/webacl/thanos-sepolia-block-ddos/33b275b4-e882-4e1d-8c9d-87f568658956
     tls: true
 applicationSet:
   metrics:

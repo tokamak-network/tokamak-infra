@@ -8,9 +8,9 @@ additionalPrometheusRulesMap:
               group: tokamak
               app: op-challenger
               severity: critical
-            expr: 'op_challenger_default_balance < 0.5'
+            expr: 'op_challenger_default_balance < 3'
             for: 5m
-            annotations: "Challenger balance is lower than 0.5 ether\nchallenger balance: {{ $value | printf \"%.2f\"}} eth"
+            annotations: "Challenger balance is lower than 3 ether\nchallenger balance: {{ $value | printf \"%.2f\"}} eth"
       - name: 'op-challenger'
         rules:
           - alert: 'op-challenger down'

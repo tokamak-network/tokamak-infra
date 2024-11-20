@@ -14,4 +14,4 @@ patches:
 
 images:
   - name: tokamaknetwork/thanos-event-listener
-    newTag: nightly-8e0ebc8f
+    newTag: nightly-9d2518f9

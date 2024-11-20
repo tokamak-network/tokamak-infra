@@ -6,35 +6,35 @@ generatorOptions:
   disableNameSuffixHash: true
 
 resources:
-  - namespace.yaml
-  - ../../bases/op-geth
-  - ../../bases/op-node
-  - ../../bases/op-batcher
-  - ../../bases/op-proposer
-  - ../../bases/op-challenger
-  - ../../bases/proxyd
-  - ../../bases/proxyd-l2geth
-  - ../../envs/thanos-sepolia
-  - ../../files
-  - pv.yaml
-  - pvc.yaml
-  - secretstore.yaml
-  - externalsecret.yaml
-  - ingress.yaml
+- namespace.yaml
+- ../../bases/op-geth
+- ../../bases/op-node
+- ../../bases/op-batcher
+- ../../bases/op-proposer
+- ../../bases/op-challenger
+- ../../bases/proxyd
+- ../../bases/proxyd-l2geth
+- ../../envs/thanos-sepolia
+- ../../files
+- pv.yaml
+- pvc.yaml
+- secretstore.yaml
+- externalsecret.yaml
+- ingress.yaml
 
 patches:
-  - path: resource_override.yaml
+- path: resource_override.yaml
 
 images:
-  - name: tokamaknetwork/thanos-op-batcher
-    newTag: nightly-5a2a8c6d
-  - name: tokamaknetwork/thanos-op-geth
-    newTag: nightly-c61a056f
-  - name: tokamaknetwork/thanos-op-node
-    newTag: nightly-5a2a8c6d
-  - name: tokamaknetwork/thanos-op-proposer
-    newTag: nightly-5a2a8c6d
-  - name: tokamaknetwork/thanos-proxyd
-    newTag: nightly-5a2a8c6d
-  - name: tokamaknetwork/thanos-op-challenger
-    newTag: nightly-5a2a8c6d
+- name: tokamaknetwork/thanos-op-batcher
+  newTag: nightly-8cc882b4
+- name: tokamaknetwork/thanos-op-challenger
+  newTag: nightly-5a2a8c6d
+- name: tokamaknetwork/thanos-op-geth
+  newTag: nightly-c61a056f
+- name: tokamaknetwork/thanos-op-node
+  newTag: nightly-8cc882b4
+- name: tokamaknetwork/thanos-op-proposer
+  newTag: nightly-8cc882b4
+- name: tokamaknetwork/thanos-proxyd
+  newTag: nightly-8cc882b4

@@ -25,3 +25,17 @@ additionalPrometheusRulesMap:
             annotations:
               message: "OutputRoot propose is stuck\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
               message_resolved: "OutputRoot propose resolved\nLatest proposed outputRoot: {{ \"op_proposer_default_refs_number{layer='l2', type='proposed'}\" | query | first | value | printf \"%.0f\" }}"
+      - name: 'ValidProposerCheck'
+        rules: 
+          - alert: 'ValidProposerCheck'
+            labels: 
+              group: tokamak
+              app: op-proposer
+              severity: critical
+              severity_resolved: info
+            expr: 'op_proposer_default_proposer_valid == 0'
+            for: 3m
+            annotations:
+              message: "Invalid proposer detected. Account: {{ $labels.account }}"
+              message_resolved: "Proposer Validation resolved"
+

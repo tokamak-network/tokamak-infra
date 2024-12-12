@@ -1,0 +1,26 @@
+additionalPrometheusRulesMap:
+  op-challenger:
+    groups:
+      - name: 'ChallengerBalance'
+        rules:
+          - alert: 'ChallengerBalance'
+            labels: 
+              group: tokamak
+              app: op-challenger
+              severity: critical
+            expr: 'op_challenger_default_balance < 3'
+            for: 5m
+            annotations: "Challenger balance is lower than 3 ether\nchallenger balance: {{ $value | printf \"%.2f\"}} eth"
+      - name: 'op-challenger'
+        rules:
+          - alert: 'op-challenger down'
+            labels:
+              group: tokamak
+              class: instatus
+              app: op-challenger
+              severity: critical
+              severity_resolved: info
+            expr: 'absent(up{job="op-challenger"} ==1)'
+            annotations:
+              message: 'op-challenger is down'
+              message_resolved: 'op-challenger is  up'

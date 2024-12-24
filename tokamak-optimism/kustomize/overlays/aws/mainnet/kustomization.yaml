@@ -32,14 +32,14 @@ configMapGenerator:
   name: chain-config
 images:
 - name: tokamaknetwork/titan-batch-submitter
-  newTag: release-0.1.21
+  newTag: release-0.1.22
 - name: tokamaknetwork/titan-data-transport-layer
-  newTag: release-0.1.21
+  newTag: release-0.1.22
 - name: tokamaknetwork/titan-gas-oracle
-  newTag: release-0.1.21
+  newTag: release-0.1.22
 - name: tokamaknetwork/titan-l2geth
-  newTag: release-0.1.21
+  newTag: release-0.1.22
 - name: tokamaknetwork/titan-message-relayer
-  newTag: release-0.1.21
+  newTag: release-0.1.22
 - name: tokamaknetwork/titan-proxyd
-  newTag: release-0.1.21
+  newTag: release-0.1.22

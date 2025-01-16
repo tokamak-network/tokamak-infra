@@ -16,7 +16,7 @@ git_repo_name             = "ALB_S3_Logs_To_ES"
 lambda_source_version     = "2.0"
 external_secret_namespace = "titan"
 eks_cluster_admins = [
-  "arn:aws:iam::211125399844:user/steven@tokamak.network",
+  "arn:aws:iam::211125399844:user/theo@tokamak.network",
 ]
 ec2_ami      = "ami-0c031a79ffb01a803"
 ec2_instance = "t3.medium"

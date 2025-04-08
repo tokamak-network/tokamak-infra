@@ -31,7 +31,7 @@ images:
 - name: tokamaknetwork/thanos-op-challenger
   newTag: nightly-5a2a8c6d
 - name: tokamaknetwork/thanos-op-geth
-  newTag: nightly-193382ee
+  newTag: nightly-a7c74c7e
 - name: tokamaknetwork/thanos-op-node
   newTag: nightly-0d108594
 - name: tokamaknetwork/thanos-op-proposer

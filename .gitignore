@@ -1,0 +1,23 @@
+# TLS/SSL certificates and private keys
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Terraform state (contains sensitive infrastructure data)
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate.d/
+.terraform/
+.terraform.lock.hcl
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Secrets
+secrets/
+*.secret
+credentials.json

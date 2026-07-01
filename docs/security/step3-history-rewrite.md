@@ -1,66 +1,85 @@
 # Step 3 — Git history rewrite runbook
 
-Verified on a throwaway `--mirror` clone on 2026-07-01: after the two passes
-below, **0** of the 35 catalogued secret literals remained in history,
-`terraform.tfstate` blobs went 1765 → 0, and `secret.env` files 16 → 0, while
-HEAD retained real content (330 files). Tooling present: `git-filter-repo`
-(`a40bce54`).
+**Scope decision (operator):** repo is decommissioned. Keep only `main` + tags;
+**delete all 196 `OR-*` / feature branches** on the remote. Deleted branches'
+commits become unreachable, so their secrets vanish with them; `main` + tags are
+rewritten to purge secrets that are also reachable from `main`
+(confirmed: batch-submitter private key in 2 `main` commits, Auth0 secret in 1,
+QuickNode key in 1; 35 `secret.env` appearances and 82 `tfstate` in `main`).
 
-> The automated run stops here. **You (operator) run the force-push** after
-> notifying collaborators — every clone diverges and must be re-cloned.
+**Correction to an earlier note:** the remote is NOT `main`-only. GitHub has
+**196 branches + 15 tags**, each carrying secrets in history. That is why the
+recipe below both rewrites `main`+tags AND deletes the other branches.
+
+End-to-end verified on a throwaway `--mirror` clone (2026-07-01): after the
+recipe, refs = `main` + 15 tags, residual catalogued secrets = 0, `tfstate`
+blobs = 0, `secret.env` files = 0, `main` HEAD intact (334 files).
+Tooling present: `git-filter-repo` (`a40bce54`).
+
+> The automated run stops here. **You (operator) run the force-push / mirror
+> push** after notifying collaborators — the 196 branches disappear and every
+> clone must be re-cloned.
 
 ## Prerequisites
 
-1. Step 1 (credential rotation) is done — history rewrite does **not** undo
-   exposure of already-pushed secrets; only rotation does.
-2. Step 2 scrub is committed on `main` (so the new clean HEAD is what survives).
-3. All collaborators are told a force-push is coming.
+1. Step 1 (credential rotation) — DONE.
+2. Step 2 scrub committed on `main` (commit `1c3ed74`) and pushed.
+3. Collaborators told: 196 branches will be deleted and history rewritten.
+4. `.git-history-replacements.txt` (repo root, gitignored) is available.
 
-## Commands
+## Recipe (order matters)
 
-Run on a **fresh mirror clone**, never your working copy:
+`git filter-repo` restores refs it processes, so **filter first, delete
+branches second, then mirror-push.** Run on a fresh mirror clone, never your
+working copy:
 
 ```bash
 git clone --mirror https://github.com/tokamak-network/tokamak-infra.git tokamak-infra-clean.git
 cd tokamak-infra-clean.git
 
-# Pass 1 — drop secret files from ALL history
+# --- Pass 1+2: purge secrets from ALL history (main + tags + branches) ---
 git filter-repo --force --invert-paths \
   --path-glob '*secret.env' \
   --path-glob '*.tfstate' \
   --path-glob '*.tfstate.backup' \
   --path-glob 'terraform/terraform.tfstate.d/'
-
-# Pass 2 — scrub remaining secrets from surviving files
-#   (.git-history-replacements.txt is in the repo root, gitignored — copy it here first)
 git filter-repo --force --replace-text /path/to/.git-history-replacements.txt
+
+# --- Then drop every branch except main (sticks only AFTER filter-repo) ---
+git for-each-ref --format='%(refname)' refs/heads \
+  | grep -v '^refs/heads/main$' \
+  | while read r; do git update-ref -d "$r"; done
 ```
 
-## Verify BEFORE pushing (must all print 0)
+## Verify BEFORE pushing (all must be 0 / expected)
 
 ```bash
+git for-each-ref refs/heads          # -> only refs/heads/main
+git for-each-ref refs/tags | wc -l   # -> 15
 ALL=$(git rev-list --all)
-# no catalogued secret survives
 while IFS= read -r l; do t="${l%%==>*}"; [ "${t#regex:}" = "$t" ] || continue; \
   c=$(git grep -lF "$t" $ALL 2>/dev/null | wc -l); [ "$c" = 0 ] || echo "LEFT: $t"; \
 done < /path/to/.git-history-replacements.txt
-# no tfstate / secret.env
-git rev-list --all | xargs -I{} git ls-tree -r {} | grep -c tfstate
-git log --all --name-only --pretty=format: | grep -cE '(^|/)secret\.env$'
+echo "$ALL" | xargs -I{} git ls-tree -r {} | grep -c tfstate      # -> 0
+git log --all --name-only --pretty=format: | grep -cE '(^|/)secret\.env$'  # -> 0
+git ls-tree -r refs/heads/main --name-only | wc -l                # -> ~334
 ```
 
-## Force-push (OPERATOR, after team notice)
+## Push (OPERATOR, after team notice)
+
+`--mirror` makes the remote match this repo exactly: rewritten `main`, 15 tags,
+and the 196 branches deleted.
 
 ```bash
-git push --force origin --all
-git push --force origin --tags
+git push --mirror origin
 ```
 
 Then: every collaborator deletes their clone and re-clones. Enable branch
-protection on `main` (block force-push) **after** this, per Step 5.
+protection on `main` (block force-push) afterwards, per Step 5.
 
 ## Cleanup
 
 ```bash
 rm -f /path/to/.git-history-replacements.txt   # contains raw secrets
+rm -rf tokamak-infra-clean.git
 ```

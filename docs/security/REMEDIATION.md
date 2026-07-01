@@ -18,7 +18,7 @@ namespace is done manually by the operator.
 
 ## Execution status (2026-07-01)
 
-- **Step 1 — PENDING (operator).** External-dashboard rotation. Not automatable.
+- **Step 1 — DONE (operator).** Credentials rotated on external dashboards.
 - **Step 2 — DONE & VERIFIED.** 26 files scrubbed in place (values → placeholders,
   structure kept). Known-token sweep, broad-pattern sweep, and an independent
   entropy sweep all return 0 live secrets; no file deleted; `.gitignore` extended
@@ -27,11 +27,17 @@ namespace is done manually by the operator.
   CLOAK key, RDS creds), the two `proxyd-config.toml` (5 RPC keys), two
   monitoring Slack webhooks, and a graph-node bearer token — all caught by the
   self-checking sweeps and scrubbed.
-- **Step 3 — PREPARED & DRY-RUN VERIFIED; force-push PENDING (operator).**
-  `.git-history-replacements.txt` (35 literals + RSA-key regex, all confirmed
-  present in history) + `docs/security/step3-history-rewrite.md`. Rewrite was
-  run on a throwaway `--mirror` clone: 35/35 literals → 0, tfstate 1765 → 0,
-  secret.env 16 → 0, HEAD content intact (330 files). Operator runs force-push.
+- **Step 3 — PREPARED & DRY-RUN VERIFIED; mirror-push PENDING (operator).**
+  Scope (operator decision): keep `main` + 15 tags, **delete the other 196
+  remote branches**. NOTE: the remote is not `main`-only — GitHub has 196
+  branches + 15 tags, all carrying secrets; `main`'s own history also contains
+  them (private key in 2 commits, 35 secret.env, 82 tfstate). The full recipe
+  (filter-repo → delete non-main heads → `git push --mirror`) was run
+  end-to-end on a throwaway mirror: result refs = main + 15 tags, catalogued
+  secrets → 0, tfstate → 0, secret.env → 0, main HEAD intact (334 files).
+  Artifacts: `.git-history-replacements.txt` (35 literals + RSA regex, all
+  confirmed in history) + `docs/security/step3-history-rewrite.md`.
+  Operator runs `git push --mirror` after team notice.
 - **Step 4 — SATISFIED (documentation).** Placeholders read
   `<SET_VIA_EXTERNALSECRET>` / `<PROVIDER_KEY>`; repo already ships the
   `ExternalSecret`+`SecretStore` pattern. No live migration for a dead repo.

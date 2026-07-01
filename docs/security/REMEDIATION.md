@@ -27,17 +27,21 @@ namespace is done manually by the operator.
   CLOAK key, RDS creds), the two `proxyd-config.toml` (5 RPC keys), two
   monitoring Slack webhooks, and a graph-node bearer token — all caught by the
   self-checking sweeps and scrubbed.
-- **Step 3 — PREPARED & DRY-RUN VERIFIED; mirror-push PENDING (operator).**
-  Scope (operator decision): keep `main` + 15 tags, **delete the other 196
-  remote branches**. NOTE: the remote is not `main`-only — GitHub has 196
-  branches + 15 tags, all carrying secrets; `main`'s own history also contains
-  them (private key in 2 commits, 35 secret.env, 82 tfstate). The full recipe
-  (filter-repo → delete non-main heads → `git push --mirror`) was run
-  end-to-end on a throwaway mirror: result refs = main + 15 tags, catalogued
-  secrets → 0, tfstate → 0, secret.env → 0, main HEAD intact (334 files).
-  Artifacts: `.git-history-replacements.txt` (35 literals + RSA regex, all
-  confirmed in history) + `docs/security/step3-history-rewrite.md`.
-  Operator runs `git push --mirror` after team notice.
+- **Step 3 — DONE & VERIFIED on the remote (2026-07-02).** History rewritten on
+  GitHub: `main` purged, 195 feature branches deleted, 15 tags kept. Verified
+  from a fresh **normal** clone (an attacker's view): 1293 commits reachable,
+  residual catalogued secrets = 0, tfstate = 0, secret.env = 0, branches = 1
+  (`main`), tags = 15. Recipe used: fresh `--mirror` clone → filter-repo
+  (drop secret.env/tfstate + replace-text) → delete non-main heads →
+  re-add origin → `git push --mirror`. Commit hashes changed
+  (`f40b9adf`, `423d372b`).
+  - **RESIDUAL — GitHub PR refs (`refs/pull/*/head`).** `git push --mirror`
+    could not touch these (GitHub: "deny updating a hidden ref"); they still
+    point to pre-rewrite commits that contain the old secrets. They are NOT
+    included in a normal clone (only via explicit `git fetch 'refs/pull/*'`).
+    Because Step 1 rotation already invalidated every one of those credentials,
+    this is dead data. To purge fully, ask **GitHub Support** to run `git gc` /
+    remove stale PR refs on the repo.
 - **Step 4 — SATISFIED (documentation).** Placeholders read
   `<SET_VIA_EXTERNALSECRET>` / `<PROVIDER_KEY>`; repo already ships the
   `ExternalSecret`+`SecretStore` pattern. No live migration for a dead repo.

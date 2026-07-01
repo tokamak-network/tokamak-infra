@@ -3,28 +3,28 @@ blockscout:
     repository: tokamaknetwork/thanos-blockscout
     tag: v6.7.0-beta-tokamak
   env:
-    DATABASE_URL: 'postgresql://***REMOVED***:5432/blockscout'
+    DATABASE_URL: 'postgresql://<user>:<password>@<rds-endpoint>:5432/blockscout'
     ETHEREUM_JSONRPC_VARIANT: geth
     ETHEREUM_JSONRPC_HTTP_URL: 'http://op-geth-svc.thanos:8545'
     ETHEREUM_JSONRPC_TRACE_URL: 'http://op-geth-svc.thanos:8545'
     ETHEREUM_JSONRPC_WS_URL: 'ws://op-geth-svc.thanos:8546'
     CONTRACT_DISABLE_INTERACTION: false
     CHAIN_SPEC_PATH: 'https://tokamak-thanos.s3.ap-northeast-2.amazonaws.com/thanos-sepolia/genesis.json'
-    SECRET_KEY_BASE: ***REMOVED***
+    SECRET_KEY_BASE: <SECRET_KEY_BASE>
     EXCHANGE_RATES_MARKET_CAP_SOURCE: coin_market_cap
-    EXCHANGE_RATES_COINMARKETCAP_API_KEY: ***REMOVED***
+    EXCHANGE_RATES_COINMARKETCAP_API_KEY: <COINMARKETCAP_API_KEY>
     EXCHANGE_RATES_COINMARKETCAP_COIN_ID: '6731' # tokamak-network
     # My Account
     ACCOUNT_ENABLED: true
     ACCOUNT_AUTH0_DOMAIN: tokamak.us.auth0.com
     ACCOUNT_AUTH0_CLIENT_ID: JrVraCwlM0weu9MpTqN45s0Gpy2FEqj6
-    ACCOUNT_AUTH0_CLIENT_SECRET: ***REMOVED***
-    ACCOUNT_SENDGRID_API_KEY: '***REMOVED***'
+    ACCOUNT_AUTH0_CLIENT_SECRET: <AUTH0_CLIENT_SECRET>
+    ACCOUNT_SENDGRID_API_KEY: '<SENDGRID_API_KEY>'
     ACCOUNT_SENDGRID_SENDER: noreply@tokamak.network
     ACCOUNT_SENDGRID_TEMPLATE: d-ab8071b3991840bab0f96d4b5beee46f
-    ACCOUNT_CLOAK_KEY: '***REMOVED***'
+    ACCOUNT_CLOAK_KEY: '<ACCOUNT_CLOAK_KEY>'
     ACCOUNT_REDIS_URL: 'redis://redis-svc.redis:6379/10'
-    ACCOUNT_DATABASE_URL: postgresql://***REMOVED***:5432/blockscout-user
+    ACCOUNT_DATABASE_URL: postgresql://<user>:<password>@<rds-endpoint>:5432/blockscout-user
     # MICROSERVICES
     MICROSERVICE_SC_VERIFIER_ENABLED: true
     MICROSERVICE_SC_VERIFIER_URL: 'https://eth-bytecode-db.services.blockscout.com'

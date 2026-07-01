@@ -18,7 +18,7 @@ metadata:
           "field": "http-header",
           "httpHeaderConfig": {
             "httpHeaderName": "Authorization",
-            "values": ["Bearer ***REMOVED***"]
+            "values": ["Bearer <GRAPH_NODE_BEARER_TOKEN>"]
           }
         }
       ]
@@ -125,7 +125,7 @@ metadata:
           "field": "http-header",
           "httpHeaderConfig": {
             "httpHeaderName": "Authorization",
-            "values": ["Bearer ***REMOVED***"]
+            "values": ["Bearer <GRAPH_NODE_BEARER_TOKEN>"]
           }
         }
       ]

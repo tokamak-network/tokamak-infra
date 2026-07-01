@@ -21,3 +21,11 @@ terraform.tfstate.d/
 secrets/
 *.secret
 credentials.json
+
+# Secret-bearing manifests — values must come from ExternalSecret / AWS Secrets Manager,
+# never inline. These names must never carry real values in git (see docs/security/REMEDIATION.md).
+**/secret.env
+**/secret-cert.yaml
+
+# git-filter-repo replacement patterns (contains raw secrets; delete after history rewrite)
+.git-history-replacements.txt

@@ -87,40 +87,40 @@ max_ws_conns = 0
 strip_trailing_xff = true
 
 [backends.alchemy]
-rpc_url = "https://eth-sepolia.g.alchemy.com/v2/***REMOVED***"
-ws_url = "wss://eth-sepolia.g.alchemy.com/v2/***REMOVED***"
+rpc_url = "https://eth-sepolia.g.alchemy.com/v2/<ALCHEMY_KEY>"
+ws_url = "wss://eth-sepolia.g.alchemy.com/v2/<ALCHEMY_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 consensus_receipts_target = "alchemy_getTransactionReceipts"
 strip_trailing_xff = true
 
 [backends.infura_steven1]
-rpc_url = "https://sepolia.infura.io/v3/***REMOVED***"
-ws_url = "wss://sepolia.infura.io/ws/v3/***REMOVED***"
+rpc_url = "https://sepolia.infura.io/v3/<INFURA_KEY>"
+ws_url = "wss://sepolia.infura.io/ws/v3/<INFURA_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 consensus_receipts_target = "eth_getBlockReceipts"
 strip_trailing_xff = true
 
 [backends.infura_steven2]
-rpc_url = "https://sepolia.infura.io/v3/***REMOVED***"
-ws_url = "wss://sepolia.infura.io/ws/v3/***REMOVED***"
+rpc_url = "https://sepolia.infura.io/v3/<INFURA_KEY>"
+ws_url = "wss://sepolia.infura.io/ws/v3/<INFURA_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 consensus_receipts_target = "eth_getBlockReceipts"
 strip_trailing_xff = true
 
 [backends.infura_theo1]
-rpc_url = "https://sepolia.infura.io/v3/***REMOVED***"
-ws_url = "wss://sepolia.infura.io/ws/v3/***REMOVED***"
+rpc_url = "https://sepolia.infura.io/v3/<INFURA_KEY>"
+ws_url = "wss://sepolia.infura.io/ws/v3/<INFURA_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 consensus_receipts_target = "eth_getBlockReceipts"
 strip_trailing_xff = true
 
 [backends.infura_theo2]
-rpc_url = "https://sepolia.infura.io/v3/***REMOVED***"
-ws_url = "wss://sepolia.infura.io/ws/v3/***REMOVED***"
+rpc_url = "https://sepolia.infura.io/v3/<INFURA_KEY>"
+ws_url = "wss://sepolia.infura.io/ws/v3/<INFURA_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 consensus_receipts_target = "eth_getBlockReceipts"

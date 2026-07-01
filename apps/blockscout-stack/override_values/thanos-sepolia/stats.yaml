@@ -5,8 +5,8 @@ stats:
     tag: v1.6.0
 
   env:
-    STATS__DB_URL: 'postgresql://***REMOVED***:5432/stats'
-    STATS__BLOCKSCOUT_DB_URL: 'postgresql://***REMOVED***:5432/blockscout'
+    STATS__DB_URL: 'postgresql://<user>:<password>@<rds-endpoint>:5432/stats'
+    STATS__BLOCKSCOUT_DB_URL: 'postgresql://<user>:<password>@<rds-endpoint>:5432/blockscout'
     STATS__CREATE_DATABASE: true
     STATS__RUN_MIGRATIONS: true
     STATS__FORCE_UPDATE_ON_START: true

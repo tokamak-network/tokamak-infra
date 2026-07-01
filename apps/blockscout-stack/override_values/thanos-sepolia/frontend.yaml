@@ -23,7 +23,7 @@ frontend:
     NEXT_PUBLIC_NETWORK_LOGO_DARK: 'https://thanos-assets.s3.ap-northeast-2.amazonaws.com/thanos_W.png'
     NEXT_PUBLIC_NETWORK_ICON: 'https://thanos-assets.s3.ap-northeast-2.amazonaws.com/thanos_network-icon.png'
     NEXT_PUBLIC_NETWORK_ICON_DARK: 'https://thanos-assets.s3.ap-northeast-2.amazonaws.com/thanos_network-icon.png'
-    FAVICON_GENERATOR_API_KEY: ***REMOVED***
+    FAVICON_GENERATOR_API_KEY: <FAVICON_GENERATOR_API_KEY>
     FAVICON_MASTER_URL: 'https://tokamak-thanos.s3.ap-northeast-2.amazonaws.com/thanos_favicon.png'
     # Optimistic rollup (L2) chain
     NEXT_PUBLIC_ROLLUP_TYPE: 'optimistic'

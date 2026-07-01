@@ -110,4 +110,4 @@ prometheus:
 grafana:
   image:
     tag: latest
-  adminPassword: admin
+  adminPassword: <SET_VIA_EXTERNALSECRET>

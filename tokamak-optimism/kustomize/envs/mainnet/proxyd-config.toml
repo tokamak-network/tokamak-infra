@@ -52,8 +52,8 @@ out_of_service_seconds = 20
 
 [backends]
 [backends.infura_business_plan]
-rpc_url = "https://mainnet.infura.io/v3/***REMOVED***"
-ws_url = "wss://mainnet.infura.io/ws/v3/***REMOVED***"
+rpc_url = "https://mainnet.infura.io/v3/<INFURA_KEY>"
+ws_url = "wss://mainnet.infura.io/ws/v3/<INFURA_KEY>"
 max_rps = 1000
 max_ws_conns = 0
 

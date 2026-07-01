@@ -1,0 +1,16 @@
+# gitleaks config — extends the built-in ruleset, adds allowlist for known-safe values.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known-safe values that are not real secrets"
+regexes = [
+  # Hardhat/Anvil well-known public test private key (account #0)
+  '''ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80''',
+]
+paths = [
+  # Placeholder-only files after remediation
+  '''.*\.env\.example$''',
+  # Public certificate material (not private keys)
+  '''.*/certs/(ca|tls)\.crt$''',
+]
